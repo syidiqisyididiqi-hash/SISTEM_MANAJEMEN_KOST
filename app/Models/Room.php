@@ -12,7 +12,7 @@ class Room extends Model
     protected $fillable = [
         'room_number',
         'price_per_month',
-        'status'
+        'status',
     ];
 
     public function roomTenants()
