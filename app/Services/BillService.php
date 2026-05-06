@@ -1,0 +1,36 @@
+<?php
+
+namespace App\Services;
+use App\Models\Bill;
+use Carbon\Carbon;
+
+class BillService
+{
+    public function getAll()
+    {
+        return Bill::with('roomtenant.room', 'roomtenant.tenant.user')
+            ->latest()
+            ->get();
+    }
+
+    public function store(array $data): Bill
+    {
+        return Bill::create($data);
+    }
+
+    public function update(Bill $bill, array $data): Bill
+    {
+        $bill->update($data);
+
+        if ($bill->status === 'unpaid' && Carbon::now()->gt($bill->due_date)) {
+            $bill->update(['status' => 'overdue']);
+        }
+
+        return $bill;
+    }
+
+    public function delete(Bill $bill): void
+    {
+        $bill->delete();
+    }
+}
