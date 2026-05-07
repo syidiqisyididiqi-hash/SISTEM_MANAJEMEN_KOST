@@ -16,7 +16,7 @@ class PaymentService
         ])->latest()->get();
     }
 
-    public function create(array $data): Payment
+    public function store(array $data): Payment
     {
         $bill = Bill::findOrFail($data['bill_id']);
 
@@ -25,10 +25,23 @@ class PaymentService
         }
 
         $payment = Payment::create($data);
+
         $bill->update([
-            'status' => 'paid',
+            'status' => 'paid'
         ]);
 
         return $payment;
+    }
+
+    public function update(Payment $payment, array $data): Payment
+    {
+        $payment->update($data);
+
+        return $payment;
+    }
+
+    public function delete(Payment $payment): void
+    {
+        $payment->delete();
     }
 }
