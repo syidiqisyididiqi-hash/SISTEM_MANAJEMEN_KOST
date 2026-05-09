@@ -23,7 +23,7 @@ class UpdateActivityLogRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'description',
+            'description' => 'sometimes|string',
         ];
     }
 }
