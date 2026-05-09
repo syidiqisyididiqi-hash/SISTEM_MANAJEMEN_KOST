@@ -24,7 +24,7 @@ class ActivityLogController extends Controller
      */
     public function store(StoreActivityLogRequest $request)
     {
-        $log = $this->service->create($request->validated()['description']);
+        $log = $this->service->store($request->validated()['description']);
         return response()->json($log, 201);
     }
 
