@@ -33,7 +33,7 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($id)
+    public function show(int $id)
     {
         $user = $this->service->findById($id);
         return response()->json($user);
