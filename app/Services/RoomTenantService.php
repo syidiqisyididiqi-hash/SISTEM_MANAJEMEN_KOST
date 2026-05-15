@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Room;
 use App\Models\RoomTenant;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class RoomTenantService
 {
@@ -22,6 +23,20 @@ class RoomTenantService
         }
 
         return $roomTenant;
+    }
+
+    public function findById(int $id): RoomTenant
+    {
+        $data = RoomTenant::with([
+            'room',
+            'tenant.user'
+        ])->find($id);
+
+        if (!$data) {
+            throw new ModelNotFoundException("RoomTenant not found");
+        }
+
+        return $data;
     }
 
     public function update(RoomTenant $roomTenant, array $data): RoomTenant
