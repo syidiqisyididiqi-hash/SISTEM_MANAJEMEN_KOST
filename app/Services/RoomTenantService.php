@@ -43,7 +43,7 @@ class RoomTenantService
     {
         $roomTenant->update($data);
 
-        if ($data['status'] === 'finished') {
+        if (isset($data['status']) && $data['status'] === 'inactive') {
             Room::where('id', $roomTenant->room_id)
                 ->update(['status' => 'available']);
         }

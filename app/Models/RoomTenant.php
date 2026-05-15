@@ -11,6 +11,7 @@ class RoomTenant extends Model
 
     public $fillable = [
         'room_id',
+        'tenant_id',
         'tenant_date',
         'start_date',
         'end_date',

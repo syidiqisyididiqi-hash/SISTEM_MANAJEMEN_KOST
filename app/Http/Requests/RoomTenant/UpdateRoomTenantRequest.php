@@ -23,8 +23,11 @@ class UpdateRoomTenantRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'room_id' => 'sometimes|exists:rooms,id',
+            'tenant_id' => 'sometimes|exists:tenants,id',
+            'start_date' => 'sometimes|date',
             'end_date' => 'nullable|date|after:start_date',
-            'status' => 'sometimes|in:active,finished',
+            'status' => 'sometimes|in:active,inactive',
         ];
     }
 }
