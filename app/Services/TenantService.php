@@ -16,7 +16,7 @@ class TenantService
         return Tenant::create($data);
     }
 
-    public function show(int $id): Tenant
+    public function findById(int $id): Tenant
     {
         $tenant = Tenant::with('user')->find($id);
 

@@ -36,7 +36,7 @@ class TenantController extends Controller
      */
     public function show(int $id)
     {
-        $tenant = $this->service->show((int) $id);
+        $tenant = $this->service->findById((int) $id);
 
         return response()->json([
             'success' => true,
