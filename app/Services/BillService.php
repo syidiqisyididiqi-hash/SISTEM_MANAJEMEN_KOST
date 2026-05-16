@@ -3,6 +3,7 @@
 namespace App\Services;
 use App\Models\Bill;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class BillService
 {
@@ -16,6 +17,21 @@ class BillService
     public function store(array $data): Bill
     {
         return Bill::create($data);
+    }
+
+    public function findById(int $id): Bill
+    {
+        $bill = Bill::with([
+            'roomTenant.room',
+            'roomTenant.tenant.user',
+            'payments'
+        ])->find($id);
+
+        if (!$bill) {
+            throw new ModelNotFoundException("bill not found");
+        }
+
+        return $bill;
     }
 
     public function update(Bill $bill, array $data): Bill
