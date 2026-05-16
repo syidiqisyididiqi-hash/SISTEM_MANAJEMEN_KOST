@@ -28,7 +28,7 @@ class StoreBillRequest extends FormRequest
             'amount' => 'required|numeric|min:0',
             'due_date' => 'required|date|after_or_equal:bill_month',
             'fine_amount' => 'nullable|numeric|min:0',
-            'status' => 'required|in:unpaid,paid,overdue',
+            'status' => 'nullable|in:unpaid,paid,overdue',
         ];
     }
 }

@@ -18,6 +18,10 @@ class Bill extends Model
         'status',
     ];
 
+    protected $attributes = [
+        'status' => 'unpaid',
+    ];
+
     protected $dates = [
         'bill_month',
         'due_date',
