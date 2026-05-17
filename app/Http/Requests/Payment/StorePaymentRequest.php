@@ -24,7 +24,7 @@ class StorePaymentRequest extends FormRequest
     {
         return [
             'bill_id' => 'required|exists:bills,id',
-            'paid_amount' => 'required|date',
+            'paid_at' => 'required|date',
             'amount' => 'required|numeric|min:0',
             'method' => 'required|in:cash,transfer,ewallet',
         ];
