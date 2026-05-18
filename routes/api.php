@@ -19,4 +19,4 @@ Route::apiResource('tenants', TenantController::class);
 Route::apiResource('room-tenants', RoomTenantController::class);
 Route::apiResource('bills', BillController::class);
 Route::apiResource('payments', PaymentController::class);
-Route::apiResource('activity-logs', ActivityLogController::class)->only(['index', 'store']);
+Route::apiResource('activity-logs', ActivityLogController::class)->only(['index', 'store', 'show']);
