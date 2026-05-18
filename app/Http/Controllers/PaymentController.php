@@ -46,7 +46,7 @@ class PaymentController extends Controller
      */
     public function show(int $id)
     {
-        $data = $this->service->findById((int)$id);
+        $data = $this->service->findById((int) $id);
 
         return response()->json([
             'success' => true,
@@ -57,7 +57,7 @@ class PaymentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdatePaymentRequest $request, $id)
+    public function update(UpdatePaymentRequest $request, int $id)
     {
         $payment = Payment::find($id);
 
@@ -73,7 +73,7 @@ class PaymentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy(int $id)
     {
         $payment = Payment::find($id);
 
