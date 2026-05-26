@@ -1,0 +1,55 @@
+
+users
+{
+  "name": "Budi Santoso",
+  "email": "budi@mail.com",
+  "password": "password",
+  "role": "tenant"
+}
+
+
+rooms
+{
+  "room_number": "A01",
+  "price_per_month": 1500000,
+  "status": "available"
+}
+
+
+tenants
+{
+  "user_id": 1,
+  "phone": "08123456789",
+  "identity_number": "327601xxxx",
+  "address": "Jakarta"
+}
+
+
+room-tenants
+{
+  "room_id": 1,
+  "tenant_id": 1,
+  "start_date": "2026-05-01",
+  "status": "active"
+}
+
+
+bills
+{
+  "room_tenant_id": 1,
+  "bill_month": "2026-05-01",
+  "amount": 1500000,
+  "due_date": "2026-05-10"
+}
+
+
+payments
+{
+  "bill_id": 1,
+  "paid_at": "2026-05-05 10:00:00",
+  "amount": 1500000,
+  "method": "transfer"
+}
+
+
+
