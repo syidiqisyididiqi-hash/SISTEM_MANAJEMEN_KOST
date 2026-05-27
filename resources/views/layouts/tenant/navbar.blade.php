@@ -16,10 +16,7 @@
             </div>
         </div>
 
-        <button 
-            id="menuBtn"
-            class="md:hidden text-2xl text-gray-700 focus:outline-none relative z-50 p-2"
-        >
+        <button id="menuBtn" class="md:hidden text-2xl text-gray-700 focus:outline-none relative z-50 p-2">
             ☰
         </button>
 
@@ -30,7 +27,8 @@
                 </a>
             </li>
             <li>
-                <a href="#" class="flex items-center gap-1.5 hover:text-blue-600 transition-colors">
+                <a href="{{ route('tenant.room') }}"
+                    class="flex items-center gap-1.5 hover:text-blue-600 transition-colors">
                     <span>🛏️</span> Kamar Saya
                 </a>
             </li>
@@ -60,7 +58,8 @@
                 </a>
             </li>
             <li>
-                <a href="#" class="flex items-center gap-1.5 text-red-600 hover:text-red-800 transition-colors border-l pl-4 border-gray-200">
+                <a href="#"
+                    class="flex items-center gap-1.5 text-red-600 hover:text-red-800 transition-colors border-l pl-4 border-gray-200">
                     <span>🚪</span> Logout
                 </a>
             </li>
@@ -68,18 +67,15 @@
 
     </div>
 
-    <div 
-        id="sidebarOverlay"
-        class="hidden fixed inset-0 bg-black/40 backdrop-blur-sm z-40 transition-opacity duration-300"
-    ></div>
+    <div id="sidebarOverlay"
+        class="hidden fixed inset-0 bg-black/40 backdrop-blur-sm z-40 transition-opacity duration-300"></div>
 
-    <div 
-        id="mobileMenu"
-        class="fixed top-0 left-0 h-screen w-64 bg-white/85 backdrop-blur-md z-50 shadow-2xl transform -translate-x-full transition-transform duration-300 ease-in-out p-6 flex flex-col justify-between"
-    >
+    <div id="mobileMenu"
+        class="fixed top-0 left-0 h-screen w-64 bg-white/85 backdrop-blur-md z-50 shadow-2xl transform -translate-x-full transition-transform duration-300 ease-in-out p-6 flex flex-col justify-between">
         <div>
             <div class="flex items-center gap-3 border-b pb-4 mb-6">
-                <div class="w-8 h-8 bg-blue-600 text-white rounded-lg flex items-center justify-center font-bold text-sm">
+                <div
+                    class="w-8 h-8 bg-blue-600 text-white rounded-lg flex items-center justify-center font-bold text-sm">
                     T
                 </div>
                 <div>
@@ -90,37 +86,44 @@
 
             <ul class="flex flex-col gap-4 text-sm font-medium text-gray-700">
                 <li>
-                    <a href="/tenant/dashboard" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-blue-50 hover:text-blue-600 transition-all">
+                    <a href="/tenant/dashboard"
+                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-blue-50 hover:text-blue-600 transition-all">
                         <span>🏠</span> Dashboard
                     </a>
                 </li>
                 <li>
-                    <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-blue-50 hover:text-blue-600 transition-all">
+                    <a href="{{ route('tenant.room') }}"
+                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-blue-50 hover:text-blue-600 transition-all">
                         <span>🛏️</span> Kamar Saya
                     </a>
                 </li>
                 <li>
-                    <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-blue-50 hover:text-blue-600 transition-all">
+                    <a href="#"
+                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-blue-50 hover:text-blue-600 transition-all">
                         <span>🧾</span> Tagihan Saya
                     </a>
                 </li>
                 <li>
-                    <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-blue-50 hover:text-blue-600 transition-all">
+                    <a href="#"
+                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-blue-50 hover:text-blue-600 transition-all">
                         <span>💳</span> Pembayaran
                     </a>
                 </li>
                 <li>
-                    <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-blue-50 hover:text-blue-600 transition-all">
+                    <a href="#"
+                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-blue-50 hover:text-blue-600 transition-all">
                         <span>📜</span> Riwayat Pembayaran
                     </a>
                 </li>
                 <li>
-                    <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-blue-50 hover:text-blue-600 transition-all">
+                    <a href="#"
+                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-blue-50 hover:text-blue-600 transition-all">
                         <span>📢</span> Pengumuman
                     </a>
                 </li>
                 <li>
-                    <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-blue-50 hover:text-blue-600 transition-all">
+                    <a href="#"
+                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-blue-50 hover:text-blue-600 transition-all">
                         <span>👤</span> Profile
                     </a>
                 </li>
@@ -128,7 +131,8 @@
         </div>
 
         <div class="border-t pt-4">
-            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-red-600 hover:bg-red-50 hover:text-red-800 transition-all font-medium">
+            <a href="#"
+                class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-red-600 hover:bg-red-50 hover:text-red-800 transition-all font-medium">
                 <span>🚪</span> Logout
             </a>
         </div>
