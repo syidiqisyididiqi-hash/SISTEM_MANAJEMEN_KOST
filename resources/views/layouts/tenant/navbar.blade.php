@@ -58,7 +58,7 @@
                 </a>
             </li>
             <li>
-                <a href="#"
+                <a href="{{ route('login') }}"
                     class="flex items-center gap-1.5 text-red-600 hover:text-red-800 transition-colors border-l pl-4 border-gray-200">
                     <span>🚪</span> Logout
                 </a>
@@ -131,7 +131,7 @@
         </div>
 
         <div class="border-t pt-4">
-            <a href="#"
+            <a href="{{ route('login') }}"
                 class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-red-600 hover:bg-red-50 hover:text-red-800 transition-all font-medium">
                 <span>🚪</span> Logout
             </a>
