@@ -23,6 +23,42 @@ Route::prefix('auth')->group(function () {
 
 });
 
+Route::prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+
+        Route::view('/dashboard', 'admin.dashboard.index')
+            ->name('dashboard');
+
+        Route::view('/tenant', 'admin.tenant.index')
+            ->name('tenant');
+
+        Route::view('/room', 'admin.room.index')
+            ->name('room');
+
+        Route::view('/room-tenant', 'admin.room-tenant.index')
+            ->name('room-tenant');
+
+        Route::view('/payment', 'admin.payment.index')
+            ->name('payment');
+
+        Route::view('/bill', 'admin.bill.index')
+            ->name('bill');
+
+        Route::view('/report', 'admin.report.index')
+            ->name('report');
+
+        Route::view('/activity-log', 'admin.activity-log.index')
+            ->name('activity-log');
+
+        Route::view('/user', 'admin.user.index')
+            ->name('user');
+
+        Route::view('/settings', 'admin.settings.index')
+            ->name('settings');
+
+});
+
 Route::prefix('tenant')->name('tenant.')->group(function () {
 
     Route::view('/dashboard', 'tenant.dashboard.index')
