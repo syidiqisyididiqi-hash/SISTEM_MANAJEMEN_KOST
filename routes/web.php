@@ -54,10 +54,13 @@ Route::prefix('admin')
         Route::view('/user', 'admin.user.index')
             ->name('user');
 
+        Route::view('/user/create', 'admin.user.create')
+            ->name('user.create');
+            
         Route::view('/settings', 'admin.settings.index')
             ->name('settings');
 
-});
+    });
 
 Route::prefix('tenant')->name('tenant.')->group(function () {
 
