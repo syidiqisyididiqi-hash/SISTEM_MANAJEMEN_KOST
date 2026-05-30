@@ -2,79 +2,86 @@
 
 @section('content')
 
-<div class="min-h-screen flex items-center justify-center bg-gray-100 px-4">
+    <div class="min-h-screen flex items-center justify-center bg-gray-100 px-4">
 
-    <div class="w-full max-w-md bg-white rounded-3xl shadow-lg p-8">
+        <x-ui.card class="w-full max-w-md">
 
-        <div class="text-center mb-8">
-            <h1 class="text-3xl font-bold text-gray-800">
-                Register
-            </h1>
+            <div class="text-center mb-8">
 
-            <p class="text-gray-500 mt-2">
-                Buat akun baru 🚀
-            </p>
-        </div>
+                <h1 class="text-3xl font-bold text-gray-800">
+                    Register
+                </h1>
 
-        <form action="#" method="POST" class="space-y-5">
-            @csrf
+                <p class="text-gray-500 mt-2">
+                    Buat akun baru 🚀
+                </p>
 
-            <div>
-                <label class="block mb-2 text-sm font-semibold">
-                    Nama
-                </label>
-
-                <input 
-                    type="text"
-                    name="name"
-                    placeholder="Masukkan nama"
-                    class="w-full border rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
-                >
             </div>
 
-            <div>
-                <label class="block mb-2 text-sm font-semibold">
-                    Email
-                </label>
+            <form action="#" method="POST" class="space-y-5">
 
-                <input 
-                    type="email"
-                    name="email"
-                    placeholder="Masukkan email"
-                    class="w-full border rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
-                >
-            </div>
+                @csrf
 
-            <div>
-                <label class="block mb-2 text-sm font-semibold">
-                    Password
-                </label>
+                <div>
 
-                <input 
-                    type="password"
-                    name="password"
-                    placeholder="Masukkan password"
-                    class="w-full border rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
-                >
-            </div>
+                    <label class="block mb-2 text-sm font-semibold">
+                        Nama
+                    </label>
 
-            <button 
-                type="submit"
-                class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-semibold transition"
-            >
-                Register
-            </button>
+                    <x-ui.input type="text" name="name" placeholder="Masukkan nama" />
 
-            <p class="text-center text-sm text-gray-500">
-                Sudah punya akun?
-                <a href="{{ route('login') }}" class="text-blue-600 font-semibold">
-                    Login
-                </a>
-            </p>
-        </form>
+                </div>
+
+                <div>
+
+                    <label class="block mb-2 text-sm font-semibold">
+                        Email
+                    </label>
+
+                    <x-ui.input type="email" name="email" placeholder="Masukkan email" />
+
+                </div>
+
+                <div>
+
+                    <label class="block mb-2 text-sm font-semibold">
+                        Password
+                    </label>
+
+                    <x-ui.input type="password" name="password" placeholder="Masukkan password" />
+
+                </div>
+
+                <div>
+
+                    <label class="block mb-2 text-sm font-semibold">
+                        Konfirmasi Password
+                    </label>
+
+                    <x-ui.input type="password" name="password_confirmation" placeholder="Ulangi password" />
+
+                </div>
+
+                <x-ui.button class="w-full">
+                    Register
+                </x-ui.button>
+
+                <p class="text-center text-sm text-gray-500">
+
+                    Sudah punya akun?
+
+                    <a href="{{ route('login') }}" class="text-blue-600 font-semibold hover:text-blue-700">
+
+                        Login
+
+                    </a>
+
+                </p>
+
+            </form>
+
+        </x-ui.card>
 
     </div>
-
-</div>
 
 @endsection
