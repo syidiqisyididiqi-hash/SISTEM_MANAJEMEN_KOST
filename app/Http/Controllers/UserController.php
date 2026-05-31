@@ -16,6 +16,24 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
+    public function indexView()
+    {
+        $users = $this->service->getAll();
+        return view('admin.user.index', compact('users'));
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function editView(int $id)
+    {
+        $user = $this->service->findById($id);
+        return view('admin.user.edit', compact('user'));
+    }
+
+    /**
+     * Display a listing of the resource as JSON.
+     */
     public function index()
     {
         return response()->json($this->service->getAll());

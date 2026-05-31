@@ -51,12 +51,24 @@ Route::prefix('admin')
         Route::view('/activity-log', 'admin.activity-log.index')
             ->name('activity-log');
 
-        Route::view('/user', 'admin.user.index')
+        Route::get('/user', [App\Http\Controllers\UserController::class, 'indexView'])
             ->name('user');
 
         Route::view('/user/create', 'admin.user.create')
             ->name('user.create');
-            
+
+        Route::get('/user/{id}/edit', [App\Http\Controllers\UserController::class, 'editView'])
+            ->name('user.edit');
+
+        Route::post('/user', [App\Http\Controllers\UserController::class, 'store'])
+            ->name('user.store');
+
+        Route::put('/user/{user}', [App\Http\Controllers\UserController::class, 'update'])
+            ->name('user.update');
+
+        Route::delete('/user/{user}', [App\Http\Controllers\UserController::class, 'destroy'])
+            ->name('user.destroy');
+
         Route::view('/settings', 'admin.settings.index')
             ->name('settings');
 
