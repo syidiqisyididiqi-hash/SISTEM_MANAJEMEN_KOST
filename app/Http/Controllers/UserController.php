@@ -45,7 +45,13 @@ class UserController extends Controller
     public function store(StoreUserRequest $request)
     {
         $user = $this->service->store($request->validated());
-        return response()->json($user, 201);
+        if ($request->wantsJson()) {
+            return response()->json($user, 201);
+        }
+
+        return redirect()
+            ->route('admin.user')
+            ->with('success', 'User created successfully');
     }
 
     /**

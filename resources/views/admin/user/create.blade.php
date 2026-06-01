@@ -10,54 +10,80 @@
             Tambah User
         </h2>
 
-        <form>
+        <form method="POST" action="{{ route('admin.user.store') }}">
+            @csrf
 
             <div class="mb-4">
 
-                <label class="block mb-2">
+                <label for="name" class="block mb-2">
                     Nama
                 </label>
 
-                <input type="text" class="w-full border rounded-xl px-4 py-3">
+                <input id="name" type="text" name="name" value="{{ old('name') }}"
+                    class="w-full border rounded-xl px-4 py-3" required>
+
+                @error('name')
+                    <p class="text-red-500 text-sm mt-1">
+                        {{ $message }}
+                    </p>
+                @enderror
 
             </div>
 
             <div class="mb-4">
 
-                <label class="block mb-2">
+                <label for="email" class="block mb-2">
                     Email
                 </label>
 
-                <input type="email" class="w-full border rounded-xl px-4 py-3">
+                <input id="email" type="email" name="email" value="{{ old('email') }}" autocomplete="email"
+                    class="w-full border rounded-xl px-4 py-3" required>
+
+                @error('email')
+                    <p class="text-red-500 text-sm mt-1">
+                        {{ $message }}
+                    </p>
+                @enderror
 
             </div>
 
             <div class="mb-4">
 
-                <label class="block mb-2">
+                <label for="password" class="block mb-2">
                     Password
                 </label>
 
-                <input type="password" class="w-full border rounded-xl px-4 py-3">
+                <input id="password" type="password" name="password" autocomplete="new-password"
+                    class="w-full border rounded-xl px-4 py-3" required>
+
+                @error('password')
+                    <p class="text-red-500 text-sm mt-1">
+                        {{ $message }}
+                    </p>
+                @enderror
 
             </div>
 
             <div class="mb-6">
 
-                <label class="block mb-2">
+                <label for="role" class="block mb-2">
                     Role
                 </label>
 
-                <select class="w-full border rounded-xl px-4 py-3">
-
-                    <option>Admin</option>
-                    <option>Tenant</option>
-
+                <select id="role" name="role" class="w-full border rounded-xl px-4 py-3" required>
+                    <option value="admin">Admin</option>
+                    <option value="tenant">Tenant</option>
                 </select>
+
+                @error('role')
+                    <p class="text-red-500 text-sm mt-1">
+                        {{ $message }}
+                    </p>
+                @enderror
 
             </div>
 
-            <button class="px-5 py-3 bg-blue-600 text-white rounded-xl">
+            <button type="submit" class="px-5 py-3 bg-blue-600 text-white rounded-xl">
                 Simpan
             </button>
 
