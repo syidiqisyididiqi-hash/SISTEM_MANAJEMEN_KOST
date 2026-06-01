@@ -10,7 +10,9 @@
             Edit User
         </h2>
 
-        <form>
+        <form method="POST" action="{{ route('admin.user.update', $user->id) }}">
+            @csrf
+            @method('PUT')
 
             <div class="mb-4">
 
@@ -18,7 +20,8 @@
                     Nama
                 </label>
 
-                <input type="text" value="Admin" class="w-full border rounded-xl px-4 py-3">
+                <input type="text" name="name" value="{{ old('name', $user->name) }}"
+                    class="w-full border rounded-xl px-4 py-3">
 
             </div>
 
@@ -28,7 +31,8 @@
                     Email
                 </label>
 
-                <input type="email" value="admin@gmail.com" class="w-full border rounded-xl px-4 py-3">
+                <input type="email" name="email" value="{{ old('email', $user->email) }}"
+                    class="w-full border rounded-xl px-4 py-3">
 
             </div>
 
@@ -38,13 +42,15 @@
                     Role
                 </label>
 
-                <select class="w-full border rounded-xl px-4 py-3">
-
-                    <option selected>
+                @if($errors->has('role'))
+                    <p class="text-red-600 text-sm mb-2">{{ $errors->first('role') }}</p>
+                @endif
+                <select name="role" class="w-full border rounded-xl px-4 py-3">
+                    <option value="admin" {{ old('role', $user->role) === 'admin' ? 'selected' : '' }}>
                         Admin
                     </option>
 
-                    <option>
+                    <option value="tenant" {{ old('role', $user->role) === 'tenant' ? 'selected' : '' }}>
                         Tenant
                     </option>
 

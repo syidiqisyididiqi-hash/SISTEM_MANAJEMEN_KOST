@@ -63,7 +63,12 @@ class UserController extends Controller
     public function update(UpdateUserRequest $request, User $user)
     {
         $user = $this->service->update($user, $request->validated());
-        return response()->json($user);
+
+        if ($request->wantsJson()) {
+            return response()->json($user);
+        }
+
+        return redirect()->route('admin.user')->with('success', 'User updated successfully');
     }
 
     /**
