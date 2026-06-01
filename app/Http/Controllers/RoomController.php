@@ -23,6 +23,23 @@ class RoomController extends Controller
     }
 
     /**
+     * Display a listing of the resource as HTML view.
+     */
+    public function indexView()
+    {
+        $rooms = $this->service->getAll();
+        return view('admin.rooms.index', compact('rooms'));
+    }
+
+    /**
+     * Show the form for creating a new resource (view).
+     */
+    public function createView()
+    {
+        return view('admin.rooms.create');
+    }
+
+    /**
      * Store a newly created resource in storage.
      */
     public function store(StoreRoomRequest $request)
@@ -45,12 +62,30 @@ class RoomController extends Controller
     }
 
     /**
+     * Display the specified resource as HTML view.
+     */
+    public function showView(int $id)
+    {
+        $room = $this->service->findById($id);
+        return view('admin.rooms.show', compact('room'));
+    }
+
+    /**
      * Update the specified resource in storage.
      */
     public function update(UpdateRoomRequest $request, Room $room)
     {
         $room = $this->service->update($room, $request->validated());
         return response()->json($room);
+    }
+
+    /**
+     * Show the form for editing the specified resource (view).
+     */
+    public function editView(int $id)
+    {
+        $room = $this->service->findById($id);
+        return view('admin.rooms.edit', compact('room'));
     }
 
     /**

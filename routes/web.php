@@ -33,8 +33,21 @@ Route::prefix('admin')
         Route::view('/tenant', 'admin.tenant.index')
             ->name('tenant');
 
-        Route::view('/room', 'admin.room.index')
-            ->name('room');
+        // Rooms Resource Routes
+        Route::get('/rooms', [App\Http\Controllers\RoomController::class, 'indexView'])
+            ->name('rooms.index');
+        Route::get('/rooms/create', [App\Http\Controllers\RoomController::class, 'createView'])
+            ->name('rooms.create');
+        Route::post('/rooms', [App\Http\Controllers\RoomController::class, 'store'])
+            ->name('rooms.store');
+        Route::get('/rooms/{room}', [App\Http\Controllers\RoomController::class, 'showView'])
+            ->name('rooms.show');
+        Route::get('/rooms/{room}/edit', [App\Http\Controllers\RoomController::class, 'editView'])
+            ->name('rooms.edit');
+        Route::put('/rooms/{room}', [App\Http\Controllers\RoomController::class, 'update'])
+            ->name('rooms.update');
+        Route::delete('/rooms/{room}', [App\Http\Controllers\RoomController::class, 'destroy'])
+            ->name('rooms.destroy');
 
         Route::view('/room-tenant', 'admin.room-tenant.index')
             ->name('room-tenant');
