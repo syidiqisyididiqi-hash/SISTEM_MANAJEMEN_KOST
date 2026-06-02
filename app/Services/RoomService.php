@@ -8,7 +8,11 @@ class RoomService
 {
     public function getAll()
     {
-        return Room::latest()->get();
+        return Room::with([
+            'roomTenants' => function ($query) {
+                $query->where('status', 'active')->with('tenant.user');
+            }
+        ])->latest()->get();
     }
 
     public function store(array $data): Room

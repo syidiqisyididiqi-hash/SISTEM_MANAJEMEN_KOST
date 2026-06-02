@@ -28,12 +28,17 @@
                             <th class="p-3 text-left">Nomor Kamar</th>
                             <th class="p-3 text-left">Harga/Bulan</th>
                             <th class="p-3 text-left">Status</th>
+                            <th class="p-3 text-left">Penghuni</th>
                             <th class="p-3 text-center">Aksi</th>
                         </tr>
                     </thead>
 
                     <tbody>
                         @foreach($rooms as $index => $room)
+                            @php
+                                $activeRoomTenant = $room->roomTenants->first();
+                                $occupantName = $activeRoomTenant?->tenant?->user?->name ?? '-';
+                            @endphp
                             <tr class="border-b hover:bg-gray-50">
                                 <td class="p-3">{{ $index + 1 }}</td>
                                 <td class="p-3 font-semibold">{{ $room->room_number }}</td>
@@ -48,6 +53,8 @@
                                         <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">Maintenance</span>
                                     @endif
                                 </td>
+
+                                <td class="p-3">{{ $occupantName }}</td>
 
                                 <td class="p-3 text-center space-x-2">
                                     <a href="{{ route('admin.rooms.show', $room->id) }}"
