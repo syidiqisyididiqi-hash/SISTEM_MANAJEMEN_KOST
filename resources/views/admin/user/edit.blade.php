@@ -10,7 +10,7 @@
             Edit User
         </h2>
 
-        <form method="POST" action="{{ route('admin.user.update', $user->id) }}">
+        <form method="POST" action="{{ route('admin.user.update', $user) }}">
             @csrf
             @method('PUT')
 

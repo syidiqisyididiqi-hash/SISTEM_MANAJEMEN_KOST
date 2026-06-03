@@ -1,10 +1,12 @@
-<aside class="w-64 min-h-screen bg-gradient-to-b from-slate-950 via-gray-900 to-slate-950 text-white px-5 py-5 flex flex-col justify-between shadow-2xl border-r border-white/10">
+<aside
+    class="w-64 min-h-screen bg-gradient-to-b from-slate-950 via-gray-900 to-slate-950 text-white px-5 py-5 flex flex-col justify-between shadow-2xl border-r border-white/10">
 
     <div>
 
         <div class="flex items-center gap-3 mb-8">
 
-            <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-lg shadow-lg shadow-blue-500/30">
+            <div
+                class="w-11 h-11 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-lg shadow-lg shadow-blue-500/30">
                 🏢
             </div>
 
@@ -24,7 +26,8 @@
 
             <div class="flex items-center gap-3">
 
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-sm font-bold">
+                <div
+                    class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-sm font-bold">
                     A
                 </div>
 
@@ -45,7 +48,7 @@
         <nav class="space-y-1.5">
 
             <a href="{{ route('admin.dashboard') }}"
-               class="group flex items-center justify-between px-3 py-2.5 rounded-xl bg-gradient-to-r from-blue-500 to-indigo-600 shadow-lg shadow-blue-500/20 hover:scale-[1.01] transition-all duration-300">
+                class="group flex items-center justify-between px-3 py-2.5 rounded-xl bg-gradient-to-r from-blue-500 to-indigo-600 shadow-lg shadow-blue-500/20 hover:scale-[1.01] transition-all duration-300">
 
                 <div class="flex items-center gap-3">
                     <span>🏠</span>
@@ -59,7 +62,7 @@
             </a>
 
             <a href="{{ route('admin.tenant') }}"
-               class="group flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-white/10 transition-all duration-300">
+                class="group flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-white/10 transition-all duration-300">
 
                 <div class="flex items-center gap-3">
                     <span>👤</span>
@@ -69,7 +72,7 @@
             </a>
 
             <a href="{{ route('admin.rooms.index') }}"
-               class="group flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-white/10 transition-all duration-300">
+                class="group flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-white/10 transition-all duration-300">
 
                 <div class="flex items-center gap-3">
                     <span>🛏️</span>
@@ -79,7 +82,7 @@
             </a>
 
             <a href="{{ route('admin.room-tenant') }}"
-               class="group flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-white/10 transition-all duration-300">
+                class="group flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-white/10 transition-all duration-300">
 
                 <div class="flex items-center gap-3">
                     <span>🔗</span>
@@ -89,7 +92,7 @@
             </a>
 
             <a href="{{ route('admin.payment') }}"
-               class="group flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-white/10 transition-all duration-300">
+                class="group flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-white/10 transition-all duration-300">
 
                 <div class="flex items-center gap-3">
                     <span>💳</span>
@@ -99,7 +102,7 @@
             </a>
 
             <a href="{{ route('admin.bill') }}"
-               class="group flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-white/10 transition-all duration-300">
+                class="group flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-white/10 transition-all duration-300">
 
                 <div class="flex items-center gap-3">
                     <span>🧾</span>
@@ -109,7 +112,7 @@
             </a>
 
             <a href="{{ route('admin.report') }}"
-               class="group flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-white/10 transition-all duration-300">
+                class="group flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-white/10 transition-all duration-300">
 
                 <div class="flex items-center gap-3">
                     <span>📊</span>
@@ -119,7 +122,7 @@
             </a>
 
             <a href="{{ route('admin.activity-log') }}"
-               class="group flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-white/10 transition-all duration-300">
+                class="group flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-white/10 transition-all duration-300">
 
                 <div class="flex items-center gap-3">
                     <span>📜</span>
@@ -128,8 +131,8 @@
 
             </a>
 
-            <a href="{{ route('admin.user') }}"
-               class="group flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-white/10 transition-all duration-300">
+            <a href="{{ route('admin.user.index') }}"
+                class="group flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-white/10 transition-all duration-300">
 
                 <div class="flex items-center gap-3">
                     <span>👥</span>
@@ -139,7 +142,7 @@
             </a>
 
             <a href="{{ route('admin.settings') }}"
-               class="group flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-white/10 transition-all duration-300">
+                class="group flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-white/10 transition-all duration-300">
 
                 <div class="flex items-center gap-3">
                     <span>⚙️</span>
@@ -155,7 +158,7 @@
     <div class="pt-5 border-t border-white/10">
 
         <a href="{{ route('login') }}"
-           class="flex items-center justify-center gap-2 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 px-4 py-3 rounded-xl text-sm font-medium shadow-lg shadow-red-500/20 transition-all duration-300">
+            class="flex items-center justify-center gap-2 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 px-4 py-3 rounded-xl text-sm font-medium shadow-lg shadow-red-500/20 transition-all duration-300">
 
             <span>🚪</span>
 

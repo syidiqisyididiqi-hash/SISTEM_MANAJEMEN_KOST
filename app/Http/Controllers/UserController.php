@@ -50,7 +50,7 @@ class UserController extends Controller
         }
 
         return redirect()
-            ->route('admin.user')
+            ->route('admin.user.index')
             ->with('success', 'User created successfully');
     }
 
@@ -74,7 +74,7 @@ class UserController extends Controller
             return response()->json($user);
         }
 
-        return redirect()->route('admin.user')->with('success', 'User updated successfully');
+        return redirect()->route('admin.user.index')->with('success', 'User updated successfully');
     }
 
     /**
@@ -83,6 +83,9 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         $this->service->delete($user);
-        return response()->json(null, 204);
+
+        return redirect()
+            ->route('admin.user.index')
+            ->with('success', 'User berhasil dihapus!');
     }
 }

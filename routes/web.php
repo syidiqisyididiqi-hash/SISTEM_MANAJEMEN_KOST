@@ -33,21 +33,30 @@ Route::prefix('admin')
         Route::view('/tenant', 'admin.tenant.index')
             ->name('tenant');
 
-        // Rooms Resource Routes
+
+
         Route::get('/rooms', [App\Http\Controllers\RoomController::class, 'indexView'])
             ->name('rooms.index');
+
         Route::get('/rooms/create', [App\Http\Controllers\RoomController::class, 'createView'])
             ->name('rooms.create');
+
         Route::post('/rooms', [App\Http\Controllers\RoomController::class, 'store'])
             ->name('rooms.store');
+
         Route::get('/rooms/{room}', [App\Http\Controllers\RoomController::class, 'showView'])
             ->name('rooms.show');
+
         Route::get('/rooms/{room}/edit', [App\Http\Controllers\RoomController::class, 'editView'])
             ->name('rooms.edit');
+
         Route::put('/rooms/{room}', [App\Http\Controllers\RoomController::class, 'update'])
             ->name('rooms.update');
+
         Route::delete('/rooms/{room}', [App\Http\Controllers\RoomController::class, 'destroy'])
             ->name('rooms.destroy');
+
+
 
         Route::view('/room-tenant', 'admin.room-tenant.index')
             ->name('room-tenant');
@@ -64,23 +73,30 @@ Route::prefix('admin')
         Route::view('/activity-log', 'admin.activity-log.index')
             ->name('activity-log');
 
+
+
         Route::get('/user', [App\Http\Controllers\UserController::class, 'indexView'])
-            ->name('user');
+            ->name('user.index');
 
         Route::view('/user/create', 'admin.user.create')
             ->name('user.create');
 
-        Route::get('/user/{id}/edit', [App\Http\Controllers\UserController::class, 'editView'])
-            ->name('user.edit');
-
         Route::post('/user', [App\Http\Controllers\UserController::class, 'store'])
             ->name('user.store');
+
+        Route::get('/user/{id}', [App\Http\Controllers\UserController::class, 'show'])
+            ->name('user.show');
+
+        Route::get('/user/{user}/edit', [App\Http\Controllers\UserController::class, 'editView'])
+            ->name('user.edit');
 
         Route::put('/user/{user}', [App\Http\Controllers\UserController::class, 'update'])
             ->name('user.update');
 
         Route::delete('/user/{user}', [App\Http\Controllers\UserController::class, 'destroy'])
             ->name('user.destroy');
+
+
 
         Route::view('/settings', 'admin.settings.index')
             ->name('settings');
