@@ -45,7 +45,10 @@ class RoomController extends Controller
     public function store(StoreRoomRequest $request)
     {
         $room = $this->service->store($request->validated());
-        return response()->json($room, 201);
+
+        return redirect()
+            ->route('admin.rooms.index')
+            ->with('success', 'Kamar berhasil ditambahkan!');
     }
 
     /**
@@ -76,7 +79,10 @@ class RoomController extends Controller
     public function update(UpdateRoomRequest $request, Room $room)
     {
         $room = $this->service->update($room, $request->validated());
-        return response()->json($room);
+
+        return redirect()
+            ->route('admin.rooms.index')
+            ->with('success', 'Kamar berhasil diperbarui!');
     }
 
     /**
@@ -94,6 +100,9 @@ class RoomController extends Controller
     public function destroy(Room $room)
     {
         $this->service->delete($room);
-        return response()->noContent();
+        
+        return redirect()
+            ->route('admin.rooms.index')
+            ->with('success', 'Kamar berhasil dihapus!');
     }
 }
