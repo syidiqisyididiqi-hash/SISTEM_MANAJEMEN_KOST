@@ -12,11 +12,6 @@
                 <h1 class="text-2xl font-bold">
                     Detail Kamar
                 </h1>
-
-                <a href="{{ route('admin.rooms.edit', $room->id) }}"
-                    class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
-                    Edit
-                </a>
             </div>
 
             <div class="grid grid-cols-2 gap-6">
