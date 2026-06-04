@@ -30,27 +30,27 @@ Route::prefix('admin')
         Route::view('/dashboard', 'admin.dashboard.index')
             ->name('dashboard');
 
+        Route::redirect('/tenant', '/tenants');
 
-
-        Route::get('/tenant', [App\Http\Controllers\TenantController::class, 'indexView'])
+        Route::get('/tenants', [App\Http\Controllers\TenantController::class, 'indexView'])
             ->name('tenants.index');
 
-        Route::get('/tenant/create', [App\Http\Controllers\TenantController::class, 'createView'])
+        Route::get('/tenants/create', [App\Http\Controllers\TenantController::class, 'createView'])
             ->name('tenants.create');
 
-        Route::post('/tenant', [App\Http\Controllers\TenantController::class, 'store'])
+        Route::post('/tenants', [App\Http\Controllers\TenantController::class, 'store'])
             ->name('tenants.store');
 
-        Route::get('/tenant/{tenant}', [App\Http\Controllers\TenantController::class, 'showView'])
+        Route::get('/tenants/{tenant}', [App\Http\Controllers\TenantController::class, 'showView'])
             ->name('tenants.show');
 
-        Route::get('/tenant/{tenant}/edit', [App\Http\Controllers\TenantController::class, 'editView'])
+        Route::get('/tenants/{tenant}/edit', [App\Http\Controllers\TenantController::class, 'editView'])
             ->name('tenants.edit');
 
-        Route::put('/tenant/{tenant}', [App\Http\Controllers\TenantController::class, 'update'])
+        Route::put('/tenants/{tenant}', [App\Http\Controllers\TenantController::class, 'update'])
             ->name('tenants.update');
 
-        Route::delete('/tenant/{tenant}', [App\Http\Controllers\TenantController::class, 'destroy'])
+        Route::delete('/tenants/{tenant}', [App\Http\Controllers\TenantController::class, 'destroy'])
             ->name('tenants.destroy');
 
 
@@ -122,6 +122,8 @@ Route::prefix('admin')
             ->name('settings');
 
     });
+
+Route::redirect('/tenants', '/admin/tenants');
 
 Route::prefix('tenant')->name('tenant.')->group(function () {
 

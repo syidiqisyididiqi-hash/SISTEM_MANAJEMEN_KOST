@@ -22,6 +22,12 @@ class TenantController extends Controller
         return response()->json($this->service->getAll());
     }
 
+    public function indexView()
+    {
+        $tenants = $this->service->getAll();
+        return view('admin.tenant.index', compact('tenants'));
+    }
+
     /**
      * Store a newly created resource in storage.
      */
