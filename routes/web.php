@@ -30,8 +30,28 @@ Route::prefix('admin')
         Route::view('/dashboard', 'admin.dashboard.index')
             ->name('dashboard');
 
-        Route::view('/tenant', 'admin.tenant.index')
-            ->name('tenant');
+
+
+        Route::get('/tenant', [App\Http\Controllers\TenantController::class, 'indexView'])
+            ->name('tenants.index');
+
+        Route::get('/tenant/create', [App\Http\Controllers\TenantController::class, 'createView'])
+            ->name('tenants.create');
+
+        Route::post('/tenant', [App\Http\Controllers\TenantController::class, 'store'])
+            ->name('tenants.store');
+
+        Route::get('/tenant/{tenant}', [App\Http\Controllers\TenantController::class, 'showView'])
+            ->name('tenants.show');
+
+        Route::get('/tenant/{tenant}/edit', [App\Http\Controllers\TenantController::class, 'editView'])
+            ->name('tenants.edit');
+
+        Route::put('/tenant/{tenant}', [App\Http\Controllers\TenantController::class, 'update'])
+            ->name('tenants.update');
+
+        Route::delete('/tenant/{tenant}', [App\Http\Controllers\TenantController::class, 'destroy'])
+            ->name('tenants.destroy');
 
 
 
