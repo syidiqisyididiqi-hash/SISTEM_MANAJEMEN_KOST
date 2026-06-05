@@ -6,6 +6,7 @@ use App\Http\Requests\Tenant\StoreTenantRequest;
 use App\Http\Requests\Tenant\UpdateTenantRequest;
 use App\Models\Tenant;
 use App\Services\TenantService;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class TenantController extends Controller
@@ -36,7 +37,9 @@ class TenantController extends Controller
      */
     public function createView()
     {
-        return view('admin.tenant.create');
+        $users = User::all();
+
+        return view('admin.tenant.create', compact('users'));
     }
 
     /**
@@ -45,7 +48,10 @@ class TenantController extends Controller
     public function store(StoreTenantRequest $request)
     {
         $tenant = $this->service->store($request->validated());
-        return response()->json($tenant, 201);
+        
+        return redirect()
+            ->route('admin.tenants.index')
+            ->with('success', 'Tenant berhasil ditambahkan!');
     }
 
     /**

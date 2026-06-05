@@ -19,7 +19,7 @@
                         Pilih User
                     </option>
 
-                    @foreach($users as $user)
+                    @foreach($users ?? [] as $user)
                         <option value="{{ $user->id }}">
                             {{ $user->name }}
                         </option>
