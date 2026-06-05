@@ -22,10 +22,21 @@ class TenantController extends Controller
         return response()->json($this->service->getAll());
     }
 
+    /**
+     * Display a listing of the resource as HTML view.
+     */
     public function indexView()
     {
         $tenants = $this->service->getAll();
         return view('admin.tenant.index', compact('tenants'));
+    }
+
+    /**
+     * Show the form for creating a new resource (view).
+     */
+    public function createView()
+    {
+        return view('admin.tenant.create');
     }
 
     /**
@@ -56,9 +67,19 @@ class TenantController extends Controller
     public function update(UpdateTenantRequest $request, Tenant $tenant)
     {
         $tenant = $this->service->update($tenant, $request->validated());
-        return response()->json($tenant);
-    }
 
+        return redirect()
+            ->route('admin.tenants.index')
+            ->with('success', 'Tenant berhasil diperbarui!');
+    }
+    /**
+     * Show the form for editing the specified resource (view).
+     */
+    public function editView(int $id)
+    {
+        $tenant = $this->service->findById($id);
+        return view('admin.tenant.edit', compact('tenant'));
+    }
     /**
      * Remove the specified resource from storage.
      */
