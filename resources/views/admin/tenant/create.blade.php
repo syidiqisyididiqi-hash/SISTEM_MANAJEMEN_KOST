@@ -19,11 +19,13 @@
                         Pilih User
                     </option>
 
-                    @foreach($users ?? [] as $user)
-                        <option value="{{ $user->id }}">
-                            {{ $user->name }}
-                        </option>
-                    @endforeach
+                    @if(isset($users))
+                        @foreach($users as $user)
+                            <option value="{{ $user->id }}">
+                                {{ $user->name }}
+                            </option>
+                        @endforeach
+                    @endif
 
                 </x-ui.select>
             </x-ui.form-group>
