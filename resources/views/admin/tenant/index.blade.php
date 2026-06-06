@@ -57,6 +57,10 @@
                         </th>
 
                         <th class="px-6 py-4 text-left font-semibold">
+                            Nomor KTP
+                        </th>
+
+                        <th class="px-6 py-4 text-left font-semibold">
                             No HP
                         </th>
 
@@ -112,6 +116,10 @@
                             </td>
 
                             <td class="px-6 py-4">
+                                {{ $tenant->identity_number }}
+                            </td>
+
+                            <td class="px-6 py-4">
                                 {{ $tenant->phone }}
                             </td>
 
@@ -138,6 +146,15 @@
                                             Edit
                                         </x-ui.button>
                                     </a>
+
+                                    <form action="{{ route('admin.tenants.destroy', $tenant) }}" method="POST" class="inline"
+                                        onsubmit="return confirm('Yakin ingin menghapus tenant ini?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <x-ui.button type="submit" color="secondary" class="bg-red-500 hover:bg-red-600 text-white">
+                                            Hapus
+                                        </x-ui.button>
+                                    </form>
 
                                 </div>
 
