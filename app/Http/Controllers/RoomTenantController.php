@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\RoomTenant\StoreRoomTenantRequest;
 use App\Http\Requests\RoomTenant\UpdateRoomTenantRequest;
+use App\Models\Room;
 use App\Models\RoomTenant;
+use App\Models\Tenant;
 use App\Services\RoomTenantService;
 use Illuminate\Http\Request;
 
@@ -22,6 +24,26 @@ class RoomTenantController extends Controller
     }
 
     /**
+     * Display a listing of the resource as HTML view.
+     */
+    public function indexView()
+    {
+        $roomTenants = $this->service->getAll();
+        return view('admin.room-tenants.index', compact('roomTenants'));
+    }
+
+    /**
+     * Show the form for creating a new resource (view).
+     */
+    public function createView()
+    {
+        $rooms = Room::all();
+        $tenants = Tenant::all();
+
+        return view('admin.room-tenants.create', compact('rooms', 'tenants'));
+    }
+
+    /**
      * Store a newly created resource in storage.
      */
     public function store(StoreRoomTenantRequest $request)
@@ -29,7 +51,12 @@ class RoomTenantController extends Controller
         $data = $request->validated();
         $rt = $this->service->store($data);
 
-        return response()->json($rt, 201);
+        if ($request->wantsJson()) {
+            return response()->json($rt, 201);
+        }
+
+        return redirect()->route('admin.room-tenant')
+            ->with('success', 'Room Tenant berhasil dibuat.');
     }
 
     /**
@@ -52,7 +79,24 @@ class RoomTenantController extends Controller
     {
         $rt = $this->service->update($roomTenant, $request->validated());
 
-        return response()->json($rt);
+        if ($request->wantsJson()) {
+            return response()->json($rt);
+        }
+
+        return redirect()->route('admin.room-tenant')
+            ->with('success', 'Room Tenant berhasil diperbarui.');
+    }
+
+    /**
+     * Show the form for editing the specified resource (view).
+     */
+    public function editView(int $id)
+    {
+        $roomTenant = RoomTenant::findOrFail($id);
+        $rooms = Room::all();
+        $tenants = Tenant::all();
+
+        return view('admin.room-tenants.edit', compact('roomTenant', 'rooms', 'tenants'));
     }
 
     /**
@@ -62,6 +106,11 @@ class RoomTenantController extends Controller
     {
         $this->service->delete($roomTenant);
 
-        return response()->noContent();
+        if (request()->wantsJson()) {
+            return response()->noContent();
+        }
+
+        return redirect()->route('admin.room-tenant')
+            ->with('success', 'Room Tenant berhasil dihapus.');
     }
 }
