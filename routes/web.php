@@ -78,8 +78,24 @@ Route::prefix('admin')
 
 
 
-        Route::view('/room-tenant', 'admin.room-tenant.index')
+        Route::get('/room-tenant', [App\Http\Controllers\RoomTenantController::class, 'indexView'])
             ->name('room-tenant');
+
+        Route::get('/room-tenant/create', [App\Http\Controllers\RoomTenantController::class, 'createView'])
+            ->name('room-tenants.create');
+
+        Route::post('/room-tenant', [App\Http\Controllers\RoomTenantController::class, 'store'])
+            ->name('room-tenants.store');
+
+        Route::get('/room-tenant/{roomTenant}/edit', [App\Http\Controllers\RoomTenantController::class, 'editView'])
+            ->name('room-tenants.edit');
+
+        Route::put('/room-tenant/{roomTenant}', [App\Http\Controllers\RoomTenantController::class, 'update'])
+            ->name('room-tenants.update');
+
+        Route::delete('/room-tenant/{roomTenant}', [App\Http\Controllers\RoomTenantController::class, 'destroy'])
+            ->name('room-tenants.destroy');
+
 
         Route::view('/payment', 'admin.payment.index')
             ->name('payment');
