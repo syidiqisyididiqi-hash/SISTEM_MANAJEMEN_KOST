@@ -29,9 +29,9 @@ class RoomTenant extends Model
         'status',
     ];
 
-    protected $dates = [
-        'start_date',
-        'end_date',
+    protected $casts = [
+        'start_date' => 'datetime:Y-m-d',
+        'end_date' => 'datetime:Y-m-d',
     ];
 
     public function room()
