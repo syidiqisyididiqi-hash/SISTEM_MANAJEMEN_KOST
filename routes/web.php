@@ -79,7 +79,7 @@ Route::prefix('admin')
 
 
         Route::get('/room-tenant', [App\Http\Controllers\RoomTenantController::class, 'indexView'])
-            ->name('room-tenant');
+             ->name('room-tenants.index');
 
         Route::get('/room-tenant/create', [App\Http\Controllers\RoomTenantController::class, 'createView'])
             ->name('room-tenants.create');

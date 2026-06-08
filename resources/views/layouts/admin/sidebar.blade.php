@@ -81,7 +81,7 @@
 
             </a>
 
-            <a href="{{ route('admin.room-tenant') }}"
+            <a href="{{ route('admin.room-tenants.index') }}"
                 class="group flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-white/10 transition-all duration-300">
 
                 <div class="flex items-center gap-3">

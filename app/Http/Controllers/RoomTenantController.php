@@ -55,7 +55,7 @@ class RoomTenantController extends Controller
             return response()->json($rt, 201);
         }
 
-        return redirect()->route('admin.room-tenant')
+        return redirect()->route('admin.room-tenants.index')
             ->with('success', 'Room Tenant berhasil dibuat.');
     }
 
@@ -83,7 +83,7 @@ class RoomTenantController extends Controller
             return response()->json($rt);
         }
 
-        return redirect()->route('admin.room-tenant')
+        return redirect()->route('admin.room-tenants.index')
             ->with('success', 'Room Tenant berhasil diperbarui.');
     }
 
@@ -110,7 +110,7 @@ class RoomTenantController extends Controller
             return response()->noContent();
         }
 
-        return redirect()->route('admin.room-tenant')
+        return redirect()->route('admin.room-tenants.index')
             ->with('success', 'Room Tenant berhasil dihapus.');
     }
 }
