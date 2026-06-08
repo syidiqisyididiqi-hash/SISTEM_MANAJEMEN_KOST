@@ -4,77 +4,192 @@
 
 @section('content')
 
-    <div class="bg-white rounded-2xl shadow-sm p-6">
+    <x-ui.page-header title="Data Room Tenant" description="Kelola data penempatan kamar tenant" />
 
-        <div class="flex justify-between items-center mb-6">
+    @if(session('success'))
+        <x-ui.alert>
+            {{ session('success') }}
+        </x-ui.alert>
+    @endif
+
+    <x-ui.card>
+
+        <div class="flex flex-col gap-4 mb-6 md:flex-row md:items-center md:justify-between">
+
             <div>
-                <h1 class="text-2xl font-bold">Data Room Tenant</h1>
-                <p class="text-gray-500">Daftar penempatan kamar untuk tenant</p>
+
+                <h3 class="text-xl font-semibold text-slate-800">
+                    Daftar Room Tenant
+                </h3>
+
+                <p class="text-sm text-slate-500">
+                    Menampilkan seluruh data penempatan kamar tenant.
+                </p>
+
             </div>
 
-            <a href="{{ route('admin.room-tenants.create') }}"
-                class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
-                + Tambah Data
+            <a href="{{ route('admin.room-tenants.create') }}">
+                <x-ui.button>
+                    + Tambah Data
+                </x-ui.button>
             </a>
+
         </div>
 
-        @if(count($roomTenants) > 0)
-            <div class="overflow-x-auto">
-                <table class="w-full">
+        @if($roomTenants->count())
 
-                    <thead>
-                        <tr class="bg-gray-100">
-                            <th class="p-3 text-left">No</th>
-                            <th class="p-3 text-left">Kamar</th>
-                            <th class="p-3 text-left">Tenant</th>
-                            <th class="p-3 text-left">Tanggal Masuk</th>
-                            <th class="p-3 text-left">Tanggal Keluar</th>
-                            <th class="p-3 text-left">Status</th>
-                            <th class="p-3 text-center">Aksi</th>
-                        </tr>
-                    </thead>
+            <x-ui.table>
 
-                    <tbody>
-                        @foreach($roomTenants as $index => $item)
-                            <tr class="border-b hover:bg-gray-50">
-                                <td class="p-3">{{ $index + 1 }}</td>
-                                <td class="p-3 font-semibold">{{ $item->room->room_number }}</td>
-                                <td class="p-3">{{ $item->tenant->user->name ?? $item->tenant->name }}</td>
-                                <td class="p-3">{{ is_string($item->start_date) ? \Carbon\Carbon::parse($item->start_date)->format('d/m/Y') : ($item->start_date ? $item->start_date->format('d/m/Y') : '-') }}</td>
-                                <td class="p-3">{{ is_string($item->end_date) ? \Carbon\Carbon::parse($item->end_date)->format('d/m/Y') : ($item->end_date ? $item->end_date->format('d/m/Y') : '-') }}</td>
-                                <td class="p-3">
-                                    @if($item->status === 'active')
-                                        <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">Active</span>
-                                    @else
-                                        <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">Inactive</span>
-                                    @endif
-                                </td>
-                                <td class="p-3 text-center space-x-2">
-                                    <a href="{{ route('admin.room-tenants.edit', $item->id) }}"
-                                        class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded text-sm">
-                                        Edit
+                <thead class="bg-slate-50 border-b">
+
+                    <tr>
+
+                        <th class="px-6 py-4 text-left font-semibold">
+                            No
+                        </th>
+
+                        <th class="px-6 py-4 text-left font-semibold">
+                            Kamar
+                        </th>
+
+                        <th class="px-6 py-4 text-left font-semibold">
+                            Tenant
+                        </th>
+
+                        <th class="px-6 py-4 text-left font-semibold">
+                            Tanggal Masuk
+                        </th>
+
+                        <th class="px-6 py-4 text-left font-semibold">
+                            Tanggal Keluar
+                        </th>
+
+                        <th class="px-6 py-4 text-left font-semibold">
+                            Status
+                        </th>
+
+                        <th class="px-6 py-4 text-center font-semibold">
+                            Aksi
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    @foreach($roomTenants as $item)
+
+                        <tr class="border-b hover:bg-gray-50">
+
+                            <td class="px-6 py-4">
+                                {{ $loop->iteration }}
+                            </td>
+
+                            <td class="px-6 py-4">
+
+                                <div class="flex items-center gap-3">
+
+                                    <div
+                                        class="flex items-center justify-center w-10 h-10 font-semibold text-blue-600 bg-blue-100 rounded-full">
+                                        {{ strtoupper(substr($item->room->room_number, 0, 1)) }}
+                                    </div>
+
+                                    <div>
+
+                                        <p class="font-medium text-slate-800">
+                                            Kamar {{ $item->room->room_number }}
+                                        </p>
+
+                                        <p class="text-xs text-slate-500">
+                                            Room
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+                            </td>
+
+                            <td class="px-6 py-4">
+                                {{ $item->tenant->user->name ?? '-' }}
+                            </td>
+
+                            <td class="px-6 py-4">
+                                {{ \Carbon\Carbon::parse($item->start_date)->format('d/m/Y') }}
+                            </td>
+
+                            <td class="px-6 py-4">
+                                {{ $item->end_date
+                        ? \Carbon\Carbon::parse($item->end_date)->format('d/m/Y')
+                        : '-' }}
+                            </td>
+
+                            <td class="px-6 py-4">
+
+                                @if($item->status === 'active')
+                                    <x-ui.badge>
+                                        Active
+                                    </x-ui.badge>
+                                @else
+                                    <x-ui.badge color="secondary">
+                                        Inactive
+                                    </x-ui.badge>
+                                @endif
+
+                            </td>
+
+                            <td class="px-6 py-4">
+
+                                <div class="flex justify-center gap-2">
+
+                                    <a href="{{ route('admin.room-tenants.edit', $item) }}">
+                                        <x-ui.button>
+                                            Edit
+                                        </x-ui.button>
                                     </a>
 
-                                    <form action="{{ route('admin.room-tenants.destroy', $item->id) }}" method="POST" class="inline"
-                                        onsubmit="return confirm('Yakin ingin menghapus?')">
+                                    <form action="{{ route('admin.room-tenants.destroy', $item) }}" method="POST" class="inline"
+                                        onsubmit="return confirm('Yakin ingin menghapus data ini?');">
+
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit"
-                                            class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm">
+
+                                        <x-ui.button type="submit" color="secondary" class="bg-red-500 hover:bg-red-600 text-white">
                                             Hapus
-                                        </button>
+                                        </x-ui.button>
+
                                     </form>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                    @endforeach
+
+                </tbody>
+
+            </x-ui.table>
+
         @else
-            <div class="text-center py-12">
-                <p class="text-gray-500 text-lg">Data belum tersedia</p>
+
+            <x-ui.empty-state title="Belum Ada Data Room Tenant"
+                description="Silakan tambahkan data penempatan kamar terlebih dahulu." />
+
+            <div class="flex justify-center mt-6">
+
+                <a href="{{ route('admin.room-tenants.create') }}">
+                    <x-ui.button>
+                        + Tambah Data
+                    </x-ui.button>
+                </a>
+
             </div>
+
         @endif
-    </div>
+
+    </x-ui.card>
 
 @endsection
