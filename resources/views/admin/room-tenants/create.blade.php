@@ -84,7 +84,7 @@
 
                 <a href="{{ route('admin.room-tenants.index') }}"
                     class="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg font-medium inline-block text-center">
-                    Kembali
+                    Batal
                 </a>
 
             </div>
