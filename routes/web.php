@@ -79,7 +79,7 @@ Route::prefix('admin')
 
 
         Route::get('/room-tenant', [App\Http\Controllers\RoomTenantController::class, 'indexView'])
-             ->name('room-tenants.index');
+            ->name('room-tenants.index');
 
         Route::get('/room-tenant/create', [App\Http\Controllers\RoomTenantController::class, 'createView'])
             ->name('room-tenants.create');
@@ -97,11 +97,29 @@ Route::prefix('admin')
             ->name('room-tenants.destroy');
 
 
+
+        Route::get('/bill', [App\Http\Controllers\BillController::class, 'indexView'])
+            ->name('bills.index');
+
+        Route::get('/room-bill/create', [App\Http\Controllers\BillController::class, 'createView'])
+            ->name('bills.create');
+
+        Route::post('/room-bill', [App\Http\Controllers\BillController::class, 'store'])
+            ->name('bills.store');
+
+        Route::get('/room-bill/{bill}/edit', [App\Http\Controllers\BillController::class, 'editView'])
+            ->name('bills.edit');
+
+        Route::put('/room-bill/{bill}', [App\Http\Controllers\BillController::class, 'update'])
+            ->name('bills.update');
+
+        Route::delete('/room-bill/{bill}', [App\Http\Controllers\BillController::class, 'destroy'])
+            ->name('bills.destroy');
+
+        
+    
         Route::view('/payment', 'admin.payment.index')
             ->name('payment');
-
-        Route::view('/bill', 'admin.bill.index')
-            ->name('bill');
 
         Route::view('/report', 'admin.report.index')
             ->name('report');
