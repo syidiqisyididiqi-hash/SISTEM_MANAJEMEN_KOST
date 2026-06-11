@@ -1,131 +1,101 @@
 @extends('layouts.admin.app')
 
-@section('title', 'Create Bill')
+@section('title', 'Tambah Bill')
 
 @section('content')
 
-    <div class="max-w-3xl mx-auto">
-        <div class="bg-white rounded-xl shadow p-6">
+    <x-ui.page-header title="Tambah Bill" description="Tambahkan data tagihan tenant" />
 
-            <h1 class="text-2xl font-bold mb-6">
-                Create Bill
-            </h1>
+    <x-ui.card>
 
-            <form action="{{ route('admin.bills.store') }}" method="POST">
-                @csrf
+        <form action="{{ route('admin.bills.store') }}" method="POST">
 
-                <div class="mb-4">
-                    <label class="block mb-2 font-medium">
-                        Tenant
-                    </label>
+            @csrf
 
-                    <select name="room_tenant_id" class="w-full border rounded-lg p-2">
-                        <option value="">
-                            Select Tenant
+            <x-ui.form-group label="Tenant" name="room_tenant_id" required>
+
+                <x-ui.select id="room_tenant_id" name="room_tenant_id">
+
+                    <option value="">
+                        Pilih Tenant
+                    </option>
+
+                    @foreach($roomTenants as $tenant)
+
+                        <option value="{{ $tenant->id }}" {{ old('room_tenant_id') == $tenant->id ? 'selected' : '' }}>
+
+                            {{ $tenant->tenant->user->name ?? 'Unknown User' }}
+                            (Room {{ $tenant->room->room_number ?? '-' }})
+
                         </option>
 
-                        @forelse($roomTenants as $tenant)
-                            <option value="{{ $tenant->id }}">
-                                {{ $tenant->user->name ?? 'Unknown User' }}
-                            </option>
-                        @empty
-                            <option disabled>
-                                No Tenant Available
-                            </option>
-                        @endforelse
+                    @endforeach
 
-                    </select>
+                </x-ui.select>
 
-                    @error('room_tenant_id')
-                        <p class="text-red-500 text-sm mt-1">
-                            {{ $message }}
-                        </p>
-                    @enderror
-                </div>
+            </x-ui.form-group>
 
-                <div class="mb-4">
-                    <label class="block mb-2 font-medium">
-                        Bill Month
-                    </label>
+            <x-ui.form-group label="Bulan Tagihan" name="bill_month" required>
 
-                    <input type="month" name="bill_month" value="{{ old('bill_month') }}"
-                        class="w-full border rounded-lg p-2">
+                <x-ui.input type="month" id="bill_month" name="bill_month" :value="old('bill_month')" />
 
-                    @error('bill_month')
-                        <p class="text-red-500 text-sm mt-1">
-                            {{ $message }}
-                        </p>
-                    @enderror
-                </div>
+            </x-ui.form-group>
 
-                <div class="mb-4">
-                    <label class="block mb-2 font-medium">
-                        Amount
-                    </label>
+            <x-ui.form-group label="Jumlah Tagihan" name="amount" required>
 
-                    <input type="number" name="amount" value="{{ old('amount') }}" class="w-full border rounded-lg p-2">
+                <x-ui.input type="number" id="amount" name="amount" :value="old('amount')" />
 
-                    @error('amount')
-                        <p class="text-red-500 text-sm mt-1">
-                            {{ $message }}
-                        </p>
-                    @enderror
-                </div>
+            </x-ui.form-group>
 
-                <div class="mb-4">
-                    <label class="block mb-2 font-medium">
-                        Due Date
-                    </label>
+            <x-ui.form-group label="Tanggal Jatuh Tempo" name="due_date" required>
 
-                    <input type="date" name="due_date" value="{{ old('due_date') }}" class="w-full border rounded-lg p-2">
+                <x-ui.input type="date" id="due_date" name="due_date" :value="old('due_date')" />
 
-                    @error('due_date')
-                        <p class="text-red-500 text-sm mt-1">
-                            {{ $message }}
-                        </p>
-                    @enderror
-                </div>
+            </x-ui.form-group>
 
-                <div class="mb-4">
-                    <label class="block mb-2 font-medium">
-                        Fine Amount
-                    </label>
+            <x-ui.form-group label="Denda" name="fine_amount">
 
-                    <input type="number" name="fine_amount" value="{{ old('fine_amount', 0) }}"
-                        class="w-full border rounded-lg p-2">
+                <x-ui.input type="number" id="fine_amount" name="fine_amount" :value="old('fine_amount', 0)" />
 
-                    @error('fine_amount')
-                        <p class="text-red-500 text-sm mt-1">
-                            {{ $message }}
-                        </p>
-                    @enderror
-                </div>
+            </x-ui.form-group>
 
-                <div class="mb-6">
-                    <label class="block mb-2 font-medium">
-                        Status
-                    </label>
+            <x-ui.form-group label="Status" name="status" required>
 
-                    <select name="status" class="w-full border rounded-lg p-2">
-                        <option value="unpaid">Unpaid</option>
-                        <option value="paid">Paid</option>
-                        <option value="overdue">Overdue</option>
-                    </select>
+                <x-ui.select id="status" name="status">
 
-                    @error('status')
-                        <p class="text-red-500 text-sm mt-1">
-                            {{ $message }}
-                        </p>
-                    @enderror
-                </div>
+                    <option value="unpaid" {{ old('status', 'unpaid') == 'unpaid' ? 'selected' : '' }}>
+                        Unpaid
+                    </option>
 
-                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
-                    Save
-                </button>
+                    <option value="paid" {{ old('status') == 'paid' ? 'selected' : '' }}>
+                        Paid
+                    </option>
 
-            </form>
+                    <option value="overdue" {{ old('status') == 'overdue' ? 'selected' : '' }}>
+                        Overdue
+                    </option>
 
-        </div>
-    </div>
+                </x-ui.select>
+
+            </x-ui.form-group>
+
+            <div class="flex gap-3">
+
+                <x-ui.button type="submit">
+                    Simpan
+                </x-ui.button>
+
+                <a href="{{ route('admin.bills.index') }}"
+                    class="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg font-medium inline-block text-center">
+
+                    Batal
+
+                </a>
+
+            </div>
+
+        </form>
+
+    </x-ui.card>
 
 @endsection

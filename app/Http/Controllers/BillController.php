@@ -36,7 +36,9 @@ class BillController extends Controller
      */
     public function createView()
     {
-        $roomTenants = RoomTenant::with('user')->get();
+        $roomTenants = RoomTenant::with(['room', 'tenant.user'])
+            ->where('status', 'active')
+            ->get();
 
         return view('admin.bills.create', compact('roomTenants'));
     }

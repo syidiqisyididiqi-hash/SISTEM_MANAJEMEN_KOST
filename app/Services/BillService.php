@@ -16,6 +16,8 @@ class BillService
 
     public function store(array $data): Bill
     {
+        $data['bill_month'] = $data['bill_month'] . '-01';
+
         return Bill::create($data);
     }
 
