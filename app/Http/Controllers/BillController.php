@@ -73,8 +73,11 @@ class BillController extends Controller
      */
     public function update(UpdateBillRequest $request, Bill $bill)
     {
-        $bill = $this->service->update($bill, $request->validated());
-        return view('admin.bills.show', compact('bill'));
+        $this->service->update($bill, $request->validated());
+
+        return redirect()
+            ->route('admin.bills.index')
+            ->with('success', 'Bill berhasil diperbarui!');
     }
 
     /**
@@ -82,7 +85,11 @@ class BillController extends Controller
      */
     public function editView(int $id)
     {
-        $bill = $this->service->findById($id);
+        $bill = Bill::with([
+            'roomtenant.room',
+            'roomtenant.tenant.user'
+        ])->findOrFail($id);
+
         $roomTenants = RoomTenant::with(['room', 'tenant.user'])
             ->where('status', 'active')
             ->get();

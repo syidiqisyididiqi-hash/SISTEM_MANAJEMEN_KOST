@@ -4,88 +4,96 @@
 
 @section('content')
 
-    <div class="max-w-3xl mx-auto">
+    <x-ui.page-header title="Edit Bill" description="Perbarui data tagihan tenant" />
 
-        <div class="bg-white rounded-xl shadow p-6">
+    <x-ui.card>
 
-            <h1 class="text-2xl font-bold mb-6">
-                Edit Bill
-            </h1>
+        <form action="{{ route('admin.bills.update', $bill->id) }}" method="POST">
 
-            <form action="{{ route('admin.bills.update', $bill->id) }}" method="POST">
+            @csrf
+            @method('PUT')
 
-                @csrf
-                @method('PUT')
+            <x-ui.form-group label="Tenant" name="room_tenant_id" required>
 
-                <div class="mb-4">
-                    <label class="block mb-2">Tenant</label>
+                <x-ui.select id="room_tenant_id" name="room_tenant_id">
 
-                    <select name="room_tenant_id" class="w-full border rounded-lg p-2">
-
-                        @foreach($roomTenants as $tenant)
-                            <option value="{{ $tenant->id }}" {{ $bill->room_tenant_id == $tenant->id ? 'selected' : '' }}>
-                                {{ $tenant->user->name }}
-                            </option>
-                        @endforeach
-
-                    </select>
-                </div>
-
-                <div class="mb-4">
-                    <label class="block mb-2">Bill Month</label>
-
-                    <input type="month" name="bill_month"
-                        value="{{ \Carbon\Carbon::parse($bill->bill_month)->format('Y-m') }}"
-                        class="w-full border rounded-lg p-2">
-                </div>
-
-                <div class="mb-4">
-                    <label class="block mb-2">Amount</label>
-
-                    <input type="number" name="amount" value="{{ $bill->amount }}" class="w-full border rounded-lg p-2">
-                </div>
-
-                <div class="mb-4">
-                    <label class="block mb-2">Due Date</label>
-
-                    <input type="date" name="due_date" value="{{ $bill->due_date }}" class="w-full border rounded-lg p-2">
-                </div>
-
-                <div class="mb-4">
-                    <label class="block mb-2">Fine Amount</label>
-
-                    <input type="number" name="fine_amount" value="{{ $bill->fine_amount }}"
-                        class="w-full border rounded-lg p-2">
-                </div>
-
-                <div class="mb-4">
-                    <label class="block mb-2">Status</label>
-
-                    <select name="status" class="w-full border rounded-lg p-2">
-
-                        <option value="unpaid" {{ $bill->status == 'unpaid' ? 'selected' : '' }}>
-                            Unpaid
+                    @foreach($roomTenants as $roomTenant)
+                        <option value="{{ $roomTenant->id }}" {{ old('room_tenant_id', $bill->room_tenant_id) == $roomTenant->id ? 'selected' : '' }}>
+                            {{ $roomTenant->tenant->user->name }}
                         </option>
+                    @endforeach
 
-                        <option value="paid" {{ $bill->status == 'paid' ? 'selected' : '' }}>
-                            Paid
-                        </option>
+                </x-ui.select>
 
-                        <option value="overdue" {{ $bill->status == 'overdue' ? 'selected' : '' }}>
-                            Overdue
-                        </option>
+            </x-ui.form-group>
 
-                    </select>
-                </div>
+            <x-ui.form-group label="Bill Month" name="bill_month" required>
 
-                <button class="bg-green-600 text-white px-4 py-2 rounded-lg">
+                <x-ui.input type="month" id="bill_month" name="bill_month" :value="old(
+            'bill_month',
+            \Carbon\Carbon::parse($bill->bill_month)->format('Y-m')
+        )" />
+
+            </x-ui.form-group>
+
+            <x-ui.form-group label="Amount" name="amount" required>
+
+                <x-ui.input type="number" id="amount" name="amount" :value="old('amount', $bill->amount)" />
+
+            </x-ui.form-group>
+
+            <x-ui.form-group label="Due Date" name="due_date" required>
+
+                <x-ui.input type="date" id="due_date" name="due_date" :value="old(
+            'due_date',
+            $bill->due_date
+            ? \Carbon\Carbon::parse($bill->due_date)->format('Y-m-d')
+            : ''
+        )" />
+
+            </x-ui.form-group>
+
+            <x-ui.form-group label="Fine Amount" name="fine_amount">
+
+                <x-ui.input type="number" id="fine_amount" name="fine_amount" :value="old('fine_amount', $bill->fine_amount)" />
+
+            </x-ui.form-group>
+
+            <x-ui.form-group label="Status" name="status" required>
+
+                <x-ui.select id="status" name="status">
+
+                    <option value="unpaid" {{ old('status', $bill->status) == 'unpaid' ? 'selected' : '' }}>
+                        Unpaid
+                    </option>
+
+                    <option value="paid" {{ old('status', $bill->status) == 'paid' ? 'selected' : '' }}>
+                        Paid
+                    </option>
+
+                    <option value="overdue" {{ old('status', $bill->status) == 'overdue' ? 'selected' : '' }}>
+                        Overdue
+                    </option>
+
+                </x-ui.select>
+
+            </x-ui.form-group>
+
+            <div class="flex gap-3">
+
+                <x-ui.button type="submit">
                     Update
-                </button>
+                </x-ui.button>
 
-            </form>
+                <a href="{{ route('admin.bills.index') }}"
+                    class="px-5 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg font-medium inline-block text-center">
+                    Kembali
+                </a>
 
-        </div>
+            </div>
 
-    </div>
+        </form>
+
+    </x-ui.card>
 
 @endsection
