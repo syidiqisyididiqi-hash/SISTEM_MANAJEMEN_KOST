@@ -83,7 +83,11 @@ class BillController extends Controller
     public function editView(int $id)
     {
         $bill = $this->service->findById($id);
-        return view('admin.bills.edit', compact('bill'));
+        $roomTenants = RoomTenant::with(['room', 'tenant.user'])
+            ->where('status', 'active')
+            ->get();
+
+        return view('admin.bills.edit', compact('bill', 'roomTenants'));
     }
 
     /**
