@@ -116,10 +116,26 @@ Route::prefix('admin')
         Route::delete('/room-bill/{bill}', [App\Http\Controllers\BillController::class, 'destroy'])
             ->name('bills.destroy');
 
-        
-    
-        Route::view('/payment', 'admin.payment.index')
-            ->name('payment');
+
+        Route::get('/payments', [App\Http\Controllers\PaymentController::class, 'indexView'])
+            ->name('payments.index');
+
+        Route::get('/payments/create', [App\Http\Controllers\PaymentController::class, 'createView'])
+            ->name('payments.create');
+
+        Route::post('/payments', [App\Http\Controllers\PaymentController::class, 'store'])
+            ->name('payments.store');
+
+        Route::get('/payments/{id}/edit', [App\Http\Controllers\PaymentController::class, 'editView'])
+            ->name('payments.edit');
+
+        Route::put('/payments/{payment}', [App\Http\Controllers\PaymentController::class, 'update'])
+            ->name('payments.update');
+
+        Route::delete('/payments/{payment}', [App\Http\Controllers\PaymentController::class, 'destroy'])
+            ->name('payments.destroy');
+
+
 
         Route::view('/report', 'admin.report.index')
             ->name('report');
