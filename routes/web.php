@@ -140,8 +140,11 @@ Route::prefix('admin')
         Route::view('/report', 'admin.report.index')
             ->name('report');
 
-        Route::view('/activity-log', 'admin.activity-log.index')
+        Route::get('/activity-log', [App\Http\Controllers\ActivityLogController::class, 'indexView'])
             ->name('activity-log');
+
+        Route::get('/activity-log/{activity_log}', [App\Http\Controllers\ActivityLogController::class, 'showView'])
+            ->name('activity-logs.show');
 
 
 
