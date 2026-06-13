@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Exception;
+use App\Models\Bill;
 use App\Models\Payment;
 use App\Services\PaymentService;
 use App\Http\Requests\Payment\StorePaymentRequest;
@@ -24,20 +25,50 @@ class PaymentController extends Controller
     }
 
     /**
+     * Display a listing of the resource as HTML view.
+     */
+    public function indexView()
+    {
+        $payments = $this->service->getAll();
+        return view('admin.payments.index', compact('payments'));
+    }
+
+    /**
+     * Show the form for creating a new resource (view).
+     */
+    public function createView()
+    {
+        $bills = Bill::with([
+            'roomtenant.tenant.user'
+        ])->where('status', 'unpaid')->get();
+
+        return view('admin.payments.create', compact(
+            'bills'
+        ));
+    }
+
+    /**
      * Store a newly created resource in storage.
      */
     public function store(StorePaymentRequest $request)
     {
         try {
-            $payment = $this->service->store($request->validated());
 
-            return response()->json($payment, 201);
+            $this->service->store(
+                $request->validated()
+            );
+
+            return redirect()
+                ->route('admin.payments.index')
+                ->with('success', 'Data payment berhasil ditambahkan.');
 
         } catch (Exception $e) {
 
-            return response()->json([
-                'message' => $e->getMessage()
-            ], 400);
+            return back()
+                ->withInput()
+                ->withErrors([
+                    'error' => $e->getMessage()
+                ]);
         }
     }
 
@@ -59,15 +90,53 @@ class PaymentController extends Controller
      */
     public function update(UpdatePaymentRequest $request, int $id)
     {
-        $payment = Payment::find($id);
+        try {
 
-        if (!$payment) {
-            return response()->json(['message' => 'Payment not found.'], 404);
+            $payment = Payment::find($id);
+
+            if (!$payment) {
+
+                return redirect()
+                    ->route('admin.payments.index')
+                    ->withErrors([
+                        'error' => 'Data payment tidak ditemukan.'
+                    ]);
+            }
+
+            $this->service->update(
+                $payment,
+                $request->validated()
+            );
+
+            return redirect()
+                ->route('admin.payments.index')
+                ->with('success', 'Data payment berhasil diperbarui.');
+
+        } catch (Exception $e) {
+
+            return back()
+                ->withInput()
+                ->withErrors([
+                    'error' => $e->getMessage()
+                ]);
         }
+    }
 
-        $payment = $this->service->update($payment, $request->validated());
+    /**
+     * Show the form for editing the specified resource (view).
+     */
+    public function editView(int $id)
+    {
+        $payment = $this->service->findById($id);
 
-        return response()->json($payment);
+        $bills = Bill::with([
+            'roomtenant.tenant.user'
+        ])->get();
+
+        return view('admin.payments.edit', compact(
+            'payment',
+            'bills'
+        ));
     }
 
     /**
@@ -78,11 +147,17 @@ class PaymentController extends Controller
         $payment = Payment::find($id);
 
         if (!$payment) {
-            return response()->json(['message' => 'Payment not found.'], 404);
+            return redirect()
+                ->route('admin.payments.index')
+                ->withErrors([
+                    'error' => 'Data payment tidak ditemukan.'
+                ]);
         }
 
         $this->service->delete($payment);
 
-        return response()->noContent();
+        return redirect()
+            ->route('admin.payments.index')
+            ->with('success', 'Data payment berhasil dihapus.');
     }
 }
