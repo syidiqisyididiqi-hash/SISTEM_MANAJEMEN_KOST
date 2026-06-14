@@ -20,6 +20,24 @@ class ActivityLogController extends Controller
     }
 
     /**
+     * Display the activity log view
+     */
+    public function indexView()
+    {
+        $logs = $this->service->getAll();
+        return view('admin.activity-log.index', compact('logs'));
+    }
+
+    /**
+     * Display the specified resource as HTML view.
+     */
+    public function showView(int $id)
+    {
+        $log = $this->service->findById($id);
+        return view('admin.activity-log.show', compact('log'));
+    }
+
+    /**
      * Store a newly created resource in storage.
      */
     public function store(StoreActivityLogRequest $request)
