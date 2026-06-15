@@ -4,109 +4,105 @@
 
 <div class="space-y-6">
 
+    {{-- Header --}}
     <div>
         <h1 class="text-3xl font-bold text-gray-800">
             Dashboard
         </h1>
 
         <p class="text-gray-500 mt-1">
-            Monitoring sistem manajemen kost
+            Monitoring Sistem Manajemen Kost
         </p>
     </div>
+
+    {{-- Statistik --}}
     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
 
         <div class="bg-white rounded-3xl shadow-sm p-6">
-
             <div class="flex items-center justify-between">
-
                 <div>
                     <p class="text-gray-500 text-sm">
                         Total Tenant
                     </p>
 
                     <h2 class="text-3xl font-bold text-gray-800 mt-2">
-                        120
+                        {{ $totalTenants }}
                     </h2>
                 </div>
 
-                <div class="w-14 h-14 rounded-2xl bg-blue-100 flex items-center justify-center text-2xl">
+                <div
+                    class="w-14 h-14 rounded-2xl bg-blue-100 flex items-center justify-center text-2xl">
                     👤
                 </div>
-
             </div>
-
         </div>
+
         <div class="bg-white rounded-3xl shadow-sm p-6">
-
             <div class="flex items-center justify-between">
-
                 <div>
                     <p class="text-gray-500 text-sm">
                         Total Kamar
                     </p>
 
                     <h2 class="text-3xl font-bold text-gray-800 mt-2">
-                        85
+                        {{ $totalRooms }}
                     </h2>
                 </div>
 
-                <div class="w-14 h-14 rounded-2xl bg-green-100 flex items-center justify-center text-2xl">
+                <div
+                    class="w-14 h-14 rounded-2xl bg-green-100 flex items-center justify-center text-2xl">
                     🛏️
                 </div>
-
             </div>
-
         </div>
+
         <div class="bg-white rounded-3xl shadow-sm p-6">
-
             <div class="flex items-center justify-between">
-
                 <div>
                     <p class="text-gray-500 text-sm">
-                        Pembayaran
+                        Total Pembayaran
                     </p>
 
                     <h2 class="text-3xl font-bold text-gray-800 mt-2">
-                        74
+                        {{ $totalPayments }}
                     </h2>
                 </div>
 
-                <div class="w-14 h-14 rounded-2xl bg-yellow-100 flex items-center justify-center text-2xl">
+                <div
+                    class="w-14 h-14 rounded-2xl bg-yellow-100 flex items-center justify-center text-2xl">
                     💳
                 </div>
-
             </div>
-
         </div>
 
         <div class="bg-white rounded-3xl shadow-sm p-6">
-
             <div class="flex items-center justify-between">
-
                 <div>
                     <p class="text-gray-500 text-sm">
-                        Pendapatan
+                        Total Pendapatan
                     </p>
 
                     <h2 class="text-2xl font-bold text-gray-800 mt-2">
-                        Rp 15JT
+                        Rp {{ number_format($totalPaidAmount, 0, ',', '.') }}
                     </h2>
                 </div>
 
-                <div class="w-14 h-14 rounded-2xl bg-red-100 flex items-center justify-center text-2xl">
+                <div
+                    class="w-14 h-14 rounded-2xl bg-red-100 flex items-center justify-center text-2xl">
                     📈
                 </div>
-
             </div>
-
         </div>
 
     </div>
 
+    {{-- Content --}}
     <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
 
+        {{-- Left --}}
         <div class="xl:col-span-2 space-y-6">
 
+            {{-- Pembayaran --}}
             <div class="bg-white rounded-3xl shadow-sm p-6">
 
                 <div class="flex items-center justify-between mb-6">
@@ -121,10 +117,6 @@
                         </p>
                     </div>
 
-                    <button class="text-blue-600 hover:underline text-sm">
-                        Lihat Semua
-                    </button>
-
                 </div>
 
                 <div class="overflow-x-auto">
@@ -132,48 +124,59 @@
                     <table class="w-full">
 
                         <thead>
-                            <tr class="text-left text-gray-500 border-b">
+
+                            <tr class="border-b text-left text-gray-500">
+
                                 <th class="pb-4">Tenant</th>
                                 <th class="pb-4">Kamar</th>
                                 <th class="pb-4">Tanggal</th>
                                 <th class="pb-4">Status</th>
+
                             </tr>
+
                         </thead>
 
                         <tbody class="text-gray-700">
 
-                            <tr class="border-b">
-                                <td class="py-4">Syahid</td>
-                                <td>A-01</td>
-                                <td>29 Mei 2026</td>
-                                <td>
-                                    <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">
-                                        Lunas
-                                    </span>
-                                </td>
-                            </tr>
+                            @forelse($recentPayments as $payment)
 
-                            <tr class="border-b">
-                                <td class="py-4">Rizky</td>
-                                <td>B-02</td>
-                                <td>29 Mei 2026</td>
-                                <td>
-                                    <span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-sm">
-                                        Pending
-                                    </span>
-                                </td>
-                            </tr>
+                                <tr class="border-b">
 
-                            <tr>
-                                <td class="py-4">Fajar</td>
-                                <td>C-03</td>
-                                <td>28 Mei 2026</td>
-                                <td>
-                                    <span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm">
-                                        Telat
-                                    </span>
-                                </td>
-                            </tr>
+                                    <td class="py-4">
+                                        {{ optional(optional(optional(optional($payment->bill)->roomTenant)->tenant)->user)->name ?? 'N/A' }}
+                                    </td>
+
+                                    <td>
+                                        {{ optional(optional($payment->bill)->roomTenant)->room->room_number ?? 'N/A' }}
+                                    </td>
+
+                                    <td>
+                                        {{ $payment->created_at->format('d M Y') }}
+                                    </td>
+
+                                    <td>
+                                        <span
+                                            class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">
+                                            Terbayar
+                                        </span>
+                                    </td>
+
+                                </tr>
+
+                            @empty
+
+                                <tr>
+
+                                    <td colspan="4"
+                                        class="py-6 text-center text-gray-500">
+
+                                        Belum ada pembayaran
+
+                                    </td>
+
+                                </tr>
+
+                            @endforelse
 
                         </tbody>
 
@@ -183,6 +186,7 @@
 
             </div>
 
+            {{-- Activity Log --}}
             <div class="bg-white rounded-3xl shadow-sm p-6">
 
                 <h2 class="text-xl font-bold text-gray-800 mb-6">
@@ -191,37 +195,36 @@
 
                 <div class="space-y-5">
 
-                    <div class="flex items-start gap-4">
-                        <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
-                            👤
+                    @forelse($recentActivities as $activity)
+
+                        <div class="flex items-start gap-4">
+
+                            <div
+                                class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
+                                📋
+                            </div>
+
+                            <div>
+
+                                <p class="text-gray-800 font-medium">
+                                    {{ $activity->description }}
+                                </p>
+
+                                <p class="text-sm text-gray-500">
+                                    {{ $activity->created_at->diffForHumans() }}
+                                </p>
+
+                            </div>
+
                         </div>
 
-                        <div>
-                            <p class="text-gray-800 font-medium">
-                                Admin menambahkan tenant baru
-                            </p>
+                    @empty
 
-                            <p class="text-sm text-gray-500">
-                                5 menit yang lalu
-                            </p>
-                        </div>
-                    </div>
+                        <p class="text-center text-gray-500">
+                            Tidak ada aktivitas
+                        </p>
 
-                    <div class="flex items-start gap-4">
-                        <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
-                            💳
-                        </div>
-
-                        <div>
-                            <p class="text-gray-800 font-medium">
-                                Pembayaran berhasil dikonfirmasi
-                            </p>
-
-                            <p class="text-sm text-gray-500">
-                                20 menit yang lalu
-                            </p>
-                        </div>
-                    </div>
+                    @endforelse
 
                 </div>
 
@@ -229,8 +232,10 @@
 
         </div>
 
+        {{-- Right --}}
         <div class="space-y-6">
 
+            {{-- Status Kamar --}}
             <div class="bg-white rounded-3xl shadow-sm p-6">
 
                 <h2 class="text-xl font-bold text-gray-800 mb-6">
@@ -240,57 +245,59 @@
                 <div class="space-y-5">
 
                     <div>
+
                         <div class="flex justify-between mb-2">
+
                             <span class="text-sm text-gray-600">
                                 Terisi
                             </span>
 
                             <span class="text-sm font-semibold">
-                                70%
+                                {{ $occupiedPercentage }}%
                             </span>
+
                         </div>
 
                         <div class="w-full bg-gray-200 rounded-full h-3">
-                            <div class="bg-green-500 h-3 rounded-full w-[70%]"></div>
+
+                            <div
+                                class="bg-green-500 h-3 rounded-full">
+                            </div>
+
                         </div>
+
                     </div>
 
                     <div>
+
                         <div class="flex justify-between mb-2">
+
                             <span class="text-sm text-gray-600">
                                 Kosong
                             </span>
 
                             <span class="text-sm font-semibold">
-                                20%
+                                {{ $availablePercentage }}%
                             </span>
+
                         </div>
 
                         <div class="w-full bg-gray-200 rounded-full h-3">
-                            <div class="bg-yellow-500 h-3 rounded-full w-[20%]"></div>
-                        </div>
-                    </div>
 
-                    <div>
-                        <div class="flex justify-between mb-2">
-                            <span class="text-sm text-gray-600">
-                                Maintenance
-                            </span>
+                            <div
+                                class="bg-yellow-500 h-3 rounded-full">
+>
+                            </div>
 
-                            <span class="text-sm font-semibold">
-                                10%
-                            </span>
                         </div>
 
-                        <div class="w-full bg-gray-200 rounded-full h-3">
-                            <div class="bg-red-500 h-3 rounded-full w-[10%]"></div>
-                        </div>
                     </div>
 
                 </div>
 
             </div>
 
+            {{-- Quick Action --}}
             <div class="bg-white rounded-3xl shadow-sm p-6">
 
                 <h2 class="text-xl font-bold text-gray-800 mb-6">
@@ -299,17 +306,26 @@
 
                 <div class="space-y-4">
 
-                    <button class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-2xl transition">
+                    <a href="{{ route('admin.tenants.create') }}"
+                        class="block w-full text-center bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-2xl transition">
+
                         + Tambah Tenant
-                    </button>
 
-                    <button class="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-2xl transition">
+                    </a>
+
+                    <a href="{{ route('admin.rooms.create') }}"
+                        class="block w-full text-center bg-green-600 hover:bg-green-700 text-white py-3 rounded-2xl transition">
+
                         + Tambah Kamar
-                    </button>
 
-                    <button class="w-full bg-yellow-500 hover:bg-yellow-600 text-white py-3 rounded-2xl transition">
-                        Generate Tagihan
-                    </button>
+                    </a>
+
+                    <a href="{{ route('admin.bills.index') }}"
+                        class="block w-full text-center bg-yellow-500 hover:bg-yellow-600 text-white py-3 rounded-2xl transition">
+
+                        Kelola Tagihan
+
+                    </a>
 
                 </div>
 
