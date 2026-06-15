@@ -27,7 +27,7 @@ Route::prefix('admin')
     ->name('admin.')
     ->group(function () {
 
-        Route::view('/dashboard', 'admin.dashboard.index')
+        Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])
             ->name('dashboard');
 
         Route::redirect('/tenant', '/tenants');
