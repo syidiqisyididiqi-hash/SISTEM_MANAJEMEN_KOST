@@ -4,74 +4,73 @@
 
 @section('content')
 
-    <div class="max-w-3xl mx-auto">
+    <x-ui.page-header title="Tambah Kamar" description="Tambahkan data kamar baru" />
 
-        <div class="bg-white rounded-2xl shadow-sm p-6">
+    <x-ui.card>
 
-            <h1 class="text-2xl font-bold mb-6">
-                Tambah Kamar
-            </h1>
+        <form action="{{ route('admin.rooms.store') }}" method="POST">
 
-            <form action="{{ route('admin.rooms.store') }}" method="POST">
-                @csrf
+            @csrf
 
-                <div class="mb-4">
-                    <label class="block mb-2 font-medium">
-                        Nomor Kamar
-                    </label>
+            <x-ui.form-group label="Nomor Kamar" name="room_number" required>
 
-                    <input type="text" name="room_number"
-                        class="w-full border rounded-lg px-4 py-2 @error('room_number') border-red-500 @enderror"
-                        placeholder="Contoh : A01" value="{{ old('room_number') }}">
-                    @error('room_number')
-                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                    @enderror
-                </div>
+                <x-ui.input name="room_number" placeholder="Contoh : A01" :value="old('room_number')" />
 
-                <div class="mb-4">
-                    <label class="block mb-2 font-medium">
-                        Harga Per Bulan
-                    </label>
+            </x-ui.form-group>
 
-                    <input type="number" name="price_per_month"
-                        class="w-full border rounded-lg px-4 py-2 @error('price_per_month') border-red-500 @enderror"
-                        placeholder="750000" value="{{ old('price_per_month') }}">
-                    @error('price_per_month')
-                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                    @enderror
-                </div>
+            <x-ui.form-group label="Harga Per Bulan" name="price_per_month" required>
 
-                <div class="mb-6">
-                    <label class="block mb-2 font-medium">
-                        Status
-                    </label>
+                <x-ui.input type="number" name="price_per_month" placeholder="750000" :value="old('price_per_month')" />
 
-                    <select name="status"
-                        class="w-full border rounded-lg px-4 py-2 @error('status') border-red-500 @enderror">
-                        <option value="available" {{ old('status') === 'available' ? 'selected' : '' }}>Available</option>
-                        <option value="occupied" {{ old('status') === 'occupied' ? 'selected' : '' }}>Occupied</option>
-                        <option value="maintenance" {{ old('status') === 'maintenance' ? 'selected' : '' }}>Maintenance
-                        </option>
-                    </select>
-                    @error('status')
-                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                    @enderror
-                </div>
+            </x-ui.form-group>
 
-                <div class="flex gap-3">
-                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg">
-                        Simpan
-                    </button>
+            <x-ui.form-group label="Status" name="status" required>
 
-                    <a href="{{ route('admin.rooms.index') }}" class="bg-gray-200 hover:bg-gray-300 px-5 py-2 rounded-lg">
-                        Batal
-                    </a>
-                </div>
+                <x-ui.select id="status" name="status">
 
-            </form>
+                    <option value="">
+                        Pilih Status
+                    </option>
 
-        </div>
+                    <option value="available" {{ old('status') == 'available' ? 'selected' : '' }}>
+                        Available
+                    </option>
 
-    </div>
+                    <option value="occupied" {{ old('status') == 'occupied' ? 'selected' : '' }}>
+                        Occupied
+                    </option>
+
+                    <option value="maintenance" {{ old('status') == 'maintenance' ? 'selected' : '' }}>
+                        Maintenance
+                    </option>
+
+                </x-ui.select>
+
+            </x-ui.form-group>
+
+            <div class="flex gap-3">
+
+                <x-ui.button type="submit">
+                    Simpan
+                </x-ui.button>
+
+                <!-- <a href="{{ route('admin.rooms.index') }}">
+
+                        <x-ui.button color="secondary">
+                            Batal
+                        </x-ui.button>
+
+                    </a> -->
+
+                <a href="{{ route('admin.rooms.index') }}"
+                    class="px-5 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg font-medium inline-block text-center">
+                    Kembali
+                </a>
+
+            </div>
+
+        </form>
+
+    </x-ui.card>
 
 @endsection
