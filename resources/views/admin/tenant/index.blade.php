@@ -135,12 +135,6 @@
 
                                 <div class="flex justify-center gap-2">
 
-                                    <a href="{{ route('admin.tenants.show', $tenant) }}">
-                                        <x-ui.button>
-                                            Detail
-                                        </x-ui.button>
-                                    </a>
-
                                     <a href="{{ route('admin.tenants.edit', $tenant) }}">
                                         <x-ui.button>
                                             Edit
