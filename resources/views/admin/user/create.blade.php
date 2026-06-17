@@ -4,91 +4,69 @@
 
 @section('content')
 
-    <div class="bg-white rounded-2xl shadow-sm p-6 max-w-2xl">
+    <x-ui.page-header title="Tambah User" description="Tambahkan akun admin atau tenant baru" />
 
-        <h2 class="text-2xl font-bold mb-6">
-            Tambah User
-        </h2>
+    <x-ui.card>
 
         <form method="POST" action="{{ route('admin.user.store') }}">
+
             @csrf
 
-            <div class="mb-4">
+            <x-ui.form-group label="Nama" name="name" required>
 
-                <label for="name" class="block mb-2">
-                    Nama
-                </label>
+                <x-ui.input id="name" type="text" name="name" placeholder="Masukkan nama" :value="old('name')" />
 
-                <input id="name" type="text" name="name" value="{{ old('name') }}"
-                    class="w-full border rounded-xl px-4 py-3" required>
+            </x-ui.form-group>
 
-                @error('name')
-                    <p class="text-red-500 text-sm mt-1">
-                        {{ $message }}
-                    </p>
-                @enderror
+            <x-ui.form-group label="Email" name="email" required>
 
-            </div>
+                <x-ui.input id="email" type="email" name="email" placeholder="Masukkan email" :value="old('email')" />
 
-            <div class="mb-4">
+            </x-ui.form-group>
 
-                <label for="email" class="block mb-2">
-                    Email
-                </label>
+            <x-ui.form-group label="Password" name="password" required>
 
-                <input id="email" type="email" name="email" value="{{ old('email') }}" autocomplete="email"
-                    class="w-full border rounded-xl px-4 py-3" required>
+                <x-ui.input id="password" type="password" name="password" placeholder="Masukkan password" />
 
-                @error('email')
-                    <p class="text-red-500 text-sm mt-1">
-                        {{ $message }}
-                    </p>
-                @enderror
+            </x-ui.form-group>
 
-            </div>
+            <x-ui.form-group label="Role" name="role" required>
 
-            <div class="mb-4">
+                <x-ui.select id="role" name="role">
 
-                <label for="password" class="block mb-2">
-                    Password
-                </label>
+                    <option value="">
+                        Pilih Role
+                    </option>
 
-                <input id="password" type="password" name="password" autocomplete="new-password"
-                    class="w-full border rounded-xl px-4 py-3" required>
+                    <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>
+                        Admin
+                    </option>
 
-                @error('password')
-                    <p class="text-red-500 text-sm mt-1">
-                        {{ $message }}
-                    </p>
-                @enderror
+                    <option value="tenant" {{ old('role') == 'tenant' ? 'selected' : '' }}>
+                        Tenant
+                    </option>
 
-            </div>
+                </x-ui.select>
 
-            <div class="mb-6">
+            </x-ui.form-group>
 
-                <label for="role" class="block mb-2">
-                    Role
-                </label>
+            <div class="flex gap-3">
 
-                <select id="role" name="role" class="w-full border rounded-xl px-4 py-3" required>
-                    <option value="admin">Admin</option>
-                    <option value="tenant">Tenant</option>
-                </select>
+                <x-ui.button type="submit">
+                    Simpan
+                </x-ui.button>
 
-                @error('role')
-                    <p class="text-red-500 text-sm mt-1">
-                        {{ $message }}
-                    </p>
-                @enderror
+                <a href="{{ route('admin.user.index') }}"
+                    class="px-5 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg font-medium inline-block text-center">
+
+                    Kembali
+
+                </a>
 
             </div>
-
-            <button type="submit" class="px-5 py-3 bg-blue-600 text-white rounded-xl">
-                Simpan
-            </button>
 
         </form>
 
-    </div>
+    </x-ui.card>
 
 @endsection

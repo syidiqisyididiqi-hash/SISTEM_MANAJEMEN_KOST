@@ -4,48 +4,31 @@
 
 @section('content')
 
-    <div class="bg-white rounded-2xl shadow-sm p-6 max-w-2xl">
+    <x-ui.page-header title="Edit User" description="Perbarui data akun pengguna" />
 
-        <h2 class="text-2xl font-bold mb-6">
-            Edit User
-        </h2>
+    <x-ui.card>
 
         <form method="POST" action="{{ route('admin.user.update', $user) }}">
+
             @csrf
             @method('PUT')
 
-            <div class="mb-4">
+            <x-ui.form-group label="Nama" name="name" required>
 
-                <label class="block mb-2">
-                    Nama
-                </label>
+                <x-ui.input type="text" name="name" :value="old('name', $user->name)" />
 
-                <input type="text" name="name" value="{{ old('name', $user->name) }}"
-                    class="w-full border rounded-xl px-4 py-3">
+            </x-ui.form-group>
 
-            </div>
+            <x-ui.form-group label="Email" name="email" required>
 
-            <div class="mb-4">
+                <x-ui.input type="email" name="email" :value="old('email', $user->email)" />
 
-                <label class="block mb-2">
-                    Email
-                </label>
+            </x-ui.form-group>
 
-                <input type="email" name="email" value="{{ old('email', $user->email) }}"
-                    class="w-full border rounded-xl px-4 py-3">
+            <x-ui.form-group label="Role" name="role" required>
 
-            </div>
+                <x-ui.select name="role">
 
-            <div class="mb-4">
-
-                <label class="block mb-2">
-                    Role
-                </label>
-
-                @if($errors->has('role'))
-                    <p class="text-red-600 text-sm mb-2">{{ $errors->first('role') }}</p>
-                @endif
-                <select name="role" class="w-full border rounded-xl px-4 py-3">
                     <option value="admin" {{ old('role', $user->role) === 'admin' ? 'selected' : '' }}>
                         Admin
                     </option>
@@ -54,16 +37,31 @@
                         Tenant
                     </option>
 
-                </select>
+                </x-ui.select>
+
+                @error('role')
+                    <p class="mt-2 text-sm text-red-600">
+                        {{ $message }}
+                    </p>
+                @enderror
+
+            </x-ui.form-group>
+
+            <div class="flex gap-3 mt-6">
+
+                <x-ui.button type="submit">
+                    Update
+                </x-ui.button>
+
+                <a href="{{ route('admin.user.index') }}"
+                    class="px-5 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg font-medium inline-block text-center">
+                    Kembali
+                </a>
 
             </div>
 
-            <button class="px-5 py-3 bg-blue-600 text-white rounded-xl">
-                Update
-            </button>
-
         </form>
 
-    </div>
+    </x-ui.card>
 
 @endsection

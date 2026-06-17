@@ -3,68 +3,182 @@
 @section('title', 'User Management')
 
 @section('content')
-    <div class="mb-6">
-        <div class="flex justify-between items-center">
-            <x-ui.page-header title="User Management" subtitle="Kelola akun admin dan tenant" />
 
-            <a href="{{ route('admin.user.create') }}"
-                class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-medium transition duration-300">
-                + Tambah User
-            </a>
-        </div>
-    </div>
+    <x-ui.page-header title="User Management" description="Kelola akun admin dan tenant" />
+
+    @if(session('success'))
+        <x-ui.alert>
+            {{ session('success') }}
+        </x-ui.alert>
+    @endif
 
     <x-ui.card>
-        @if($users->isEmpty())
-            <x-ui.empty-state>
-                Belum ada user. <a href="{{ route('admin.user.create') }}" class="text-blue-600 font-medium">Buat user baru</a>
-            </x-ui.empty-state>
-        @else
+
+        <div class="flex flex-col gap-4 mb-6 md:flex-row md:items-center md:justify-between">
+
+            <div>
+
+                <h3 class="text-xl font-semibold text-slate-800">
+                    Daftar User
+                </h3>
+
+                <p class="text-sm text-slate-500">
+                    Menampilkan seluruh akun admin dan tenant yang terdaftar.
+                </p>
+
+            </div>
+
+            <a href="{{ route('admin.user.create') }}">
+                <x-ui.button>
+                    + Tambah User
+                </x-ui.button>
+            </a>
+
+        </div>
+
+        @if($users->count())
+
             <x-ui.table>
-                <thead>
-                    <tr class="border-b">
-                        <th class="text-left py-3 px-4 font-semibold">Nama</th>
-                        <th class="text-left py-3 px-4 font-semibold">Email</th>
-                        <th class="text-left py-3 px-4 font-semibold">Role</th>
-                        <th class="text-left py-3 px-4 font-semibold">Aksi</th>
+
+                <thead class="bg-slate-50 border-b">
+
+                    <tr>
+
+                        <th class="px-6 py-4 text-left font-semibold">
+                            No
+                        </th>
+
+                        <th class="px-6 py-4 text-left font-semibold">
+                            Nama
+                        </th>
+
+                        <th class="px-6 py-4 text-left font-semibold">
+                            Email
+                        </th>
+
+                        <th class="px-6 py-4 text-left font-semibold">
+                            Role
+                        </th>
+
+                        <th class="px-6 py-4 text-center font-semibold">
+                            Aksi
+                        </th>
+
                     </tr>
+
                 </thead>
+
                 <tbody>
+
                     @foreach($users as $user)
-                        <tr class="border-b hover:bg-gray-50 transition">
-                            <td class="py-3 px-4">
-                                <span class="font-medium text-gray-800">{{ $user->name }}</span>
+
+                        <tr class="border-b hover:bg-gray-50">
+
+                            <td class="px-6 py-4">
+                                {{ $loop->iteration }}
                             </td>
-                            <td class="py-3 px-4">
-                                <span class="text-gray-600">{{ $user->email }}</span>
+
+                            <td class="px-6 py-4">
+
+                                <div class="flex items-center gap-3">
+
+                                    <div
+                                        class="flex items-center justify-center w-10 h-10 font-semibold text-blue-600 bg-blue-100 rounded-full">
+
+                                        {{ strtoupper(substr($user->name, 0, 1)) }}
+
+                                    </div>
+
+                                    <div>
+
+                                        <p class="font-medium text-slate-800">
+                                            {{ $user->name }}
+                                        </p>
+
+                                        <p class="text-xs text-slate-500">
+                                            Nama User
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
                             </td>
-                            <td class="py-3 px-4">
-                                <x-ui.badge color="{{ $user->role === 'admin' ? 'blue' : 'green' }}">
-                                    {{ ucfirst($user->role) }}
-                                </x-ui.badge>
+
+                            <td class="px-6 py-4">
+                                {{ $user->email }}
                             </td>
-                            <td class="py-3 px-4">
-                                <div class="flex gap-2">
-                                    <a href="{{ route('admin.user.edit', $user) }}"
-                                        class="px-3 py-1 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg text-sm font-medium transition duration-300">
-                                        Edit
+
+                            <td class="px-6 py-4">
+
+                                @if($user->role === 'admin')
+
+                                    <x-ui.badge class="bg-blue-100 text-blue-700">
+                                        Admin
+                                    </x-ui.badge>
+
+                                @else
+
+                                    <x-ui.badge class="bg-green-100 text-green-700">
+                                        Tenant
+                                    </x-ui.badge>
+
+                                @endif
+
+                            </td>
+
+                            <td class="px-6 py-4">
+
+                                <div class="flex justify-center gap-2">
+
+                                    <a href="{{ route('admin.user.edit', $user) }}">
+                                        <x-ui.button>
+                                            Edit
+                                        </x-ui.button>
                                     </a>
+
                                     <form action="{{ route('admin.user.destroy', $user) }}" method="POST" class="inline"
-                                        onsubmit="return confirm('Yakin hapus user ini?');">
+                                        onsubmit="return confirm('Yakin ingin menghapus user ini?');">
+
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit"
-                                            class="px-3 py-1 bg-red-500 hover:bg-red-600 text-white rounded-lg text-sm font-medium transition duration-300">
+
+                                        <x-ui.button type="submit" color="secondary" class="bg-red-500 hover:bg-red-600 text-white">
+
                                             Hapus
-                                        </button>
+
+                                        </x-ui.button>
+
                                     </form>
+
                                 </div>
+
                             </td>
+
                         </tr>
+
                     @endforeach
+
                 </tbody>
+
             </x-ui.table>
+
+        @else
+
+            <x-ui.empty-state title="Belum Ada User" description="Silakan tambahkan user terlebih dahulu." />
+
+            <div class="flex justify-center mt-6">
+
+                <a href="{{ route('admin.user.create') }}">
+                    <x-ui.button>
+                        + Tambah User
+                    </x-ui.button>
+                </a>
+
+            </div>
+
         @endif
+
     </x-ui.card>
 
 @endsection
