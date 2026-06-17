@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-full">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,24 +9,30 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="bg-gray-100">
+<body class="bg-gray-100 text-slate-800 font-sans antialiased h-full">
 
-    <div class="flex min-h-screen">
+    <div class="flex h-screen overflow-hidden">
 
         @include('layouts.admin.sidebar')
 
-        <div class="flex-1 p-6">
-            @include('layouts.admin.navbar')
+        <div class="flex-1 flex flex-col min-w-0 h-full overflow-y-auto">
 
-            <main class="mt-6">
+            <div class="p-6 pb-0">
+                @include('layouts.admin.navbar')
+            </div>
+
+            <main class="flex-1 p-6">
                 @yield('content')
             </main>
 
-            @include('layouts.admin.footer')
+            <div class="p-6 pt-0 mt-auto">
+                @include('layouts.admin.footer')
+            </div>
 
         </div>
 
     </div>
 
 </body>
+
 </html>

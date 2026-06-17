@@ -160,7 +160,8 @@ Route::prefix('admin')
         Route::delete('/user/{user}', [App\Http\Controllers\UserController::class, 'destroy'])
             ->name('user.destroy');
 
-
+        Route::view('/profile', 'admin.profile.index')
+            ->name('profile.edit');
 
         Route::view('/settings', 'admin.settings.index')
             ->name('settings');
