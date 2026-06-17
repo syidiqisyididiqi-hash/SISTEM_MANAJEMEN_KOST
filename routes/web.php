@@ -41,9 +41,6 @@ Route::prefix('admin')
         Route::post('/tenants', [App\Http\Controllers\TenantController::class, 'store'])
             ->name('tenants.store');
 
-        Route::get('/tenants/{tenant}', [App\Http\Controllers\TenantController::class, 'showView'])
-            ->name('tenants.show');
-
         Route::get('/tenants/{tenant}/edit', [App\Http\Controllers\TenantController::class, 'editView'])
             ->name('tenants.edit');
 
@@ -63,9 +60,6 @@ Route::prefix('admin')
 
         Route::post('/rooms', [App\Http\Controllers\RoomController::class, 'store'])
             ->name('rooms.store');
-
-        Route::get('/rooms/{room}', [App\Http\Controllers\RoomController::class, 'showView'])
-            ->name('rooms.show');
 
         Route::get('/rooms/{room}/edit', [App\Http\Controllers\RoomController::class, 'editView'])
             ->name('rooms.edit');
@@ -156,9 +150,6 @@ Route::prefix('admin')
 
         Route::post('/user', [App\Http\Controllers\UserController::class, 'store'])
             ->name('user.store');
-
-        Route::get('/user/{id}', [App\Http\Controllers\UserController::class, 'show'])
-            ->name('user.show');
 
         Route::get('/user/{user}/edit', [App\Http\Controllers\UserController::class, 'editView'])
             ->name('user.edit');
