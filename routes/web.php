@@ -161,7 +161,13 @@ Route::prefix('admin')
             ->name('user.destroy');
 
         Route::view('/profile', 'admin.profile.index')
+            ->name('profile.index');
+
+        Route::view('/profile/edit', 'admin.profile.edit')
             ->name('profile.edit');
+
+        Route::view('/profile/change-password', 'admin.profile.change-password')
+            ->name('profile.change-password');
 
         Route::view('/settings', 'admin.settings.index')
             ->name('settings');
