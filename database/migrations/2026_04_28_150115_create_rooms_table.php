@@ -14,6 +14,8 @@ return new class extends Migration {
             $table->id();
             $table->string('room_number', 20)->unique();
             $table->decimal('price_per_month', 12, 2);
+            $table->string('image')->nullable();
+            $table->text('description')->nullable();
             $table->enum('status', ['available', 'occupied', 'maintenance'])->default('available');
             $table->timestamps();
         });

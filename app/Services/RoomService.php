@@ -2,6 +2,7 @@
 
 namespace App\Services;
 use App\Models\Room;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class RoomService
@@ -17,6 +18,13 @@ class RoomService
 
     public function store(array $data): Room
     {
+        if (isset($data['image'])) {
+            $data['image'] = $data['image']->store(
+                'rooms',
+                'public'
+            );
+        }
+
         return Room::create($data);
     }
 
@@ -33,12 +41,35 @@ class RoomService
 
     public function update(Room $room, array $data): Room
     {
+        if (isset($data['image'])) {
+
+            if (
+                $room->image &&
+                Storage::disk('public')->exists($room->image)
+            ) {
+                Storage::disk('public')->delete($room->image);
+            }
+
+            $data['image'] = $data['image']->store(
+                'rooms',
+                'public'
+            );
+        }
+
         $room->update($data);
+
         return $room;
     }
 
     public function delete(Room $room): void
     {
+        if (
+            $room->image &&
+            Storage::disk('public')->exists($room->image)
+        ) {
+            Storage::disk('public')->delete($room->image);
+        }
+
         $room->delete();
     }
 }

@@ -25,6 +25,8 @@ class StoreRoomRequest extends FormRequest
         return [
             'room_number' => 'required|string|max:20|unique:rooms,room_number',
             'price_per_month' => 'required|numeric|min:0',
+            'description' => 'nullable|string|max:1000',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             'status' => 'required|in:available,occupied,maintenance',
         ];
     }

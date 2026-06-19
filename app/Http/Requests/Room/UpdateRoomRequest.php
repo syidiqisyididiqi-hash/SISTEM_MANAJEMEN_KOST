@@ -31,6 +31,8 @@ class UpdateRoomRequest extends FormRequest
                 Rule::unique('rooms', 'room_number')->ignore($this->room),
             ],
             'price_per_month' => 'sometimes|numeric|min:0',
+            'description' => 'nullable|string|max:1000',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             'status' => 'sometimes|in:available,occupied,maintenance',
         ];
     }
