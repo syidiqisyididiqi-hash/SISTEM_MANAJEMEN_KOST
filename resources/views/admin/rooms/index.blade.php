@@ -49,7 +49,15 @@
                         </th>
 
                         <th class="px-6 py-4 text-left font-semibold">
+                            Foto
+                        </th>
+
+                        <th class="px-6 py-4 text-left font-semibold">
                             Nomor Kamar
+                        </th>
+
+                        <th class="px-6 py-4 text-left font-semibold">
+                            Deskripsi
                         </th>
 
                         <th class="px-6 py-4 text-left font-semibold">
@@ -80,7 +88,6 @@
                             $activeRoomTenant = $room->roomTenants->first();
                             $occupantName = $activeRoomTenant?->tenant?->user?->name ?? '-';
                         @endphp
-
                         <tr class="border-b hover:bg-gray-50">
 
                             <td class="px-6 py-4">
@@ -89,11 +96,33 @@
 
                             <td class="px-6 py-4">
 
+                                @if($room->image)
+
+                                    <img src="{{ asset('storage/' . $room->image) }}" alt="{{ $room->room_number }}"
+                                        class="object-cover w-16 h-16 rounded-xl border shadow-sm">
+
+                                @else
+
+                                    <div
+                                        class="flex items-center justify-center w-16 h-16 text-xs text-gray-400 bg-gray-100 border rounded-xl">
+
+                                        No Image
+
+                                    </div>
+
+                                @endif
+
+                            </td>
+
+                            <td class="px-6 py-4">
+
                                 <div class="flex items-center gap-3">
 
                                     <div
                                         class="flex items-center justify-center w-10 h-10 font-semibold text-blue-600 bg-blue-100 rounded-full">
+
                                         {{ strtoupper(substr($room->room_number, 0, 1)) }}
+
                                     </div>
 
                                     <div>
@@ -113,6 +142,28 @@
                             </td>
 
                             <td class="px-6 py-4">
+
+                                @if($room->description)
+
+                                    <div class="max-w-xs">
+
+                                        <p class="text-sm text-slate-600 line-clamp-2">
+                                            {{ $room->description }}
+                                        </p>
+
+                                    </div>
+
+                                @else
+
+                                    <span class="text-slate-400 italic">
+                                        Tidak ada deskripsi
+                                    </span>
+
+                                @endif
+
+                            </td>
+
+                            <td class="px-6 py-4 whitespace-nowrap">
                                 Rp {{ number_format($room->price_per_month, 0, ',', '.') }}
                             </td>
 
@@ -149,9 +200,11 @@
                                 <div class="flex justify-center gap-2">
 
                                     <a href="{{ route('admin.rooms.edit', $room) }}">
+
                                         <x-ui.button>
                                             Edit
                                         </x-ui.button>
+
                                     </a>
 
                                     <form action="{{ route('admin.rooms.destroy', $room) }}" method="POST" class="inline"
