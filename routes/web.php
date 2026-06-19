@@ -178,16 +178,43 @@ Route::redirect('/tenants', '/admin/tenants');
 
 Route::prefix('tenant')->name('tenant.')->group(function () {
 
-    Route::view('/dashboard', 'tenant.dashboard.index')
-        ->name('dashboard');
+    Route::get('/dashboard', function () {
+        return view('tenant.dashboard.index');
+    })->name('dashboard');
 
-    Route::view('/room', 'tenant.room.index')
-        ->name('room');
+    Route::get('/room', function () {
+        return view('tenant.room.index');
+    })->name('room');
+    Route::get('/room/{id}', function () {
+        return view('tenant.room.show');
+    })->name('room.show');
 
-    Route::view('/room/detail', 'tenant.room.detail')
-        ->name('room.detail');
+    Route::get('/billing', function () {
+        return view('tenant.billing.index');
+    })->name('billing.index');
+    Route::get('/billing/{id}', function () {
+        return view('tenant.billing.show');
+    })->name('billing.show');
 
-    Route::view('/payment', 'tenant.payment.index')
-        ->name('payment');
+    Route::get('/payment/create', function () {
+        return view('tenant.payment.create');
+    })->name('payment.create');
+    Route::get('/payment/history', function () {
+        return view('tenant.payment.history');
+    })->name('payment.history');
+    Route::get('/payment/{id}', function () {
+        return view('tenant.payment.show');
+    })->name('payment.show');
+
+    Route::get('/announcement', function () {
+        return view('tenant.announcement.index');
+    })->name('announcement.index');
+    Route::get('/announcement/{id}', function () {
+        return view('tenant.announcement.show');
+    })->name('announcement.show');
+
+    Route::get('/profile', function () {
+        return view('tenant.profile.index');
+    })->name('profile.index');
 
 });
