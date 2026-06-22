@@ -33,27 +33,32 @@
                 </a>
             </li>
             <li>
-                <a href="#" class="flex items-center gap-1.5 hover:text-blue-600 transition-colors">
+                <a href="{{ route('tenant.billing.index') }}"
+                    class="flex items-center gap-1.5 hover:text-blue-600 transition-colors">
                     <span>🧾</span> Tagihan Saya
                 </a>
             </li>
             <li>
-                <a href="#" class="flex items-center gap-1.5 hover:text-blue-600 transition-colors">
+                <a href="{{ route('tenant.payment.create') }}"
+                    class="flex items-center gap-1.5 hover:text-blue-600 transition-colors">
                     <span>💳</span> Pembayaran
                 </a>
             </li>
             <li>
-                <a href="#" class="flex items-center gap-1.5 hover:text-blue-600 transition-colors">
+                <a href="{{ route('tenant.payment.history') }}"
+                    class="flex items-center gap-1.5 hover:text-blue-600 transition-colors">
                     <span>📜</span> Riwayat Pembayaran
                 </a>
             </li>
             <li>
-                <a href="#" class="flex items-center gap-1.5 hover:text-blue-600 transition-colors">
+                <a href="{{ route('tenant.announcement.index') }}"
+                    class="flex items-center gap-1.5 hover:text-blue-600 transition-colors">
                     <span>📢</span> Pengumuman
                 </a>
             </li>
             <li>
-                <a href="#" class="flex items-center gap-1.5 hover:text-blue-600 transition-colors">
+                <a href="{{ route('tenant.profile.index') }}"
+                    class="flex items-center gap-1.5 hover:text-blue-600 transition-colors">
                     <span>👤</span> Profile
                 </a>
             </li>
@@ -98,31 +103,31 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#"
+                    <a href="{{ route('tenant.billing.index') }}"
                         class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-blue-50 hover:text-blue-600 transition-all">
                         <span>🧾</span> Tagihan Saya
                     </a>
                 </li>
                 <li>
-                    <a href="#"
+                    <a href="{{ route('tenant.payment.create') }}"
                         class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-blue-50 hover:text-blue-600 transition-all">
                         <span>💳</span> Pembayaran
                     </a>
                 </li>
                 <li>
-                    <a href="#"
+                    <a href="{{ route('tenant.payment.history') }}"
                         class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-blue-50 hover:text-blue-600 transition-all">
                         <span>📜</span> Riwayat Pembayaran
                     </a>
                 </li>
                 <li>
-                    <a href="#"
+                    <a href="{{ route('tenant.announcement.index') }}"
                         class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-blue-50 hover:text-blue-600 transition-all">
                         <span>📢</span> Pengumuman
                     </a>
                 </li>
                 <li>
-                    <a href="#"
+                    <a href="{{ route('tenant.profile.index') }}"
                         class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-blue-50 hover:text-blue-600 transition-all">
                         <span>👤</span> Profile
                     </a>
