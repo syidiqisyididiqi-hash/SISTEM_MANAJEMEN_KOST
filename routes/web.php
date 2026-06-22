@@ -182,12 +182,13 @@ Route::prefix('tenant')->name('tenant.')->group(function () {
         return view('tenant.dashboard.index');
     })->name('dashboard');
 
-    Route::get('/room', function () {
-        return view('tenant.room.index');
-    })->name('room');
-    Route::get('/room/{id}', function () {
-        return view('tenant.room.show');
-    })->name('room.show');
+    Route::get(
+        '/rooms',
+        [App\Http\Controllers\RoomController::class, 'tenantIndex']
+    )->name('rooms');
+    Route::get('/rooms/{id}', function ($id) {
+        return view('tenant.rooms.show');
+    })->name('rooms.show');
 
     Route::get('/billing', function () {
         return view('tenant.billing.index');

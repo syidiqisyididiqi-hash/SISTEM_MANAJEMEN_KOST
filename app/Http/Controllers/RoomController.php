@@ -32,6 +32,16 @@ class RoomController extends Controller
     }
 
     /**
+     * untuk tenant
+     */
+    public function tenantIndex()
+    {
+        $rooms = Room::all();
+
+        return view('tenant.rooms.index', compact('rooms'));
+    }
+
+    /**
      * Show the form for creating a new resource (view).
      */
     public function createView()
@@ -100,7 +110,7 @@ class RoomController extends Controller
     public function destroy(Room $room)
     {
         $this->service->delete($room);
-        
+
         return redirect()
             ->route('admin.rooms.index')
             ->with('success', 'Kamar berhasil dihapus!');
