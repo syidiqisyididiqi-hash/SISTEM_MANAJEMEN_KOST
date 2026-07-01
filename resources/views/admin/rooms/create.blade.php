@@ -33,15 +33,15 @@
                     </option>
 
                     <option value="available" {{ old('status') == 'available' ? 'selected' : '' }}>
-                        Available
+                        Tersedia
                     </option>
 
                     <option value="occupied" {{ old('status') == 'occupied' ? 'selected' : '' }}>
-                        Occupied
+                        Terisi
                     </option>
 
                     <option value="maintenance" {{ old('status') == 'maintenance' ? 'selected' : '' }}>
-                        Maintenance
+                        Perbaikan
                     </option>
 
                 </x-ui.select>

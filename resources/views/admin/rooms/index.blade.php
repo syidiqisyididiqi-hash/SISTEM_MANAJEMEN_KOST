@@ -172,19 +172,19 @@
                                 @if($room->status === 'available')
 
                                     <x-ui.badge class="bg-green-100 text-green-700">
-                                        Available
+                                        Tersedia
                                     </x-ui.badge>
 
                                 @elseif($room->status === 'occupied')
 
                                     <x-ui.badge class="bg-blue-100 text-blue-700">
-                                        Occupied
+                                        Terisi
                                     </x-ui.badge>
 
                                 @else
 
                                     <x-ui.badge class="bg-gray-100 text-gray-700">
-                                        Maintenance
+                                        Perbaikan
                                     </x-ui.badge>
 
                                 @endif

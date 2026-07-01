@@ -30,15 +30,15 @@
                 <x-ui.select name="status" id="status">
 
                     <option value="available" {{ old('status', $room->status) == 'available' ? 'selected' : '' }}>
-                        Available
+                        Tersedia
                     </option>
 
                     <option value="occupied" {{ old('status', $room->status) == 'occupied' ? 'selected' : '' }}>
-                        Occupied
+                        Terisi
                     </option>
 
                     <option value="maintenance" {{ old('status', $room->status) == 'maintenance' ? 'selected' : '' }}>
-                        Maintenance
+                        Perbaikan
                     </option>
 
                 </x-ui.select>
