@@ -174,7 +174,6 @@ Route::prefix('admin')
 
     });
 
-Route::redirect('/tenants', '/admin/tenants');
 
 Route::prefix('tenant')->name('tenant.')->group(function () {
 
@@ -186,9 +185,15 @@ Route::prefix('tenant')->name('tenant.')->group(function () {
         '/rooms',
         [App\Http\Controllers\RoomController::class, 'tenantIndex']
     )->name('rooms');
-    Route::get('/rooms/{id}', function ($id) {
-        return view('tenant.rooms.show');
-    })->name('rooms.show');
+
+    Route::get(
+        '/rooms/{room}',
+        [App\Http\Controllers\RoomController::class, 'show']
+    )->name('rooms.show');
+
+
+
+
 
     Route::get('/billing', function () {
         return view('tenant.billing.index');
