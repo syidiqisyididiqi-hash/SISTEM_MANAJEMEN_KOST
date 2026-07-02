@@ -66,12 +66,9 @@ class RoomController extends Controller
      */
     public function show(int $id)
     {
-        $room = $this->service->findById((int) $id);
+        $room = $this->service->findById($id);
 
-        return response()->json([
-            'success' => true,
-            'data' => $room
-        ]);
+        return view('tenant.rooms.show', compact('room'));
     }
 
     /**
