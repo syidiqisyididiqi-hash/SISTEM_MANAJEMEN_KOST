@@ -27,7 +27,7 @@
                 </a>
             </li>
             <li>
-                <a href="{{ route('tenant.rooms') }}"
+                <a href="{{ route('tenant.rooms.index') }}"
                     class="flex items-center gap-1.5 hover:text-blue-600 transition-colors">
                     <span>🛏️</span> Kamar Saya
                 </a>
@@ -97,7 +97,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('tenant.rooms') }}"
+                    <a href="{{ route('tenant.rooms.index') }}"
                         class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-blue-50 hover:text-blue-600 transition-all">
                         <span>🛏️</span> Kamar Saya
                     </a>
