@@ -29,13 +29,39 @@
                                 class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
 
                             <div class="absolute top-4 right-4">
-                                <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold tracking-wide backdrop-blur-md shadow-sm
-                                                        {{ $room->status == 'available'
-                        ? 'bg-green-50/90 text-green-700 border border-green-200'
-                        : 'bg-red-50/90 text-red-700 border border-red-200' }}">
+                                <span
+                                    class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold tracking-wide backdrop-blur-md shadow-sm
+
+                                    @if($room->status == 'available')
+                                        bg-green-50/90 text-green-700 border border-green-200
+                                    @elseif($room->status == 'occupied')
+                                        bg-blue-50/90 text-blue-700 border border-blue-200
+                                    @else
+                                        bg-yellow-50/90 text-yellow-700 border border-yellow-200
+                                    @endif
+                                ">
+
                                     <span
-                                        class="w-1.5 h-1.5 mr-1.5 rounded-full {{ $room->status == 'available' ? 'bg-green-500' : 'bg-red-500' }}"></span>
-                                    {{ $room->status == 'available' ? 'Tersedia' : 'Penuh' }}
+                                        class="w-1.5 h-1.5 mr-1.5 rounded-full
+
+                                        @if($room->status == 'available')
+                                            bg-green-500
+                                        @elseif($room->status == 'occupied')
+                                            bg-blue-500
+                                        @else
+                                            bg-yellow-500
+                                        @endif
+                                    ">
+                                    </span>
+
+                                    @if($room->status == 'available')
+                                        Tersedia
+                                    @elseif($room->status == 'occupied')
+                                        Terisi
+                                    @else
+                                        Perbaikan
+                                    @endif
+
                                 </span>
                             </div>
                         </div>
