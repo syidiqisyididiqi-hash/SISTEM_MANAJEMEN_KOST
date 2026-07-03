@@ -1,12 +1,4 @@
-@php
-    $profile = [
-        'nama' => 'Muhammad Syahid',
-        'email' => 'admin@kost.com',
-        'telepon' => '081234567890',
-        'role' => 'Administrator',
-        'bergabung' => '15 Juni 2026',
-    ];
-@endphp
+@props(['user'])
 
 <div class="bg-white rounded-2xl shadow-sm p-6">
 
@@ -22,7 +14,7 @@
             </label>
 
             <div class="bg-slate-50 p-3 rounded-xl">
-                {{ $profile['nama'] }}
+                {{ $user->name }}
             </div>
         </div>
 
@@ -32,7 +24,7 @@
             </label>
 
             <div class="bg-slate-50 p-3 rounded-xl">
-                {{ $profile['email'] }}
+                {{ $user->email }}
             </div>
         </div>
 
@@ -42,7 +34,7 @@
             </label>
 
             <div class="bg-slate-50 p-3 rounded-xl">
-                {{ $profile['telepon'] }}
+                {{ $user->phone ?? '-' }}
             </div>
         </div>
 
@@ -52,7 +44,7 @@
             </label>
 
             <div class="bg-slate-50 p-3 rounded-xl">
-                {{ $profile['role'] }}
+                {{ ucfirst($user->role) }}
             </div>
         </div>
 
@@ -62,7 +54,7 @@
             </label>
 
             <div class="bg-slate-50 p-3 rounded-xl">
-                {{ $profile['bergabung'] }}
+                {{ $user->created_at->format('d F Y') }}
             </div>
         </div>
 
