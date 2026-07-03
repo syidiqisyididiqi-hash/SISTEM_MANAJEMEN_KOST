@@ -8,11 +8,10 @@
 
         <x-ui.page-header title="My Profile" description="Kelola informasi akun administrator" />
 
-        <x-ui.profile-card />
+        <x-ui.profile-card :user="$user" />
 
-        <x-ui.profile-info />
+        <x-ui.profile-info :user="$user" />
 
-        <!-- Action Button -->
         <div class="flex flex-wrap gap-3">
 
             <a href="{{ route('admin.profile.edit') }}"

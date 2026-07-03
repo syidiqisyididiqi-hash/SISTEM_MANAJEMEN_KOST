@@ -166,7 +166,7 @@
                     </div>
                 </a>
 
-                <a href="{{ route('admin.profile.edit') }}"
+                <a href="{{ route('admin.profile.index') }}"
                     class="group flex items-center justify-between px-3 py-2.5 rounded-xl relative transition-all duration-150
                     {{ request()->routeIs('admin.profile.*') ? 'bg-white/10 text-white font-medium border-l-2 border-blue-500 rounded-l-none' : 'text-gray-400 hover:text-white hover:bg-white/[0.03]' }}">
                     <div class="flex items-center gap-3">
