@@ -188,13 +188,22 @@
             </div>
         </div>
     </nav>
-
     <div class="pt-4 mt-auto border-t border-white/5 bg-slate-950 shrink-0">
-        <a href="{{ route('login') }}"
-            class="flex items-center justify-center gap-2 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 px-4 py-2.5 rounded-xl text-[13px] font-semibold tracking-wide shadow-lg shadow-red-500/10 active:scale-[0.99] transition-all duration-150">
-            <span>🚪</span>
-            Logout
-        </a>
+
+        <form action="{{ route('logout') }}" method="POST">
+
+            @csrf
+
+            <button type="submit"
+                class="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 px-4 py-2.5 rounded-xl text-[13px] font-semibold tracking-wide shadow-lg shadow-red-500/10 active:scale-[0.99] transition-all duration-150">
+
+                <span>🚪</span>
+                Logout
+
+            </button>
+
+        </form>
+
     </div>
 </aside>
 
