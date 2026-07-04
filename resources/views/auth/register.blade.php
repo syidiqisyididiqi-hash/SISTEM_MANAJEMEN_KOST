@@ -18,7 +18,23 @@
 
             </div>
 
-            <form action="#" method="POST" class="space-y-5">
+            @if(session('success'))
+                <div class="mb-4 rounded-lg bg-green-100 border border-green-300 text-green-700 px-4 py-3">
+                    {{ session('success') }}
+                </div>
+            @endif
+
+            @if($errors->any())
+                <div class="mb-4 rounded-lg bg-red-100 border border-red-300 text-red-700 px-4 py-3">
+                    <ul class="list-disc list-inside text-sm">
+                        @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
+            <form action="{{ route('register.post') }}" method="POST" class="space-y-5">
 
                 @csrf
 
@@ -28,7 +44,7 @@
                         Nama
                     </label>
 
-                    <x-ui.input type="text" name="name" placeholder="Masukkan nama" />
+                    <x-ui.input type="text" name="name" value="{{ old('name') }}" placeholder="Masukkan nama" />
 
                 </div>
 
@@ -38,7 +54,7 @@
                         Email
                     </label>
 
-                    <x-ui.input type="email" name="email" placeholder="Masukkan email" />
+                    <x-ui.input type="email" name="email" value="{{ old('email') }}" placeholder="Masukkan email" />
 
                 </div>
 
