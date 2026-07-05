@@ -21,53 +21,76 @@
         </button>
 
         <ul class="hidden md:flex items-center gap-6 text-sm font-medium text-gray-700">
+
             <li>
                 <a href="/tenant/dashboard" class="flex items-center gap-1.5 hover:text-blue-600 transition-colors">
                     <span>🏠</span> Dashboard
                 </a>
             </li>
+
             <li>
                 <a href="{{ route('tenant.rooms.index') }}"
                     class="flex items-center gap-1.5 hover:text-blue-600 transition-colors">
                     <span>🛏️</span> Kamar Saya
                 </a>
             </li>
+
             <li>
                 <a href="{{ route('tenant.billing.index') }}"
                     class="flex items-center gap-1.5 hover:text-blue-600 transition-colors">
                     <span>🧾</span> Tagihan Saya
                 </a>
             </li>
+
             <li>
                 <a href="{{ route('tenant.payment.create') }}"
                     class="flex items-center gap-1.5 hover:text-blue-600 transition-colors">
                     <span>💳</span> Pembayaran
                 </a>
             </li>
+
             <li>
                 <a href="{{ route('tenant.payment.history') }}"
                     class="flex items-center gap-1.5 hover:text-blue-600 transition-colors">
                     <span>📜</span> Riwayat Pembayaran
                 </a>
             </li>
+
             <li>
                 <a href="{{ route('tenant.announcement.index') }}"
                     class="flex items-center gap-1.5 hover:text-blue-600 transition-colors">
                     <span>📢</span> Pengumuman
                 </a>
             </li>
+
             <li>
                 <a href="{{ route('tenant.profile.index') }}"
                     class="flex items-center gap-1.5 hover:text-blue-600 transition-colors">
                     <span>👤</span> Profile
                 </a>
             </li>
-            <li>
-                <a href="{{ route('login') }}"
-                    class="flex items-center gap-1.5 text-red-600 hover:text-red-800 transition-colors border-l pl-4 border-gray-200">
-                    <span>🚪</span> Logout
-                </a>
-            </li>
+
+            @auth
+                <li>
+                    <form action="{{ route('logout') }}" method="POST">
+                        @csrf
+                        <button type="submit"
+                            class="flex items-center gap-1.5 text-red-600 hover:text-red-800 transition-colors border-l pl-4 border-gray-200">
+                            <span>🚪</span> Logout
+                        </button>
+                    </form>
+                </li>
+            @endauth
+
+            @guest
+                <li>
+                    <a href="{{ route('login') }}"
+                        class="flex items-center gap-1.5 text-blue-600 hover:text-blue-800 transition-colors">
+                        <span>🔑</span> Login
+                    </a>
+                </li>
+            @endguest
+
         </ul>
 
     </div>
@@ -77,7 +100,9 @@
 
     <div id="mobileMenu"
         class="fixed top-0 left-0 h-screen w-64 bg-white/85 backdrop-blur-md z-50 shadow-2xl transform -translate-x-full transition-transform duration-300 ease-in-out p-6 flex flex-col justify-between">
+
         <div>
+
             <div class="flex items-center gap-3 border-b pb-4 mb-6">
                 <div
                     class="w-8 h-8 bg-blue-600 text-white rounded-lg flex items-center justify-center font-bold text-sm">
@@ -90,56 +115,58 @@
             </div>
 
             <ul class="flex flex-col gap-4 text-sm font-medium text-gray-700">
-                <li>
-                    <a href="/tenant/dashboard"
-                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-blue-50 hover:text-blue-600 transition-all">
-                        <span>🏠</span> Dashboard
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('tenant.rooms.index') }}"
-                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-blue-50 hover:text-blue-600 transition-all">
-                        <span>🛏️</span> Kamar Saya
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('tenant.billing.index') }}"
-                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-blue-50 hover:text-blue-600 transition-all">
-                        <span>🧾</span> Tagihan Saya
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('tenant.payment.create') }}"
-                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-blue-50 hover:text-blue-600 transition-all">
-                        <span>💳</span> Pembayaran
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('tenant.payment.history') }}"
-                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-blue-50 hover:text-blue-600 transition-all">
-                        <span>📜</span> Riwayat Pembayaran
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('tenant.announcement.index') }}"
-                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-blue-50 hover:text-blue-600 transition-all">
-                        <span>📢</span> Pengumuman
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('tenant.profile.index') }}"
-                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-blue-50 hover:text-blue-600 transition-all">
-                        <span>👤</span> Profile
-                    </a>
-                </li>
+
+                <li><a href="/tenant/dashboard"
+                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-blue-50 hover:text-blue-600 transition-all">🏠
+                        Dashboard</a></li>
+
+                <li><a href="{{ route('tenant.rooms.index') }}"
+                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-blue-50 hover:text-blue-600 transition-all">🛏️
+                        Kamar Saya</a></li>
+
+                <li><a href="{{ route('tenant.billing.index') }}"
+                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-blue-50 hover:text-blue-600 transition-all">🧾
+                        Tagihan Saya</a></li>
+
+                <li><a href="{{ route('tenant.payment.create') }}"
+                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-blue-50 hover:text-blue-600 transition-all">💳
+                        Pembayaran</a></li>
+
+                <li><a href="{{ route('tenant.payment.history') }}"
+                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-blue-50 hover:text-blue-600 transition-all">📜
+                        Riwayat Pembayaran</a></li>
+
+                <li><a href="{{ route('tenant.announcement.index') }}"
+                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-blue-50 hover:text-blue-600 transition-all">📢
+                        Pengumuman</a></li>
+
+                <li><a href="{{ route('tenant.profile.index') }}"
+                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-blue-50 hover:text-blue-600 transition-all">👤
+                        Profile</a></li>
+
             </ul>
+
         </div>
 
         <div class="border-t pt-4">
-            <a href="{{ route('login') }}"
-                class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-red-600 hover:bg-red-50 hover:text-red-800 transition-all font-medium">
-                <span>🚪</span> Logout
-            </a>
+
+            @auth
+                <form action="{{ route('logout') }}" method="POST">
+                    @csrf
+                    <button type="submit"
+                        class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-red-600 hover:bg-red-50 hover:text-red-800 transition-all font-medium">
+                        🚪 Logout
+                    </button>
+                </form>
+            @endauth
+
+            @guest
+                <a href="{{ route('login') }}"
+                    class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-blue-600 hover:bg-blue-50 hover:text-blue-800 transition-all font-medium">
+                    🔑 Login
+                </a>
+            @endguest
+
         </div>
     </div>
 </nav>
@@ -164,6 +191,5 @@
     }
 
     menuBtn.addEventListener('click', toggleSidebar);
-
     sidebarOverlay.addEventListener('click', toggleSidebar);
 </script>
