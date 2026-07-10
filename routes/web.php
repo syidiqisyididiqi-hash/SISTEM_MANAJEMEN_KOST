@@ -5,40 +5,74 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\TenantController;
 use App\Http\Controllers\RoomController;
-use App\Http\Controllers\RoomTenantController;
-use App\Http\Controllers\BillController;
 use App\Http\Controllers\PaymentController;
-use App\Http\Controllers\ActivityLogController;
-use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
-| PUBLIC ROUTES (BISA DILIHAT TANPA LOGIN)
+| PUBLIC
 |--------------------------------------------------------------------------
 */
 
-// Landing page
-Route::view('/', 'welcome');
+Route::get('/', function () {
 
-// Public tenant room (lihat kamar)
-Route::get('/tenant/rooms', [RoomController::class, 'tenantIndex'])
-    ->name('tenant.rooms.index');
+    if (Auth::check()) {
 
-Route::get('/tenant/rooms/{room}', [RoomController::class, 'show'])
-    ->name('tenant.rooms.show');
+        $user = Auth::user();
 
-// Public announcement
-Route::get('/tenant/announcement', fn() => view('tenant.announcement.index'))
-    ->name('tenant.announcement.index');
+        if ($user->role === 'admin') {
+            return redirect()->route('admin.dashboard');
+        }
 
-Route::get('/tenant/announcement/{id}', fn() => view('tenant.announcement.show'))
-    ->name('tenant.announcement.show');
+        if ($user->role === 'tenant') {
+            return redirect()->route('tenant.dashboard');
+        }
+
+    }
+
+    return view('tenant.home.index');
+
+})->name('home');
+
 
 
 /*
 |--------------------------------------------------------------------------
-| AUTH ROUTES
+| PUBLIC TENANT
+|--------------------------------------------------------------------------
+*/
+
+Route::prefix('tenant')
+    ->name('tenant.')
+    ->group(function () {
+
+
+        // Melihat daftar kamar (publik)
+        Route::get('/rooms', [RoomController::class, 'tenantIndex'])
+            ->name('rooms.index');
+
+
+        // Detail kamar
+        Route::get('/rooms/{room}', [RoomController::class, 'show'])
+            ->name('rooms.show');
+
+
+        // Pengumuman
+        Route::view('/announcement', 'tenant.announcement.index')
+            ->name('announcement.index');
+
+
+        Route::view('/announcement/{id}', 'tenant.announcement.show')
+            ->name('announcement.show');
+
+    });
+
+
+
+/*
+|--------------------------------------------------------------------------
+| AUTH
 |--------------------------------------------------------------------------
 */
 
@@ -46,33 +80,57 @@ Route::prefix('auth')
     ->middleware('guest')
     ->group(function () {
 
+
+        // Login
         Route::get('/login', [AuthController::class, 'showLogin'])
             ->name('login');
 
+
         Route::post('/login', [AuthController::class, 'login']);
 
+
+
+        // Register
         Route::get('/register', [AuthController::class, 'showRegister'])
             ->name('register');
+
 
         Route::post('/register', [AuthController::class, 'register'])
             ->name('register.post');
 
+
+
+        // Forgot password
         Route::view('/forgot-password', 'auth.forgot-password')
             ->name('password.request');
 
+
+
+        // Reset password
         Route::view('/reset-password', 'auth.reset-password')
             ->name('password.reset');
+
     });
 
-// LOGOUT
+
+
+/*
+|--------------------------------------------------------------------------
+| LOGOUT
+|--------------------------------------------------------------------------
+*/
+
 Route::post('/logout', [AuthController::class, 'logout'])
     ->middleware('auth')
     ->name('logout');
 
 
+
+
+
 /*
 |--------------------------------------------------------------------------
-| ADMIN (HARUS LOGIN + ROLE ADMIN)
+| ADMIN
 |--------------------------------------------------------------------------
 */
 
@@ -81,43 +139,54 @@ Route::prefix('admin')
     ->name('admin.')
     ->group(function () {
 
+
+        // Dashboard Admin
         Route::get('/dashboard', [DashboardController::class, 'index'])
             ->name('dashboard');
 
-        // Tenant management
-        Route::get('/tenants', [TenantController::class, 'indexView'])->name('tenants.index');
-        Route::get('/tenants/create', [TenantController::class, 'createView'])->name('tenants.create');
-        Route::post('/tenants', [TenantController::class, 'store'])->name('tenants.store');
-        Route::get('/tenants/{tenant}/edit', [TenantController::class, 'editView'])->name('tenants.edit');
-        Route::put('/tenants/{tenant}', [TenantController::class, 'update'])->name('tenants.update');
-        Route::delete('/tenants/{tenant}', [TenantController::class, 'destroy'])->name('tenants.destroy');
 
-        // Rooms
-        Route::get('/rooms', [RoomController::class, 'indexView'])->name('rooms.index');
-        Route::get('/rooms/create', [RoomController::class, 'createView'])->name('rooms.create');
-        Route::post('/rooms', [RoomController::class, 'store'])->name('rooms.store');
-        Route::get('/rooms/{room}/edit', [RoomController::class, 'editView'])->name('rooms.edit');
-        Route::put('/rooms/{room}', [RoomController::class, 'update'])->name('rooms.update');
-        Route::delete('/rooms/{room}', [RoomController::class, 'destroy'])->name('rooms.destroy');
 
-        // Payments
-        Route::get('/payments', [PaymentController::class, 'indexView'])->name('payments.index');
-        Route::get('/payments/create', [PaymentController::class, 'createView'])->name('payments.create');
-        Route::post('/payments', [PaymentController::class, 'store'])->name('payments.store');
-        Route::get('/payments/{id}/edit', [PaymentController::class, 'editView'])->name('payments.edit');
-        Route::put('/payments/{payment}', [PaymentController::class, 'update'])->name('payments.update');
-        Route::delete('/payments/{payment}', [PaymentController::class, 'destroy'])->name('payments.destroy');
+        // Tenant Management
+        Route::resource('tenants', TenantController::class)
+            ->except(['show']);
 
-        // Profile
-        Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
-        Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
-        Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+
+
+        // Room Management
+        Route::resource('rooms', RoomController::class)
+            ->except(['show']);
+
+
+
+        // Payment Management
+        Route::resource('payments', PaymentController::class)
+            ->except(['show']);
+
+
+
+        // Profile Admin
+        Route::get('/profile', [ProfileController::class, 'index'])
+            ->name('profile.index');
+
+
+        Route::get('/profile/edit', [ProfileController::class, 'edit'])
+            ->name('profile.edit');
+
+
+        Route::put('/profile', [ProfileController::class, 'update'])
+            ->name('profile.update');
+
+
     });
+
+
+
+
 
 
 /*
 |--------------------------------------------------------------------------
-| TENANT (LOGIN REQUIRED)
+| TENANT
 |--------------------------------------------------------------------------
 */
 
@@ -126,28 +195,41 @@ Route::prefix('tenant')
     ->name('tenant.')
     ->group(function () {
 
-        // Dashboard
-        Route::get('/dashboard', fn() => view('tenant.dashboard.index'))
+
+
+        // Dashboard Tenant
+        Route::view('/dashboard', 'tenant.dashboard.index')
             ->name('dashboard');
 
-        // Booking / payment (HARUS LOGIN)
-        Route::get('/payment/create', fn() => view('tenant.payment.create'))
+
+
+        // Payment
+        Route::view('/payment/create', 'tenant.payment.create')
             ->name('payment.create');
 
-        Route::get('/payment/history', fn() => view('tenant.payment.history'))
+
+        Route::view('/payment/history', 'tenant.payment.history')
             ->name('payment.history');
 
-        Route::get('/payment/{id}', fn() => view('tenant.payment.show'))
+
+        Route::view('/payment/{id}', 'tenant.payment.show')
             ->name('payment.show');
 
-        // Profile (HARUS LOGIN)
-        Route::get('/profile', fn() => view('tenant.profile.index'))
-            ->name('profile.index');
 
-        // Billing (login only)
-        Route::get('/billing', fn() => view('tenant.billing.index'))
+
+        // Billing
+        Route::view('/billing', 'tenant.billing.index')
             ->name('billing.index');
 
-        Route::get('/billing/{id}', fn() => view('tenant.billing.show'))
+
+        Route::view('/billing/{id}', 'tenant.billing.show')
             ->name('billing.show');
+
+
+
+        // Profile
+        Route::view('/profile', 'tenant.profile.index')
+            ->name('profile.index');
+
+
     });
