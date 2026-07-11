@@ -18,6 +18,18 @@
 
             </div>
 
+            @if(session('success'))
+                <div class="mb-5 flex items-center gap-3 rounded-lg bg-green-50 border border-green-200 text-green-800 px-4 py-3 text-sm shadow-sm"
+                    role="alert">
+                    <svg class="w-5 h-5 text-green-500 shrink-0" fill="none" stroke="currentColor" stroke-width="2"
+                        viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z">
+                        </path>
+                    </svg>
+                    <span>{{ session('success') }}</span>
+                </div>
+            @endif
+
             <form action="{{ route('login') }}" method="POST" class="space-y-6">
 
                 @csrf
@@ -30,12 +42,6 @@
 
                     <x-ui.input type="email" name="email" :value="old('email')" placeholder="nama@email.com" required
                         autofocus />
-
-                    @error('email')
-                        <p class="mt-1 text-xs text-red-500">
-                            {{ $message }}
-                        </p>
-                    @enderror
 
                 </div>
 
@@ -90,5 +96,19 @@
         </x-ui.card>
 
     </div>
+
+    @if($errors->any())
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Username atau password salah.',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#3b82f6'
+                });
+            });
+        </script>
+    @endif
 
 @endsection

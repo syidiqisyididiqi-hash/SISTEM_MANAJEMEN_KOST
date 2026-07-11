@@ -39,7 +39,7 @@ class AuthController extends Controller
 
         if (!Auth::attempt($credentials, $remember)) {
             return back()->withErrors([
-                'email' => 'Email atau password salah.',
+                'email' => 'Username atau password salah.',
             ])->onlyInput('email');
         }
 
@@ -48,7 +48,6 @@ class AuthController extends Controller
         $user = Auth::user();
 
         switch ($user->role) {
-
             case 'admin':
                 return redirect()->route('admin.dashboard');
 
@@ -57,7 +56,6 @@ class AuthController extends Controller
 
             default:
                 Auth::logout();
-
                 return redirect()->route('login')->withErrors([
                     'email' => 'Role akun tidak dikenali.',
                 ]);
