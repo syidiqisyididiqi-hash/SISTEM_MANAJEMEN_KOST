@@ -19,15 +19,8 @@ class RoomController extends Controller
      */
     public function index()
     {
-        return response()->json($this->service->getAll());
-    }
-
-    /**
-     * Display a listing of the resource as HTML view.
-     */
-    public function indexView()
-    {
         $rooms = $this->service->getAll();
+
         return view('admin.rooms.index', compact('rooms'));
     }
 
@@ -42,9 +35,17 @@ class RoomController extends Controller
     }
 
     /**
+     * Show the a new resource (view).
+     */
+    public function tenantShow(Room $room)
+    {
+        return view('tenant.rooms.show', compact('room'));
+    }
+
+    /**
      * Show the form for creating a new resource (view).
      */
-    public function createView()
+    public function create()
     {
         return view('admin.rooms.create');
     }
@@ -71,13 +72,13 @@ class RoomController extends Controller
         return view('tenant.rooms.show', compact('room'));
     }
 
+
     /**
-     * Display the specified resource as HTML view.
+     * Show the form for editing the specified resource (view).
      */
-    public function showView(int $id)
+    public function edit(Room $room)
     {
-        $room = $this->service->findById($id);
-        return view('admin.rooms.show', compact('room'));
+        return view('admin.rooms.edit', compact('room'));
     }
 
     /**
@@ -90,15 +91,6 @@ class RoomController extends Controller
         return redirect()
             ->route('admin.rooms.index')
             ->with('success', 'Kamar berhasil diperbarui!');
-    }
-
-    /**
-     * Show the form for editing the specified resource (view).
-     */
-    public function editView(int $id)
-    {
-        $room = $this->service->findById($id);
-        return view('admin.rooms.edit', compact('room'));
     }
 
     /**
