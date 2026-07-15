@@ -32,7 +32,53 @@
         </div>
 
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+    @if(session('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: "{{ session('success') }}",
+                width: '400px',
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#2563eb'
+            });
+        </script>
+    @endif
+
+    @if(session('error'))
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal!',
+                text: "{{ session('error') }}",
+                width: '400px',
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#dc2626'
+            });
+        </script>
+    @endif
+
+    @if($errors->any())
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Data Gagal Disimpan!',
+                width: '400px',
+                html: `
+                    <p class="text-sm">Silakan periksa kembali data yang Anda masukkan.</p>
+                    <ul style="text-align:left; margin-top:10px;" class="text-sm text-gray-600">
+                        @foreach($errors->all() as $error)
+                            <li>• {{ $error }}</li>
+                        @endforeach
+                    </ul>
+                `,
+                confirmButtonText: 'Mengerti',
+                confirmButtonColor: '#dc2626'
+            });
+        </script>
+    @endif
 </body>
 
 </html>

@@ -8,7 +8,7 @@
 
     <x-ui.card>
 
-        <form action="{{ route('admin.rooms.store') }}" method="POST" enctype="multipart/form-data">
+        <form id="formTambahKamar" action="{{ route('admin.rooms.store') }}" method="POST" enctype="multipart/form-data">
 
             @csrf
 
@@ -92,19 +92,41 @@
     </x-ui.card>
 
     <script>
+
         document.getElementById('image').addEventListener('change', function (e) {
 
             const preview = document.getElementById('preview-image');
             const file = e.target.files[0];
 
             if (file) {
-
                 preview.src = URL.createObjectURL(file);
                 preview.classList.remove('hidden');
-
             }
 
         });
-    </script>
 
+        document.getElementById('formTambahKamar').addEventListener('submit', function (e) {
+
+            e.preventDefault();
+
+            Swal.fire({
+                icon: 'question',
+                title: 'Konfirmasi',
+                text: 'Apakah Anda yakin ingin menambahkan data kamar ini?',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, Simpan',
+                cancelButtonText: 'Batal',
+                confirmButtonColor: '#2563eb',
+                cancelButtonColor: '#ef4444',
+                reverseButtons: true
+            }).then((result) => {
+
+                if (result.isConfirmed) {
+                    this.submit();
+                }
+
+            });
+
+        });
+    </script>
 @endsection
