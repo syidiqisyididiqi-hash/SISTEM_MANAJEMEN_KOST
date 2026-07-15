@@ -113,11 +113,12 @@
                 icon: 'question',
                 title: 'Konfirmasi',
                 text: 'Apakah Anda yakin ingin menambahkan data kamar ini?',
+                width: '400px',
                 showCancelButton: true,
                 confirmButtonText: 'Ya, Simpan',
                 cancelButtonText: 'Batal',
                 confirmButtonColor: '#2563eb',
-                cancelButtonColor: '#ef4444',
+                cancelButtonColor: '#6b7280',
                 reverseButtons: true
             }).then((result) => {
 

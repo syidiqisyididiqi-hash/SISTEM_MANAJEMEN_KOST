@@ -32,53 +32,70 @@
         </div>
 
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
     @if(session('success'))
-        <script>
-            Swal.fire({
-                icon: 'success',
-                title: 'Berhasil!',
-                text: "{{ session('success') }}",
-                width: '400px',
-                confirmButtonText: 'OK',
-                confirmButtonColor: '#2563eb'
-            });
-        </script>
+        <input type="hidden" id="session-success" value="{{ session('success') }}">
     @endif
 
     @if(session('error'))
-        <script>
-            Swal.fire({
-                icon: 'error',
-                title: 'Gagal!',
-                text: "{{ session('error') }}",
-                width: '400px',
-                confirmButtonText: 'OK',
-                confirmButtonColor: '#dc2626'
-            });
-        </script>
+        <input type="hidden" id="session-error" value="{{ session('error') }}">
     @endif
 
     @if($errors->any())
-        <script>
-            Swal.fire({
-                icon: 'error',
-                title: 'Data Gagal Disimpan!',
-                width: '400px',
-                html: `
-                    <p class="text-sm">Silakan periksa kembali data yang Anda masukkan.</p>
-                    <ul style="text-align:left; margin-top:10px;" class="text-sm text-gray-600">
-                        @foreach($errors->all() as $error)
-                            <li>• {{ $error }}</li>
-                        @endforeach
-                    </ul>
-                `,
-                confirmButtonText: 'Mengerti',
-                confirmButtonColor: '#dc2626'
-            });
-        </script>
+        <ul id="validation-errors" class="hidden">
+            @foreach($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
     @endif
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            const successMsg = document.getElementById('session-success');
+            if (successMsg) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil!',
+                    text: successMsg.value,
+                    width: '400px',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#2563eb'
+                });
+            }
+
+            const errorMsg = document.getElementById('session-error');
+            if (errorMsg) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal!',
+                    text: errorMsg.value,
+                    width: '400px',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#dc2626'
+                });
+            }
+
+            const errorsList = document.getElementById('validation-errors');
+            if (errorsList) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Data Gagal Disimpan!',
+                    width: '400px',
+                    html: `
+                        <p class="text-sm">Silakan periksa kembali data yang Anda masukkan.</p>
+                        <ul style="text-align: left; margin-top: 12px;" class="text-sm text-gray-600 list-disc list-inside space-y-1">
+                            ${errorsList.innerHTML}
+                        </ul>
+                    `,
+                    confirmButtonText: 'Mengerti',
+                    confirmButtonColor: '#dc2626'
+                });
+            }
+
+        });
+    </script>
 </body>
 
 </html>
