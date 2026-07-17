@@ -146,12 +146,12 @@
         <div>
             <p class="px-2 text-[11px] font-bold tracking-wider text-gray-600 uppercase mb-2.5">System</p>
             <div class="space-y-1.5">
-                <a href="{{ route('admin.user.index') }}"
+                <a href="{{ route('admin.users.index') }}"
                     class="group flex items-center justify-between px-3 py-2.5 rounded-xl relative transition-all duration-150
-                    {{ request()->routeIs('admin.user.*') ? 'bg-white/10 text-white font-medium border-l-2 border-blue-500 rounded-l-none' : 'text-gray-400 hover:text-white hover:bg-white/[0.03]' }}">
+                    {{ request()->routeIs('admin.users.*') ? 'bg-white/10 text-white font-medium border-l-2 border-blue-500 rounded-l-none' : 'text-gray-400 hover:text-white hover:bg-white/[0.03]' }}">
                     <div class="flex items-center gap-3">
                         <span
-                            class="text-lg {{ request()->routeIs('admin.user.*') ? 'scale-110' : 'opacity-70 group-hover:opacity-100' }}">👥</span>
+                            class="text-lg {{ request()->routeIs('admin.users.*') ? 'scale-110' : 'opacity-70 group-hover:opacity-100' }}">👥</span>
                         <span class="text-[13px] tracking-wide">User Management</span>
                     </div>
                 </a>
