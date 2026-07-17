@@ -6,37 +6,29 @@ use App\Http\Requests\User\StoreUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
 use App\Models\User;
 use App\Services\UserService;
-use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
     public function __construct(private UserService $service)
     {
     }
+
     /**
-     * Display a listing of the resource.
+     * Display a listing of user.
      */
-    public function indexView()
+    public function index()
     {
         $users = $this->service->getAll();
+
         return view('admin.user.index', compact('users'));
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for creating a new user.
      */
-    public function editView(int $id)
+    public function create()
     {
-        $user = $this->service->findById($id);
-        return view('admin.user.edit', compact('user'));
-    }
-
-    /**
-     * Display a listing of the resource as JSON.
-     */
-    public function index()
-    {
-        return response()->json($this->service->getAll());
+        return view('admin.user.create');
     }
 
     /**
@@ -44,23 +36,19 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request)
     {
-        $user = $this->service->store($request->validated());
-        if ($request->wantsJson()) {
-            return response()->json($user, 201);
-        }
+        $this->service->store($request->validated());
 
         return redirect()
-            ->route('admin.user.index')
-            ->with('success', 'User created successfully');
+            ->route('admin.users.index')
+            ->with('success', 'User berhasil ditambahkan!');
     }
 
     /**
-     * Display the specified resource.
+     * Show the form for editing the specified user.
      */
-    public function show(int $id)
+    public function edit(User $user)
     {
-        $user = $this->service->findById($id);
-        return response()->json($user);
+        return view('admin.user.edit', compact('user'));
     }
 
     /**
@@ -68,13 +56,11 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, User $user)
     {
-        $user = $this->service->update($user, $request->validated());
+        $this->service->update($user, $request->validated());
 
-        if ($request->wantsJson()) {
-            return response()->json($user);
-        }
-
-        return redirect()->route('admin.user.index')->with('success', 'User updated successfully');
+        return redirect()
+            ->route('admin.users.index')
+            ->with('success', 'User berhasil diperbarui!');
     }
 
     /**
@@ -85,7 +71,7 @@ class UserController extends Controller
         $this->service->delete($user);
 
         return redirect()
-            ->route('admin.user.index')
+            ->route('admin.users.index')
             ->with('success', 'User berhasil dihapus!');
     }
 }
