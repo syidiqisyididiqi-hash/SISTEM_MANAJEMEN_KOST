@@ -6,12 +6,6 @@
 
     <x-ui.page-header title="User Management" description="Kelola akun admin dan tenant" />
 
-    @if(session('success'))
-        <x-ui.alert>
-            {{ session('success') }}
-        </x-ui.alert>
-    @endif
-
     <x-ui.card>
 
         <div class="flex flex-col gap-4 mb-6 md:flex-row md:items-center md:justify-between">
@@ -28,7 +22,7 @@
 
             </div>
 
-            <a href="{{ route('admin.user.create') }}">
+            <a href="{{ route('admin.users.create') }}">
                 <x-ui.button>
                     + Tambah User
                 </x-ui.button>
@@ -131,24 +125,23 @@
 
                                 <div class="flex justify-center gap-2">
 
-                                    <a href="{{ route('admin.user.edit', $user) }}">
+                                    <a href="{{ route('admin.users.edit', $user) }}">
                                         <x-ui.button>
                                             Edit
                                         </x-ui.button>
                                     </a>
 
-                                    <form action="{{ route('admin.user.destroy', $user) }}" method="POST" class="inline"
-                                        onsubmit="return confirm('Yakin ingin menghapus user ini?');">
+                                    <form action="{{ route('admin.users.destroy', $user) }}" method="POST" class="inline"
+                                        data-confirm="Apakah Anda yakin ingin menghapus user {{ $user->name }}? Data yang dihapus tidak dapat dikembalikan."
+                                        data-confirm-title="Konfirmasi Hapus User" data-confirm-type="warning"
+                                        data-confirm-button-color="#dc2626">
 
                                         @csrf
                                         @method('DELETE')
 
-                                        <x-ui.button type="submit" color="secondary" class="bg-red-500 hover:bg-red-600 text-white">
-
+                                        <x-ui.button type="submit" class="bg-red-500 hover:bg-red-600 text-white">
                                             Hapus
-
                                         </x-ui.button>
-
                                     </form>
 
                                 </div>
@@ -169,7 +162,7 @@
 
             <div class="flex justify-center mt-6">
 
-                <a href="{{ route('admin.user.create') }}">
+                <a href="{{ route('admin.users.create') }}">
                     <x-ui.button>
                         + Tambah User
                     </x-ui.button>
@@ -180,5 +173,36 @@
         @endif
 
     </x-ui.card>
+    <script>
+        document.addEventListener('submit', function (e) {
+            const form = e.target;
 
+            if (form.hasAttribute('data-confirm')) {
+                e.preventDefault();
+
+                const title = form.getAttribute('data-confirm-title') || 'Konfirmasi';
+                const message = form.getAttribute('data-confirm') || 'Apakah Anda yakin ingin melanjutkan tindakan ini?';
+
+                const iconType = form.getAttribute('data-confirm-type') || 'question';
+                const confirmColor = form.getAttribute('data-confirm-button-color') || '#2563eb';
+
+                Swal.fire({
+                    icon: iconType,
+                    title: title,
+                    text: message,
+                    width: '400px',
+                    showCancelButton: true,
+                    confirmButtonText: 'Ya, Lanjutkan',
+                    cancelButtonText: 'Batal',
+                    confirmButtonColor: confirmColor,
+                    cancelButtonColor: '#6b7280',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            }
+        });
+    </script>
 @endsection
