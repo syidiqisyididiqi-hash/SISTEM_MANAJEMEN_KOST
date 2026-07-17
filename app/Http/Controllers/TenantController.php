@@ -7,7 +7,6 @@ use App\Http\Requests\Tenant\UpdateTenantRequest;
 use App\Models\Tenant;
 use App\Services\TenantService;
 use App\Models\User;
-use Illuminate\Http\Request;
 
 class TenantController extends Controller
 {
@@ -20,22 +19,15 @@ class TenantController extends Controller
      */
     public function index()
     {
-        return response()->json($this->service->getAll());
-    }
-
-    /**
-     * Display a listing of the resource as HTML view.
-     */
-    public function indexView()
-    {
         $tenants = $this->service->getAll();
+
         return view('admin.tenant.index', compact('tenants'));
     }
 
     /**
      * Show the form for creating a new resource (view).
      */
-    public function createView()
+    public function create()
     {
         $users = User::all();
 
@@ -48,23 +40,18 @@ class TenantController extends Controller
     public function store(StoreTenantRequest $request)
     {
         $tenant = $this->service->store($request->validated());
-        
+
         return redirect()
             ->route('admin.tenants.index')
             ->with('success', 'Tenant berhasil ditambahkan!');
     }
 
     /**
-     * Display the specified resource.
+     * Edit
      */
-    public function show(int $id)
+    public function edit(Tenant $tenant)
     {
-        $tenant = $this->service->findById((int) $id);
-
-        return response()->json([
-            'success' => true,
-            'data' => $tenant
-        ]);
+        return view('admin.tenant.edit', compact('tenant'));
     }
 
     /**
@@ -78,20 +65,15 @@ class TenantController extends Controller
             ->route('admin.tenants.index')
             ->with('success', 'Tenant berhasil diperbarui!');
     }
-    /**
-     * Show the form for editing the specified resource (view).
-     */
-    public function editView(int $id)
-    {
-        $tenant = $this->service->findById($id);
-        return view('admin.tenant.edit', compact('tenant'));
-    }
+
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(Tenant $tenant)
     {
         $this->service->delete($tenant);
-        return response()->noContent();
+        return redirect()
+            ->route('admin.tenants.index')
+            ->with('success', 'Tenant berhasil dihapus!');
     }
 }
