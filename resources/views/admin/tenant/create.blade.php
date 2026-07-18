@@ -8,8 +8,7 @@
 
     <x-ui.card>
 
-        <form action="{{ route('admin.tenants.store') }}" method="POST">
-
+        <form id="formTambahTenant" action="{{ route('admin.tenants.store') }}" method="POST">
             @csrf
 
             <x-ui.form-group label="User" name="user_id" required>
@@ -48,10 +47,9 @@
                     Simpan
                 </x-ui.button>
 
-                <a href="{{ route('admin.tenants.index') }}">
-                    <x-ui.button color="secondary">
-                        Batal
-                    </x-ui.button>
+                <a href="{{ route('admin.tenants.index') }}"
+                    class="px-5 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg font-medium inline-block text-center transition-colors">
+                    Kembali
                 </a>
 
             </div>
@@ -60,4 +58,26 @@
 
     </x-ui.card>
 
+    <script>
+        document.getElementById('formTambahTenant').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            Swal.fire({
+                icon: 'question',
+                title: 'Konfirmasi',
+                text: 'Apakah Anda yakin ingin menambahkan data tenant ini?',
+                width: '400px',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, Simpan',
+                cancelButtonText: 'Batal',
+                confirmButtonColor: '#2563eb',
+                cancelButtonColor: '#6b7280',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    this.submit();
+                }
+            });
+        });
+    </script>
 @endsection

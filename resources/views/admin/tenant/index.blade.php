@@ -6,12 +6,6 @@
 
     <x-ui.page-header title="Data Tenant" description="Kelola data penghuni kost" />
 
-    @if(session('success'))
-        <x-ui.alert>
-            {{ session('success') }}
-        </x-ui.alert>
-    @endif
-
     <x-ui.card>
 
         <div class="flex flex-col gap-4 mb-6 md:flex-row md:items-center md:justify-between">
@@ -141,8 +135,8 @@
                                         </x-ui.button>
                                     </a>
 
-                                    <form action="{{ route('admin.tenants.destroy', $tenant) }}" method="POST" class="inline"
-                                        onsubmit="return confirm('Yakin ingin menghapus tenant ini?');">
+                                    <form action="{{ route('admin.tenants.destroy', $tenant) }}" method="POST"
+                                        class="inline form-delete">
                                         @csrf
                                         @method('DELETE')
                                         <x-ui.button type="submit" color="secondary" class="bg-red-500 hover:bg-red-600 text-white">
@@ -180,4 +174,30 @@
 
     </x-ui.card>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        document.querySelectorAll('.form-delete').forEach(form => {
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Hapus Data Tenant?',
+                    text: 'Apakah Anda yakin ingin menghapus data tenant ini? Tindakan ini tidak bisa dibatalkan!',
+                    width: '400px',
+                    showCancelButton: true,
+                    confirmButtonText: 'Ya, Hapus',
+                    cancelButtonText: 'Batal',
+                    confirmButtonColor: '#dc2626',
+                    cancelButtonColor: '#6b7280',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        this.submit();
+                    }
+                });
+            });
+        });
+    </script>
 @endsection

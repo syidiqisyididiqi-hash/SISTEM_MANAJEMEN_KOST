@@ -8,8 +8,7 @@
 
     <x-ui.card>
 
-        <form action="{{ route('admin.tenants.update', $tenant) }}" method="POST">
-
+        <form action="{{ route('admin.tenants.update', $tenant) }}" method="POST" id="form-edit">
             @csrf
             @method('PUT')
 
@@ -31,10 +30,9 @@
                     Update
                 </x-ui.button>
 
-                <a href="{{ route('admin.tenants.index') }}">
-                    <x-ui.button color="secondary">
-                        Batal
-                    </x-ui.button>
+                <a href="{{ route('admin.tenants.index') }}"
+                    class="px-5 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg font-medium inline-block text-center transition-colors">
+                    Kembali
                 </a>
 
             </div>
@@ -43,4 +41,26 @@
 
     </x-ui.card>
 
+    <script>
+        document.getElementById('form-edit').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            Swal.fire({
+                icon: 'question',
+                title: 'Simpan Perubahan?',
+                text: 'Apakah Anda yakin ingin memperbarui data tenant ini?',
+                width: '400px',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, Simpan',
+                cancelButtonText: 'Batal',
+                confirmButtonColor: '#2563eb',
+                cancelButtonColor: '#6b7280',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    this.submit();
+                }
+            });
+        });
+    </script>
 @endsection
