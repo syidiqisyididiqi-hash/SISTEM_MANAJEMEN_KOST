@@ -190,7 +190,7 @@
     </nav>
     <div class="pt-4 mt-auto border-t border-white/5 bg-slate-950 shrink-0">
 
-        <form action="{{ route('logout') }}" method="POST">
+        <form action="{{ route('logout') }}" method="POST" id="form-logout">
 
             @csrf
 
@@ -270,6 +270,31 @@
                 hamburgerIcon.classList.remove('hidden');
                 closeIcon.classList.add('hidden');
             }
+        });
+    }
+
+
+    const formLogout = document.getElementById('form-logout');
+    if (formLogout) {
+        formLogout.addEventListener('submit', function (e) {
+            e.preventDefault(); // Menahan proses logout langsung
+
+            Swal.fire({
+                icon: 'warning', // Menggunakan ikon peringatan
+                title: 'Keluar dari Sistem?',
+                text: 'Apakah Anda yakin ingin mengakhiri sesi admin saat ini?',
+                width: '400px',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, Keluar',
+                cancelButtonText: 'Batal',
+                confirmButtonColor: '#dc2626', // Warna merah untuk aksi logout
+                cancelButtonColor: '#6b7280',  // Warna abu-abu untuk membatalkan
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    this.submit(); // Jalankan logout jika klik 'Ya, Keluar'
+                }
+            });
         });
     }
 </script>
