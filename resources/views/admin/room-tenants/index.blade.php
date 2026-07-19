@@ -6,12 +6,6 @@
 
     <x-ui.page-header title="Data Room Tenant" description="Kelola data penempatan kamar tenant" />
 
-    @if(session('success'))
-        <x-ui.alert>
-            {{ session('success') }}
-        </x-ui.alert>
-    @endif
-
     <x-ui.card>
 
         <div class="flex flex-col gap-4 mb-6 md:flex-row md:items-center md:justify-between">
@@ -149,8 +143,8 @@
                                         </x-ui.button>
                                     </a>
 
-                                    <form action="{{ route('admin.room-tenants.destroy', $item) }}" method="POST" class="inline"
-                                        onsubmit="return confirm('Yakin ingin menghapus data ini?');">
+                                    <form action="{{ route('admin.room-tenants.destroy', $item) }}" method="POST"
+                                        class="inline form-delete">
 
                                         @csrf
                                         @method('DELETE')
@@ -192,4 +186,37 @@
 
     </x-ui.card>
 
+
+    <script>
+
+        document.querySelectorAll('.form-delete').forEach(form => {
+
+            form.addEventListener('submit', function (e) {
+
+                e.preventDefault();
+
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Hapus Data?',
+                    text: 'Apakah Anda yakin ingin menghapus data room tenant ini? Tindakan ini tidak bisa dibatalkan!',
+                    width: '400px',
+                    showCancelButton: true,
+                    confirmButtonText: 'Ya, Hapus',
+                    cancelButtonText: 'Batal',
+                    confirmButtonColor: '#dc2626',
+                    cancelButtonColor: '#6b7280',
+                    reverseButtons: true
+                }).then((result) => {
+
+                    if (result.isConfirmed) {
+                        this.submit();
+                    }
+
+                });
+
+            });
+
+        });
+
+    </script>
 @endsection
