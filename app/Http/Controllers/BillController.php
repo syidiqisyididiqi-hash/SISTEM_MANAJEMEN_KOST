@@ -7,7 +7,6 @@ use App\Http\Requests\Bill\UpdateBillRequest;
 use App\Models\Bill;
 use App\Models\RoomTenant;
 use App\Services\BillService;
-use Illuminate\Http\Request;
 
 class BillController extends Controller
 {
@@ -19,24 +18,20 @@ class BillController extends Controller
      */
     public function index()
     {
-        return response()->json($this->service->getAll());
-    }
-
-    /**
-     * Display a listing of the resource as HTML view.
-     */
-    public function indexView()
-    {
         $bills = $this->service->getAll();
+
         return view('admin.bills.index', compact('bills'));
     }
 
     /**
      * Show the form for creating a new resource (view).
      */
-    public function createView()
+    public function create()
     {
-        $roomTenants = RoomTenant::with(['room', 'tenant.user'])
+        $roomTenants = RoomTenant::with([
+            'room',
+            'tenant.user'
+        ])
             ->where('status', 'active')
             ->get();
 
@@ -56,16 +51,23 @@ class BillController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Show the form for editing the specified bill.
      */
-    public function show(int $id)
+    public function edit(Bill $bill)
     {
-        $data = $this->service->findById((int) $id);
-
-        return response()->json([
-            'success' => true,
-            'data' => $data
+        $bill->load([
+            'roomtenant.room',
+            'roomtenant.tenant.user'
         ]);
+
+        $roomTenants = RoomTenant::with([
+            'room',
+            'tenant.user'
+        ])
+            ->where('status', 'active')
+            ->get();
+
+        return view('admin.bills.edit', compact('bill', 'roomTenants'));
     }
 
     /**
@@ -78,23 +80,6 @@ class BillController extends Controller
         return redirect()
             ->route('admin.bills.index')
             ->with('success', 'Bill berhasil diperbarui!');
-    }
-
-    /**
-     * Show the form for editing the specified resource (view).
-     */
-    public function editView(int $id)
-    {
-        $bill = Bill::with([
-            'roomtenant.room',
-            'roomtenant.tenant.user'
-        ])->findOrFail($id);
-
-        $roomTenants = RoomTenant::with(['room', 'tenant.user'])
-            ->where('status', 'active')
-            ->get();
-
-        return view('admin.bills.edit', compact('bill', 'roomTenants'));
     }
 
     /**
