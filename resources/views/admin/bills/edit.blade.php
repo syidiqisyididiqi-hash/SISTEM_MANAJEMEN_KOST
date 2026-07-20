@@ -8,12 +8,11 @@
 
     <x-ui.card>
 
-        <form action="{{ route('admin.bills.update', $bill->id) }}" method="POST">
-
+        <form action="{{ route('admin.bills.update', $bill->id) }}" method="POST" id="form-edit">
             @csrf
             @method('PUT')
 
-            <x-ui.form-group label="Tenant" name="room_tenant_id" required>
+            <x-ui.form-group label="Room Tenant" name="room_tenant_id" required>
 
                 <x-ui.select id="room_tenant_id" name="room_tenant_id">
 
@@ -64,15 +63,15 @@
                 <x-ui.select id="status" name="status">
 
                     <option value="unpaid" {{ old('status', $bill->status) == 'unpaid' ? 'selected' : '' }}>
-                        Unpaid
+                        Belum Dibayar
                     </option>
 
                     <option value="paid" {{ old('status', $bill->status) == 'paid' ? 'selected' : '' }}>
-                        Paid
+                        Lunas
                     </option>
 
                     <option value="overdue" {{ old('status', $bill->status) == 'overdue' ? 'selected' : '' }}>
-                        Overdue
+                        Tunggakan
                     </option>
 
                 </x-ui.select>
@@ -95,5 +94,27 @@
         </form>
 
     </x-ui.card>
+
+    <script>
+        document.getElementById('form-edit').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            Swal.fire({
+                icon: 'question',
+                title: 'Simpan Perubahan?',
+                text: 'Apakah Anda yakin ingin memperbarui data tagihan ini?',
+                width: '400px',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, Simpan',
+                cancelButtonText: 'Batal',
+                confirmButtonColor: '#2563eb', cancelButtonColor: '#6b7280',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    this.submit();
+                }
+            });
+        });
+    </script>
 
 @endsection

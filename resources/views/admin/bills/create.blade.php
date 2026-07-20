@@ -8,16 +8,16 @@
 
     <x-ui.card>
 
-        <form action="{{ route('admin.bills.store') }}" method="POST">
+        <form id="formTambahBill" action="{{ route('admin.bills.store') }}" method="POST">
 
             @csrf
 
-            <x-ui.form-group label="Tenant" name="room_tenant_id" required>
+            <x-ui.form-group label="Room Tenant" name="room_tenant_id" required>
 
                 <x-ui.select id="room_tenant_id" name="room_tenant_id">
 
                     <option value="">
-                        Pilih Tenant
+                        Pilih Room Tenant
                     </option>
 
                     @foreach($roomTenants as $tenant)
@@ -64,15 +64,15 @@
                 <x-ui.select id="status" name="status">
 
                     <option value="unpaid" {{ old('status', 'unpaid') == 'unpaid' ? 'selected' : '' }}>
-                        Unpaid
+                        Belum Dibayar
                     </option>
 
                     <option value="paid" {{ old('status') == 'paid' ? 'selected' : '' }}>
-                        Paid
+                        Lunas
                     </option>
 
                     <option value="overdue" {{ old('status') == 'overdue' ? 'selected' : '' }}>
-                        Overdue
+                        Tunggakan
                     </option>
 
                 </x-ui.select>
@@ -87,9 +87,7 @@
 
                 <a href="{{ route('admin.bills.index') }}"
                     class="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg font-medium inline-block text-center">
-
-                    Batal
-
+                    Kembali
                 </a>
 
             </div>
@@ -97,5 +95,28 @@
         </form>
 
     </x-ui.card>
+
+    <script>
+        document.getElementById('formTambahBill').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            Swal.fire({
+                icon: 'question',
+                title: 'Konfirmasi',
+                text: 'Apakah Anda yakin ingin membuat tagihan baru ini?',
+                width: '400px',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, Simpan',
+                cancelButtonText: 'Batal',
+                confirmButtonColor: '#2563eb',
+                cancelButtonColor: '#6b7280',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    this.submit();
+                }
+            });
+        });
+    </script>
 
 @endsection
