@@ -20,31 +20,22 @@ class PaymentController extends Controller
      */
     public function index()
     {
-        return response()->json($this->service->getAll());
-
-    }
-
-    /**
-     * Display a listing of the resource as HTML view.
-     */
-    public function indexView()
-    {
         $payments = $this->service->getAll();
+
         return view('admin.payments.index', compact('payments'));
+
     }
 
     /**
      * Show the form for creating a new resource (view).
      */
-    public function createView()
+    public function create()
     {
         $bills = Bill::with([
             'roomtenant.tenant.user'
         ])->where('status', 'unpaid')->get();
 
-        return view('admin.payments.create', compact(
-            'bills'
-        ));
+        return view('admin.payments.create', compact('bills'));
     }
 
     /**
@@ -72,17 +63,22 @@ class PaymentController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(int $id)
-    {
-        $data = $this->service->findById((int) $id);
 
-        return response()->json([
-            'success' => true,
-            'data' => $data
-        ]);
+    /**
+     * Show the form for editing the specified resource (view).
+     */
+    public function edit(int $id)
+    {
+        $payment = $this->service->findById($id);
+
+        $bills = Bill::with([
+            'roomtenant.tenant.user'
+        ])->get();
+
+        return view('admin.payments.edit', compact(
+            'payment',
+            'bills'
+        ));
     }
 
     /**
@@ -120,23 +116,6 @@ class PaymentController extends Controller
                     'error' => $e->getMessage()
                 ]);
         }
-    }
-
-    /**
-     * Show the form for editing the specified resource (view).
-     */
-    public function editView(int $id)
-    {
-        $payment = $this->service->findById($id);
-
-        $bills = Bill::with([
-            'roomtenant.tenant.user'
-        ])->get();
-
-        return view('admin.payments.edit', compact(
-            'payment',
-            'bills'
-        ));
     }
 
     /**
