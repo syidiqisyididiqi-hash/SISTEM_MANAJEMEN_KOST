@@ -8,20 +8,13 @@
 
     <x-ui.card>
 
-        @if($errors->has('error'))
-            <x-ui.alert type="danger" class="mb-5">
-                {{ $errors->first('error') }}
-            </x-ui.alert>
-        @endif
-
         @if($errors->any() && !$errors->has('error'))
             <x-ui.alert type="danger" class="mb-5">
                 Silakan periksa kembali data yang Anda masukkan.
             </x-ui.alert>
         @endif
 
-        <form action="{{ route('admin.payments.store') }}" method="POST">
-
+        <form id="formTambahPayment" action="{{ route('admin.payments.store') }}" method="POST">
             @csrf
 
             <x-ui.form-group label="Bill" name="bill_id" required>
@@ -88,4 +81,30 @@
 
     </x-ui.card>
 
+    <script>
+        document.getElementById('formTambahPayment').addEventListener('submit', function (e) {
+
+            e.preventDefault();
+
+            Swal.fire({
+                icon: 'question',
+                title: 'Konfirmasi',
+                text: 'Apakah Anda yakin ingin menyimpan data pembayaran ini?',
+                width: '400px',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, Simpan',
+                cancelButtonText: 'Batal',
+                confirmButtonColor: '#2563eb',
+                cancelButtonColor: '#6b7280',
+                reverseButtons: true
+            }).then((result) => {
+
+                if (result.isConfirmed) {
+                    this.submit();
+                }
+
+            });
+
+        });
+    </script>
 @endsection

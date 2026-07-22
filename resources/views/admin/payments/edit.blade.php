@@ -8,8 +8,7 @@
 
     <x-ui.card>
 
-        <form action="{{ route('admin.payments.update', $payment) }}" method="POST">
-
+        <form action="{{ route('admin.payments.update', $payment) }}" method="POST" id="form-edit">
             @csrf
             @method('PUT')
 
@@ -87,4 +86,26 @@
 
     </x-ui.card>
 
+    <script>
+        document.getElementById('form-edit').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            Swal.fire({
+                icon: 'question',
+                title: 'Simpan Perubahan?',
+                text: 'Apakah Anda yakin ingin memperbarui data pembayaran ini?',
+                width: '400px',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, Simpan',
+                cancelButtonText: 'Batal',
+                confirmButtonColor: '#2563eb',
+                cancelButtonColor: '#6b7280',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    this.submit();
+                }
+            });
+        });
+    </script>
 @endsection
