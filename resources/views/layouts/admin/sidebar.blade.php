@@ -156,12 +156,12 @@
                     </div>
                 </a>
 
-                <a href="{{ route('admin.activity-log') }}"
+                <a href="{{ route('admin.activity-log.index') }}"
                     class="group flex items-center justify-between px-3 py-2.5 rounded-xl relative transition-all duration-150
-                    {{ request()->routeIs('admin.activity-log') ? 'bg-white/10 text-white font-medium border-l-2 border-blue-500 rounded-l-none' : 'text-gray-400 hover:text-white hover:bg-white/[0.03]' }}">
+                    {{ request()->routeIs('admin.activity-log.index') ? 'bg-white/10 text-white font-medium border-l-2 border-blue-500 rounded-l-none' : 'text-gray-400 hover:text-white hover:bg-white/[0.03]' }}">
                     <div class="flex items-center gap-3">
                         <span
-                            class="text-lg {{ request()->routeIs('admin.activity-log') ? 'scale-110' : 'opacity-70 group-hover:opacity-100' }}">📜</span>
+                            class="text-lg {{ request()->routeIs('admin.activity-log.index') ? 'scale-110' : 'opacity-70 group-hover:opacity-100' }}">📜</span>
                         <span class="text-[13px] tracking-wide">Activity Log</span>
                     </div>
                 </a>
