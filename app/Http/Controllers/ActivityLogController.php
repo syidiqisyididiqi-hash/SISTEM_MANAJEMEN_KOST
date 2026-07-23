@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ActivityLog\StoreActivityLogRequest;
 use App\Services\ActivityLogService;
 use Illuminate\Http\Request;
+use App\Models\ActivityLog;
 
 class ActivityLogController extends Controller
 {
@@ -16,25 +17,9 @@ class ActivityLogController extends Controller
      */
     public function index()
     {
-        return response()->json($this->service->getAll());
-    }
-
-    /**
-     * Display the activity log view
-     */
-    public function indexView()
-    {
         $logs = $this->service->getAll();
-        return view('admin.activity-log.index', compact('logs'));
-    }
 
-    /**
-     * Display the specified resource as HTML view.
-     */
-    public function showView(int $id)
-    {
-        $log = $this->service->findById($id);
-        return view('admin.activity-log.show', compact('log'));
+        return view('admin.activity-log.index', compact('logs'));
     }
 
     /**
@@ -42,23 +27,34 @@ class ActivityLogController extends Controller
      */
     public function store(StoreActivityLogRequest $request)
     {
-        $log = $this->service->store($request->validated()['description']);
-        return response()->json($log, 201);
-    }
+        $this->service->store(
+            $request->validated()['description']
+        );
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(int $id)
+        return redirect()
+            ->route('admin.activity-log.index')
+            ->with('success', 'Activity log berhasil ditambahkan.');
+    }
+    public function clear(Request $request)
     {
-        $data = $this->service->findById((int) $id);
-
-        return response()->json([
-            'success' => true,
-            'data' => $data
+        $request->validate([
+            'days' => 'required|integer|in:0,7,30,90,180,365',
         ]);
-    }
 
+        $days = (int) $request->days;
+
+        if ($days === 0) {
+            ActivityLog::truncate();
+            $message = "Semua activity log berhasil dibersihkan.";
+        } else {
+            ActivityLog::where('created_at', '<', now()->subDays($days))->delete();
+            $message = "Activity log lebih dari {$days} hari berhasil dihapus.";
+        }
+
+        return redirect()
+            ->route('admin.activity-log.index')
+            ->with('success', $message);
+    }
     /**
      * Update the specified resource in storage.
      */
