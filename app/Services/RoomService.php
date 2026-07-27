@@ -1,12 +1,18 @@
 <?php
 
 namespace App\Services;
+
 use App\Models\Room;
+use App\Services\ActivityLogService;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class RoomService
 {
+    public function __construct(
+        private ActivityLogService $activityLogService
+    ) {
+    }
     public function getAll()
     {
         return Room::with([
@@ -25,7 +31,13 @@ class RoomService
             );
         }
 
-        return Room::create($data);
+        $room = Room::create($data);
+
+        $this->activityLogService->store(
+            "Menambahkan kamar {$room->room_number}"
+        );
+
+        return $room;
     }
 
     public function findById(int $id): Room
@@ -56,13 +68,24 @@ class RoomService
             );
         }
 
+        $oldData = $room->toArray();
+
         $room->update($data);
+
+        $changes = array_diff_assoc($room->toArray(), $oldData);
+
+        if (!empty($changes)) {
+            $this->activityLogService->store(
+                "Data kamar {$room->room_number} diperbarui: " . json_encode($changes)
+            );
+        }
 
         return $room;
     }
-
     public function delete(Room $room): void
     {
+        $roomNumber = $room->room_number;
+
         if (
             $room->image &&
             Storage::disk('public')->exists($room->image)
@@ -71,5 +94,9 @@ class RoomService
         }
 
         $room->delete();
+
+        $this->activityLogService->store(
+            "Menghapus kamar {$roomNumber}"
+        );
     }
 }
