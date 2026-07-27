@@ -79,6 +79,17 @@ class PaymentService
 
     public function delete(Payment $payment): void
     {
-        $payment->delete();
+        DB::transaction(function () use ($payment) {
+
+            $billId = $payment->bill_id;
+            $amount = $payment->amount;
+            $method = $payment->method;
+
+            $payment->delete();
+
+            $this->activityLogService->store(
+                "Payment of {$amount} for Bill #{$billId} using {$method} has been deleted."
+            );
+        });
     }
 }
