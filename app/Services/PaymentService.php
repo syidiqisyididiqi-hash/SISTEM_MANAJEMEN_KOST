@@ -40,7 +40,9 @@ class PaymentService
             ]);
 
             $this->activityLogService->store(
-                "Payment of {$payment->amount} created for Bill #{$bill->id} using {$payment->method}"
+                "Menambahkan pembayaran Bill #{$bill->id} sebesar Rp" .
+                number_format($payment->amount, 0, ',', '.') .
+                " menggunakan metode {$payment->method}."
             );
 
             return $payment;
@@ -67,10 +69,27 @@ class PaymentService
 
         $payment->update($data);
 
-        $changes = array_diff_assoc($payment->toArray(), $oldData);
-        if (!empty($changes)) {
+        $messages = [];
+
+        if ($oldData['amount'] != $payment->amount) {
+            $messages[] = "Jumlah: Rp" .
+                number_format($oldData['amount'], 0, ',', '.') .
+                " → Rp" .
+                number_format($payment->amount, 0, ',', '.');
+        }
+
+        if ($oldData['method'] != $payment->method) {
+            $messages[] = "Metode: {$oldData['method']} → {$payment->method}";
+        }
+
+        if ($oldData['paid_at'] != $payment->paid_at) {
+            $messages[] = "Tanggal pembayaran diperbarui";
+        }
+
+        if (!empty($messages)) {
             $this->activityLogService->store(
-                "Payment #{$payment->id} updated: " . json_encode($changes)
+                "Mengubah pembayaran Bill #{$payment->bill_id}. " .
+                implode(", ", $messages)
             );
         }
 
@@ -88,7 +107,9 @@ class PaymentService
             $payment->delete();
 
             $this->activityLogService->store(
-                "Payment of {$amount} for Bill #{$billId} using {$method} has been deleted."
+                "Menghapus pembayaran Bill #{$billId} sebesar Rp" .
+                number_format($amount, 0, ',', '.') .
+                " menggunakan metode {$method}."
             );
         });
     }

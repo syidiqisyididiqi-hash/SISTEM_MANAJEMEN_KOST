@@ -34,7 +34,9 @@ class RoomService
         $room = Room::create($data);
 
         $this->activityLogService->store(
-            "Menambahkan kamar {$room->room_number}"
+            "Menambahkan kamar {$room->room_number} dengan harga Rp" .
+            number_format($room->price_per_month, 0, ',', '.') .
+            " dan status {$room->status}."
         );
 
         return $room;
@@ -69,19 +71,37 @@ class RoomService
         }
 
         $oldData = $room->toArray();
+        $oldRoomNumber = $room->room_number;
 
         $room->update($data);
 
-        $changes = array_diff_assoc($room->toArray(), $oldData);
+        $messages = [];
 
-        if (!empty($changes)) {
+        if ($oldData['room_number'] != $room->room_number) {
+            $messages[] = "Nomor kamar: {$oldData['room_number']} → {$room->room_number}";
+        }
+
+        if ($oldData['price_per_month'] != $room->price_per_month) {
+            $messages[] = "Harga: Rp" .
+                number_format($oldData['price_per_month'], 0, ',', '.') .
+                " → Rp" .
+                number_format($room->price_per_month, 0, ',', '.');
+        }
+
+        if ($oldData['status'] != $room->status) {
+            $messages[] = "Status: {$oldData['status']} → {$room->status}";
+        }
+
+        if (!empty($messages)) {
             $this->activityLogService->store(
-                "Data kamar {$room->room_number} diperbarui: " . json_encode($changes)
+                "Mengubah data kamar {$oldRoomNumber}. " .
+                implode(", ", $messages) . "."
             );
         }
 
         return $room;
     }
+
     public function delete(Room $room): void
     {
         $roomNumber = $room->room_number;
@@ -96,7 +116,8 @@ class RoomService
         $room->delete();
 
         $this->activityLogService->store(
-            "Menghapus kamar {$roomNumber}"
+            "Menghapus kamar {$roomNumber} dengan harga Rp" .
+            number_format($room->price_per_month, 0, ',', '.') . "."
         );
     }
 }
