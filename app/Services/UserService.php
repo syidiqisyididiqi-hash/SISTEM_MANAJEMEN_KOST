@@ -1,11 +1,18 @@
 <?php
 
 namespace App\Services;
+
 use App\Models\User;
+use App\Services\ActivityLogService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class UserService
 {
+    public function __construct(
+        private ActivityLogService $activityLogService
+    ) {
+    }
+
     public function getAll()
     {
         return User::latest()->get();
@@ -13,7 +20,13 @@ class UserService
 
     public function store(array $data): User
     {
-        return User::create($data);
+        $user = User::create($data);
+
+        $this->activityLogService->store(
+            "Menambahkan pengguna ID {$user->id} ({$user->name}) dengan email {$user->email} dan peran {$user->role}."
+        );
+
+        return $user;
     }
 
     public function findById(int $id): User
@@ -29,12 +42,50 @@ class UserService
 
     public function update(User $user, array $data): User
     {
+        $oldData = $user->toArray();
+        $oldName = $user->name;
+        $userId = $user->id;
+
         $user->update($data);
+
+        $messages = [];
+
+        if ($oldData['name'] != $user->name) {
+            $messages[] = "Nama: {$oldData['name']} → {$user->name}";
+        }
+
+        if ($oldData['email'] != $user->email) {
+            $messages[] = "Email: {$oldData['email']} → {$user->email}";
+        }
+
+        if ($oldData['role'] != $user->role) {
+            $messages[] = "Peran: {$oldData['role']} → {$user->role}";
+        }
+
+        if (!empty($messages)) {
+            $this->activityLogService->store(
+                "Mengubah data pengguna ID {$userId} ({$oldName}). " .
+                implode(", ", $messages) . "."
+            );
+        }
+
         return $user;
     }
 
     public function delete(User $user): void
     {
+        $userId = $user->id;
+        $name = $user->name;
+        $email = $user->email;
+        $role = $user->role;
+
         $user->delete();
+
+        $this->activityLogService->store(
+            "Menghapus pengguna ID {$userId}. " .
+            "Nama: {$name}, " .
+            "Email: {$email}, " .
+            "Peran: {$role}."
+        );
     }
 }
