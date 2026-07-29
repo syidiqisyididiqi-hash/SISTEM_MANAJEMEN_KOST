@@ -1,24 +1,46 @@
 <?php
 
 namespace App\Services;
+
 use App\Models\Bill;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class BillService
 {
+    public function __construct(
+        private ActivityLogService $activityLogService
+    ) {
+    }
+
     public function getAll()
     {
-        return Bill::with('roomtenant.room', 'roomtenant.tenant.user')
+        return Bill::with('roomTenant.room', 'roomTenant.tenant.user')
             ->latest()
             ->get();
     }
 
     public function store(array $data): Bill
     {
-        $data['bill_month'] = $data['bill_month'] . '-01';
+        $data['bill_month'] = Carbon::parse($data['bill_month'])
+            ->startOfMonth()
+            ->format('Y-m-d');
 
-        return Bill::create($data);
+        $bill = Bill::create($data);
+        $bill->load(['roomTenant.room', 'roomTenant.tenant.user']);
+
+        $this->activityLogService->store(
+            "Menambahkan data tagihan {$bill->id}. " .
+            "Nomor Kamar: {$bill->roomTenant->room->room_number}, " .
+            "Nama Penyewa: {$bill->roomTenant->tenant->user->name}, " .
+            "Bulan Tagihan: {$bill->bill_month->format('F Y')}, " .
+            "Jumlah Tagihan: Rp" . number_format($bill->amount, 0, ',', '.') . ", " .
+            "Jatuh Tempo: {$bill->due_date->format('Y-m-d')}, " .
+            "Denda: Rp" . number_format($bill->fine_amount, 0, ',', '.') . ", " .
+            "Status: {$bill->status}."
+        );
+
+        return $bill;
     }
 
     public function findById(int $id): Bill
@@ -30,7 +52,7 @@ class BillService
         ])->find($id);
 
         if (!$bill) {
-            throw new ModelNotFoundException("bill not found");
+            throw new ModelNotFoundException("Bill not found");
         }
 
         return $bill;
@@ -38,10 +60,54 @@ class BillService
 
     public function update(Bill $bill, array $data): Bill
     {
+        $bill->load(['roomTenant.room', 'roomTenant.tenant.user']);
+
+        $oldData = $bill->toArray();
+
         $bill->update($data);
 
         if ($bill->status === 'unpaid' && Carbon::now()->gt($bill->due_date)) {
             $bill->update(['status' => 'overdue']);
+        }
+
+        $bill->refresh()->load(['roomTenant.room', 'roomTenant.tenant.user']);
+
+        $messages = [];
+
+        if ($bill->wasChanged('bill_month')) {
+            $messages[] = "Bulan Tagihan: " .
+                Carbon::parse($oldData['bill_month'])->format('F Y') .
+                " → " .
+                $bill->bill_month->format('F Y');
+        }
+
+        if ($bill->wasChanged('amount')) {
+            $messages[] = "Jumlah Tagihan: Rp" .
+                number_format($oldData['amount'], 0, ',', '.') .
+                " → Rp" .
+                number_format($bill->amount, 0, ',', '.');
+        }
+
+        if ($bill->wasChanged('due_date')) {
+            $messages[] = "Jatuh Tempo: {$oldData['due_date']} → {$bill->due_date->format('Y-m-d')}";
+        }
+
+        if ($bill->wasChanged('fine_amount')) {
+            $messages[] = "Denda: Rp" .
+                number_format($oldData['fine_amount'], 0, ',', '.') .
+                " → Rp" .
+                number_format($bill->fine_amount, 0, ',', '.');
+        }
+
+        if ($bill->wasChanged('status')) {
+            $messages[] = "Status: {$oldData['status']} → {$bill->status}";
+        }
+
+        if (!empty($messages)) {
+            $this->activityLogService->store(
+                "Mengubah data tagihan {$bill->id}. " .
+                implode(", ", $messages) . "."
+            );
         }
 
         return $bill;
@@ -49,6 +115,20 @@ class BillService
 
     public function delete(Bill $bill): void
     {
+        $bill->load(['roomTenant.room', 'roomTenant.tenant.user']);
+
+        $billId = $bill->id;
+        $roomNumber = $bill->roomTenant->room->room_number;
+        $tenantName = $bill->roomTenant->tenant->user->name;
+        $billMonth = $bill->bill_month->format('F Y');
+
         $bill->delete();
+
+        $this->activityLogService->store(
+            "Menghapus data tagihan {$billId}. " .
+            "Nomor Kamar: {$roomNumber}, " .
+            "Nama Penyewa: {$tenantName}, " .
+            "Bulan Tagihan: {$billMonth}."
+        );
     }
 }
