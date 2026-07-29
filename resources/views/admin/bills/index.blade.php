@@ -45,23 +45,23 @@
                         </th>
 
                         <th class="px-6 py-4 text-left font-semibold">
-                            Room Tenant
+                            Penyewa Kamar
                         </th>
 
                         <th class="px-6 py-4 text-left font-semibold">
-                            Month
+                            Bualan
                         </th>
 
                         <th class="px-6 py-4 text-left font-semibold">
-                            Amount
+                            Jumlah Tagihan
                         </th>
 
                         <th class="px-6 py-4 text-left font-semibold">
-                            Due Date
+                            Tanggal Jatuh Tempo
                         </th>
 
                         <th class="px-6 py-4 text-left font-semibold">
-                            Fine
+                            Denda
                         </th>
 
                         <th class="px-6 py-4 text-left font-semibold">
@@ -69,7 +69,7 @@
                         </th>
 
                         <th class="px-6 py-4 text-center font-semibold">
-                            Action
+                            Aksi
                         </th>
 
                     </tr>

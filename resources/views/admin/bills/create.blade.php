@@ -12,12 +12,12 @@
 
             @csrf
 
-            <x-ui.form-group label="Room Tenant" name="room_tenant_id" required>
+            <x-ui.form-group label="Penyewa Kamar" name="room_tenant_id" required>
 
                 <x-ui.select id="room_tenant_id" name="room_tenant_id">
 
                     <option value="">
-                        Pilih Room Tenant
+                        Pilih Kamar
                     </option>
 
                     @foreach($roomTenants as $tenant)
@@ -36,9 +36,7 @@
             </x-ui.form-group>
 
             <x-ui.form-group label="Bulan Tagihan" name="bill_month" required>
-
-                <x-ui.input type="month" id="bill_month" name="bill_month" :value="old('bill_month')" />
-
+                <x-ui.input type="date" id="bill_month" name="bill_month" :value="old('bill_month')" />
             </x-ui.form-group>
 
             <x-ui.form-group label="Jumlah Tagihan" name="amount" required>

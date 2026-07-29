@@ -12,7 +12,7 @@
             @csrf
             @method('PUT')
 
-            <x-ui.form-group label="Room Tenant" name="room_tenant_id" required>
+            <x-ui.form-group label="Penyewa Kamar" name="room_tenant_id" required>
 
                 <x-ui.select id="room_tenant_id" name="room_tenant_id">
 
@@ -26,7 +26,7 @@
 
             </x-ui.form-group>
 
-            <x-ui.form-group label="Bill Month" name="bill_month" required>
+            <x-ui.form-group label="Bulan Tagihan" name="bill_month" required>
 
                 <x-ui.input type="month" id="bill_month" name="bill_month" :value="old(
             'bill_month',
@@ -35,13 +35,13 @@
 
             </x-ui.form-group>
 
-            <x-ui.form-group label="Amount" name="amount" required>
+            <x-ui.form-group label="Jumlah Tagihan" name="amount" required>
 
                 <x-ui.input type="number" id="amount" name="amount" :value="old('amount', $bill->amount)" />
 
             </x-ui.form-group>
 
-            <x-ui.form-group label="Due Date" name="due_date" required>
+            <x-ui.form-group label="Tanggal Jatuh Tempo" name="due_date" required>
 
                 <x-ui.input type="date" id="due_date" name="due_date" :value="old(
             'due_date',
@@ -52,7 +52,7 @@
 
             </x-ui.form-group>
 
-            <x-ui.form-group label="Fine Amount" name="fine_amount">
+            <x-ui.form-group label="Denda" name="fine_amount">
 
                 <x-ui.input type="number" id="fine_amount" name="fine_amount" :value="old('fine_amount', $bill->fine_amount)" />
 
