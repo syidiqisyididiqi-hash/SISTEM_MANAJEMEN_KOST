@@ -12,7 +12,7 @@
             @csrf
             @method('PUT')
 
-            <x-ui.form-group label="Bill" name="bill_id" required>
+            <x-ui.form-group label="Tagihan" name="bill_id" required>
 
                 <x-ui.select id="bill_id" name="bill_id">
 

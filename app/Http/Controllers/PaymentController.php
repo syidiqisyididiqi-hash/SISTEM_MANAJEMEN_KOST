@@ -32,12 +32,14 @@ class PaymentController extends Controller
     public function create()
     {
         $bills = Bill::with([
-            'roomtenant.tenant.user'
-        ])->where('status', 'unpaid')->get();
+            'roomTenant.room',
+            'roomTenant.tenant.user'
+        ])
+            ->whereIn('status', ['unpaid', 'overdue'])
+            ->get();
 
         return view('admin.payments.create', compact('bills'));
     }
-
     /**
      * Store a newly created resource in storage.
      */
@@ -72,6 +74,7 @@ class PaymentController extends Controller
         $payment = $this->service->findById($id);
 
         $bills = Bill::with([
+            'roomtenant.room',
             'roomtenant.tenant.user'
         ])->get();
 

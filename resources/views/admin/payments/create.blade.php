@@ -17,17 +17,18 @@
         <form id="formTambahPayment" action="{{ route('admin.payments.store') }}" method="POST">
             @csrf
 
-            <x-ui.form-group label="Bill" name="bill_id" required>
+            <x-ui.form-group label="Tagihan" name="bill_id" required>
 
                 <x-ui.select id="bill_id" name="bill_id">
 
                     @forelse($bills as $bill)
 
-                        <option value="{{ $bill->id }}" {{ old('bill_id') == $bill->id ? 'selected' : '' }}>
+                        <option value="{{ $bill->id }}" data-amount="{{ $bill->amount }}" data-fine="{{ $bill->fine_amount }}"
+                            {{ old('bill_id') == $bill->id ? 'selected' : '' }}>
 
-                            {{ $bill->roomtenant->tenant->user->name }}
+                            {{ $bill->roomTenant->room->room_number }}
                             -
-                            {{ \Carbon\Carbon::parse($bill->bill_month)->format('F Y') }}
+                            {{ \Carbon\Carbon::parse($bill->bill_month)->translatedFormat('F Y') }}
 
                         </option>
 
@@ -41,15 +42,34 @@
 
             </x-ui.form-group>
 
+            <div class="mb-4 rounded-lg border bg-gray-50 p-4">
+                <div class="flex justify-between">
+                    <span>Tagihan</span>
+                    <span id="billAmount">Rp0</span>
+                </div>
+
+                <div class="flex justify-between mt-2">
+                    <span>Denda</span>
+                    <span id="billFine">Rp0</span>
+                </div>
+
+                <hr class="my-3">
+
+                <div class="flex justify-between font-semibold text-blue-600">
+                    <span>Total Pembayaran</span>
+                    <span id="billTotal">Rp0</span>
+                </div>
+            </div>
+
             <x-ui.form-group label="Tanggal Bayar" name="paid_at" required>
 
                 <x-ui.input type="datetime-local" id="paid_at" name="paid_at" :value="old('paid_at')" />
 
             </x-ui.form-group>
 
-            <x-ui.form-group label="Jumlah Pembayaran" name="amount" required>
+            <x-ui.form-group label="Total Pembayaran" name="amount" required>
 
-                <x-ui.input type="number" id="amount" name="amount" :value="old('amount')" />
+                <x-ui.input type="number" id="amount" name="amount" :value="old('amount')" readonly />
 
             </x-ui.form-group>
 
@@ -82,6 +102,33 @@
     </x-ui.card>
 
     <script>
+        const billSelect = document.getElementById('bill_id');
+        const amountInput = document.getElementById('amount');
+
+        function formatRupiah(number) {
+            return 'Rp' + Number(number).toLocaleString('id-ID');
+        }
+
+        function updateAmount() {
+            const selectedOption = billSelect.options[billSelect.selectedIndex];
+
+            if (!selectedOption) return;
+
+            const amount = Number(selectedOption.dataset.amount || 0);
+            const fine = Number(selectedOption.dataset.fine || 0);
+            const total = amount + fine;
+
+            amountInput.value = total;
+
+            document.getElementById('billAmount').textContent = formatRupiah(amount);
+            document.getElementById('billFine').textContent = formatRupiah(fine);
+            document.getElementById('billTotal').textContent = formatRupiah(total);
+        }
+
+        billSelect.addEventListener('change', updateAmount);
+
+        updateAmount();
+
         document.getElementById('formTambahPayment').addEventListener('submit', function (e) {
 
             e.preventDefault();
