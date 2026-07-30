@@ -5,6 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property int $id
+ * @property string $room_number
+ * @property float|int $price_per_month
+ * @property string|null $image
+ * @property string|null $description
+ * @property string $status
+ */
 class Room extends Model
 {
     use HasFactory;
