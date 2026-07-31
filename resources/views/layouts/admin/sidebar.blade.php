@@ -102,7 +102,7 @@
                     <div class="flex items-center gap-3">
                         <span
                             class="text-lg {{ request()->routeIs('admin.tenants.*') ? 'scale-110' : 'opacity-70 group-hover:opacity-100' }}">👤</span>
-                        <span class="text-[13px] tracking-wide">Data Tenant</span>
+                        <span class="text-[13px] tracking-wide">Penyewa</span>
                     </div>
                 </a>
 
@@ -112,7 +112,7 @@
                     <div class="flex items-center gap-3">
                         <span
                             class="text-lg {{ request()->routeIs('admin.room-tenants.*') ? 'scale-110' : 'opacity-70 group-hover:opacity-100' }}">🔗</span>
-                        <span class="text-[13px] tracking-wide">Room Tenant</span>
+                        <span class="text-[13px] tracking-wide">Penyewa Kamar</span>
                     </div>
                 </a>
             </div>
