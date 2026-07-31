@@ -6,6 +6,7 @@ use App\Http\Requests\User\StoreUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
 use App\Models\User;
 use App\Services\UserService;
+use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
@@ -16,9 +17,9 @@ class UserController extends Controller
     /**
      * Display a listing of user.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $users = $this->service->getAll();
+        $users = $this->service->getAll($request->search);
 
         return view('admin.user.index', compact('users'));
     }

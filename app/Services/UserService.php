@@ -13,9 +13,15 @@ class UserService
     ) {
     }
 
-    public function getAll()
+    public function getAll($search = null)
     {
-        return User::latest()->get();
+        return User::when($search, function ($query) use ($search) {
+            $query->where('name', 'like', "%{$search}%")
+                ->orWhere('email', 'like', "%{$search}%")
+                ->orWhere('role', 'like', "%{$search}%");
+        })
+            ->latest()
+            ->paginate(10);
     }
 
     public function store(array $data): User
