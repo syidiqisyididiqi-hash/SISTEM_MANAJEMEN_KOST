@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use App\Models\User;
+use App\Models\Tenant;
+use Illuminate\Support\Facades\DB;
 use App\Services\ActivityLogService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
@@ -26,13 +28,25 @@ class UserService
 
     public function store(array $data): User
     {
-        $user = User::create($data);
+        return DB::transaction(function () use ($data) {
 
-        $this->activityLogService->store(
-            "Menambahkan pengguna ID {$user->id} ({$user->name}) dengan email {$user->email} dan peran {$user->role}."
-        );
+            $user = User::create($data);
 
-        return $user;
+            if ($user->role === 'tenant') {
+                Tenant::create([
+                    'user_id' => $user->id,
+                    'phone' => $data['phone'] ?? null,
+                    'identity_number' => $data['identity_number'] ?? null,
+                    'address' => $data['address'] ?? null,
+                ]);
+            }
+
+            $this->activityLogService->store(
+                "Menambahkan pengguna {$user->id} ({$user->name}) dengan email {$user->email} dan peran {$user->role}."
+            );
+
+            return $user;
+        });
     }
 
     public function findById(int $id): User
@@ -70,7 +84,7 @@ class UserService
 
         if (!empty($messages)) {
             $this->activityLogService->store(
-                "Mengubah data pengguna ID {$userId} ({$oldName}). " .
+                "Mengubah data pengguna {$userId} ({$oldName}). " .
                 implode(", ", $messages) . "."
             );
         }
@@ -88,7 +102,7 @@ class UserService
         $user->delete();
 
         $this->activityLogService->store(
-            "Menghapus pengguna ID {$userId}. " .
+            "Menghapus pengguna {$userId}. " .
             "Nama: {$name}, " .
             "Email: {$email}, " .
             "Peran: {$role}."
