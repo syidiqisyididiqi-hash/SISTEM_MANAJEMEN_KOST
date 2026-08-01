@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Tenant\StoreTenantRequest;
 use App\Http\Requests\Tenant\UpdateTenantRequest;
 use App\Models\Tenant;
+use Illuminate\Http\Request;
 use App\Services\TenantService;
 use App\Models\User;
 
@@ -17,9 +18,9 @@ class TenantController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $tenants = $this->service->getAll();
+        $tenants = $this->service->getAll($request->search);
 
         return view('admin.tenant.index', compact('tenants'));
     }

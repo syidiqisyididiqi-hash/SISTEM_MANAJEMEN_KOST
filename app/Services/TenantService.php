@@ -11,9 +11,19 @@ class TenantService
     ) {
     }
 
-    public function getAll()
+    public function getAll($search = null)
     {
-        return Tenant::with('user')->latest()->get();
+        return Tenant::with('user')
+            ->when($search, function ($query) use ($search) {
+                $query->whereHas('user', function ($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%");
+                })
+                    ->orWhere('identity_number', 'like', "%{$search}%")
+                    ->orWhere('phone', 'like', "%{$search}%");
+            })
+            ->latest()
+            ->paginate(10);
     }
 
     public function store(array $data): Tenant
