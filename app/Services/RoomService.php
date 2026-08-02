@@ -13,13 +13,23 @@ class RoomService
         private ActivityLogService $activityLogService
     ) {
     }
-    public function getAll()
+    public function getAll($search = null)
     {
         return Room::with([
             'roomTenants' => function ($query) {
-                $query->where('status', 'active')->with('tenant.user');
+                $query->where('status', 'active')
+                    ->with('tenant.user');
             }
-        ])->latest()->get();
+        ])
+            ->when($search, function ($query) use ($search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('room_number', 'like', "%{$search}%")
+                        ->orWhere('description', 'like', "%{$search}%")
+                        ->orWhere('status', 'like', "%{$search}%");
+                });
+            })
+            ->latest()
+            ->paginate(10);
     }
 
     public function store(array $data): Room
