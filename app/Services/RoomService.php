@@ -13,6 +13,16 @@ class RoomService
         private ActivityLogService $activityLogService
     ) {
     }
+
+    private function getStatusLabel(string $status): string
+    {
+        return match ($status) {
+            'available' => 'Tersedia',
+            'occupied' => 'Terisi',
+            'maintenance' => 'Perbaikan',
+            default => $status,
+        };
+    }
     public function getAll($search = null)
     {
         return Room::with([
@@ -44,9 +54,9 @@ class RoomService
         $room = Room::create($data);
 
         $this->activityLogService->store(
-            "Menambahkan kamar {$room->room_number} dengan harga Rp" .
+            "Menambahkan kamar {$room->id}. Nomor Kamar: {$room->room_number}, Harga: Rp" .
             number_format($room->price_per_month, 0, ',', '.') .
-            " dan status {$room->status}."
+            ", Status: " . $this->getStatusLabel($room->status) . "."
         );
 
         return $room;
@@ -88,7 +98,7 @@ class RoomService
         $messages = [];
 
         if ($oldData['room_number'] != $room->room_number) {
-            $messages[] = "Nomor kamar: {$oldData['room_number']} → {$room->room_number}";
+            $messages[] = "Nomor Kamar: {$oldData['room_number']} → {$room->room_number}";
         }
 
         if ($oldData['price_per_month'] != $room->price_per_month) {
@@ -99,12 +109,15 @@ class RoomService
         }
 
         if ($oldData['status'] != $room->status) {
-            $messages[] = "Status: {$oldData['status']} → {$room->status}";
+            $messages[] = "Status: " .
+                $this->getStatusLabel($oldData['status']) .
+                " → " .
+                $this->getStatusLabel($room->status);
         }
 
         if (!empty($messages)) {
             $this->activityLogService->store(
-                "Mengubah data kamar {$oldRoomNumber}. " .
+                "Mengubah data {$room->id}. Kamar {$oldRoomNumber}. " .
                 implode(", ", $messages) . "."
             );
         }
@@ -126,7 +139,7 @@ class RoomService
         $room->delete();
 
         $this->activityLogService->store(
-            "Menghapus kamar {$roomNumber} dengan harga Rp" .
+            "Menghapus kamar {$room->id}. Nomor Kamar: {$roomNumber}, Harga: Rp" .
             number_format($room->price_per_month, 0, ',', '.') . "."
         );
     }

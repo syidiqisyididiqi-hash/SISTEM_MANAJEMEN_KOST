@@ -28,11 +28,7 @@
 
                 <x-ui.select id="status" name="status">
 
-                    <option value="">
-                        Pilih Status
-                    </option>
-
-                    <option value="available" {{ old('status') == 'available' ? 'selected' : '' }}>
+                    <option value="available" {{ old('status', 'available') == 'available' ? 'selected' : '' }}>
                         Tersedia
                     </option>
 
@@ -45,7 +41,6 @@
                     </option>
 
                 </x-ui.select>
-
             </x-ui.form-group>
 
             <x-ui.form-group label="Deskripsi Kamar" name="description">
