@@ -17,7 +17,7 @@ class ActivityLogController extends Controller
      */
     public function index()
     {
-        $logs = $this->service->getAll();
+        $logs = $this->service->getAll(request('search'));
 
         return view('admin.activity-log.index', compact('logs'));
     }

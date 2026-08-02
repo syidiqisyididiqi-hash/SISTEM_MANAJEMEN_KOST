@@ -7,9 +7,13 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class ActivityLogService
 {
-    public function getAll()
+    public function getAll($search = null)
     {
-        return ActivityLog::latest()->get();
+        return ActivityLog::when($search, function ($query) use ($search) {
+            $query->where('description', 'like', "%{$search}%");
+        })
+            ->latest()
+            ->paginate(10);
     }
 
     public function store(string $description): ActivityLog
