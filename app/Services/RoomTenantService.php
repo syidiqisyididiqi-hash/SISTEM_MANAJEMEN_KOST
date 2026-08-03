@@ -14,9 +14,16 @@ class RoomTenantService
     ) {
     }
 
-    public function getAll()
+    public function getAll($search = null)
     {
-        return RoomTenant::with(['room', 'tenant.user'])->latest()->get();
+        return RoomTenant::with(['room', 'tenant.user'])
+            ->when($search, function ($query) use ($search) {
+                $query->whereHas('tenant.user', function ($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%");
+                });
+            })
+            ->latest()
+            ->paginate(10);
     }
 
     public function store(array $data): RoomTenant
@@ -50,7 +57,7 @@ class RoomTenantService
 
         return $roomTenant;
     }
-    
+
     public function findById(int $id): RoomTenant
     {
         $data = RoomTenant::with([
@@ -74,11 +81,18 @@ class RoomTenantService
         $roomTenant->update($data);
         $roomTenant->refresh()->load(['room', 'tenant.user']);
 
-        if (isset($data['status']) && $data['status'] === 'inactive') {
-            Room::where('id', $roomTenant->room_id)
-                ->update(['status' => 'available']);
-        }
+        if (isset($data['status'])) {
 
+            if ($data['status'] === 'active') {
+                Room::where('id', $roomTenant->room_id)
+                    ->update(['status' => 'occupied']);
+            }
+
+            if ($data['status'] === 'inactive') {
+                Room::where('id', $roomTenant->room_id)
+                    ->update(['status' => 'available']);
+            }
+        }
         $messages = [];
         if ($roomTenant->wasChanged('start_date')) {
             $messages[] = "Tanggal Mulai: {$oldData['start_date']} → {$roomTenant->start_date?->format('Y-m-d')}";
@@ -95,6 +109,8 @@ class RoomTenantService
         if (!empty($messages)) {
             $this->activityLogService->store(
                 "Mengubah data penyewaan kamar {$roomTenant->id}. " .
+                "Nomor Kamar: {$roomTenant->room->room_number}, " .
+                "Nama Penyewa: {$roomTenant->tenant->user->name}, " .
                 implode(", ", $messages) . "."
             );
         }

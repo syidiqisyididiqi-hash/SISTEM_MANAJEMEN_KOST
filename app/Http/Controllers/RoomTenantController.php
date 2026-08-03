@@ -19,18 +19,20 @@ class RoomTenantController extends Controller
      */
     public function index()
     {
-        $roomTenants = $this->service->getAll();
+        $roomTenants = $this->service->getAll(request('search'));
 
         return view('admin.room-tenants.index', compact('roomTenants'));
     }
-
 
     /**
      * Show the form for creating a new resource (view).
      */
     public function create()
     {
-        $rooms = Room::all();
+        $rooms = Room::where('status', 'available')
+            ->orderBy('room_number')
+            ->get();
+
         $tenants = Tenant::all();
 
         return view('admin.room-tenants.create', compact('rooms', 'tenants'));
@@ -61,7 +63,11 @@ class RoomTenantController extends Controller
      */
     public function edit(RoomTenant $roomTenant)
     {
-        $rooms = Room::all();
+        $rooms = Room::where('status', 'available')
+            ->orWhere('id', $roomTenant->room_id)
+            ->orderBy('room_number')
+            ->get();
+
         $tenants = Tenant::all();
 
         return view('admin.room-tenants.edit', compact('roomTenant', 'rooms', 'tenants'));

@@ -46,10 +46,10 @@
                 </x-ui.select>
 
             </x-ui.form-group>
-
+            
             <x-ui.form-group label="Tanggal Masuk" name="start_date" required>
 
-                <x-ui.input type="date" id="start_date" name="start_date" :value="old('start_date')" />
+                <x-ui.input type="date" id="start_date" name="start_date" :value="old('start_date', now()->format('Y-m-d'))" />
 
             </x-ui.form-group>
 
