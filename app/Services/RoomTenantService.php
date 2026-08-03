@@ -9,7 +9,8 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 class RoomTenantService
 {
     public function __construct(
-        private ActivityLogService $activityLogService
+        private ActivityLogService $activityLogService,
+        private BillService $billService
     ) {
     }
 
@@ -24,8 +25,18 @@ class RoomTenantService
         $roomTenant->load(['room', 'tenant.user']);
 
         if ($data['status'] === 'active') {
+
             Room::where('id', $data['room_id'])
                 ->update(['status' => 'occupied']);
+
+            $this->billService->store([
+                'room_tenant_id' => $roomTenant->id,
+                'bill_month' => $roomTenant->start_date,
+                'amount' => $roomTenant->room->price_per_month,
+                'due_date' => $roomTenant->start_date->copy()->addDays(7),
+                'fine_amount' => 0,
+                'status' => 'unpaid',
+            ]);
         }
 
         $this->activityLogService->store(
@@ -39,6 +50,7 @@ class RoomTenantService
 
         return $roomTenant;
     }
+    
     public function findById(int $id): RoomTenant
     {
         $data = RoomTenant::with([
