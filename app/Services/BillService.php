@@ -26,7 +26,7 @@ class BillService
             ->paginate(10);
     }
 
-    public function store(array $data): Bill
+    public function store(array $data, bool $isAutomatic = false): Bill
     {
         $data['bill_month'] = Carbon::parse($data['bill_month'])
             ->startOfMonth()
@@ -51,8 +51,12 @@ class BillService
             'roomTenant.tenant.user'
         ]);
 
+        $message = $isAutomatic
+            ? "Membuat tagihan otomatis {$bill->id}. "
+            : "Menambahkan data tagihan {$bill->id}. ";
+
         $this->activityLogService->store(
-            "Menambahkan data tagihan {$bill->id}. " .
+            $message .
             "Nomor Kamar: {$bill->roomTenant->room->room_number}, " .
             "Nama Penyewa: {$bill->roomTenant->tenant->user->name}, " .
             "Bulan Tagihan: {$bill->bill_month->translatedFormat('F Y')}, " .
@@ -61,7 +65,7 @@ class BillService
             "Denda: Rp" . number_format($bill->fine_amount, 0, ',', '.') . ", " .
             "Status: {$bill->status}."
         );
-
+        
         return $bill;
     }
 

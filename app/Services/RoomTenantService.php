@@ -43,7 +43,7 @@ class RoomTenantService
                 'due_date' => $roomTenant->start_date->copy()->addDays(7),
                 'fine_amount' => 0,
                 'status' => 'unpaid',
-            ]);
+            ], true);
         }
 
         $this->activityLogService->store(
