@@ -32,6 +32,47 @@
 
         </div>
 
+        <form method="GET" class="mb-6">
+            <div class="flex items-center gap-2">
+
+                <div class="relative w-80">
+
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                        class="absolute w-4 h-4 text-gray-400 left-3 top-1/2 -translate-y-1/2"
+                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16z" />
+
+                    </svg>
+
+                    <input
+                        type="text"
+                        name="search"
+                        value="{{ request('search') }}"
+                        placeholder="Cari penyewa..."
+                        class="w-full py-2 pl-9 pr-3 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none">
+
+                </div>
+
+                <x-ui.button type="submit" class="px-4 py-2 text-sm">
+                    Cari
+                </x-ui.button>
+
+                @if(request()->filled('search'))
+                    <a href="{{ route('admin.bills.index') }}">
+                        <x-ui.button
+                            type="button"
+                            class="px-4 py-2 text-sm bg-gray-500 hover:bg-gray-600 text-white">
+                            Reset
+                        </x-ui.button>
+                    </a>
+                @endif
+
+            </div>
+        </form>
+
         @if($bills->count())
 
             <x-ui.table>
@@ -49,7 +90,7 @@
                         </th>
 
                         <th class="px-6 py-4 text-left font-semibold">
-                            Bualan
+                            Bulan
                         </th>
 
                         <th class="px-6 py-4 text-left font-semibold">
@@ -83,7 +124,7 @@
                         <tr class="border-b hover:bg-gray-50">
 
                             <td class="px-6 py-4">
-                                {{ $loop->iteration }}
+                                {{ $bills->firstItem() + $loop->index }}
                             </td>
 
                             <td class="px-6 py-4">
@@ -159,6 +200,10 @@
                 </tbody>
 
             </x-ui.table>
+
+            <div class="mt-6 flex justify-center">
+                {{ $bills->withQueryString()->links() }}
+            </div>
 
         @else
 

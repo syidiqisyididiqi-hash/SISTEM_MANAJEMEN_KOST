@@ -14,11 +14,16 @@ class BillService
     ) {
     }
 
-    public function getAll()
+    public function getAll($search = null)
     {
         return Bill::with('roomTenant.room', 'roomTenant.tenant.user')
+            ->when($search, function ($query) use ($search) {
+                $query->whereHas('roomTenant.tenant.user', function ($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%");
+                });
+            })
             ->latest()
-            ->get();
+            ->paginate(10);
     }
 
     public function store(array $data): Bill

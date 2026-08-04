@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Bill\StoreBillRequest;
 use App\Http\Requests\Bill\UpdateBillRequest;
 use App\Models\Bill;
+    use Illuminate\Http\Request;
 use App\Models\RoomTenant;
 use App\Services\BillService;
 
@@ -16,9 +17,10 @@ class BillController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+
+    public function index(Request $request)
     {
-        $bills = $this->service->getAll();
+        $bills = $this->service->getAll($request->search);
 
         return view('admin.bills.index', compact('bills'));
     }
