@@ -63,7 +63,7 @@
 
             <x-ui.form-group label="Tanggal Bayar" name="paid_at" required>
 
-                <x-ui.input type="datetime-local" id="paid_at" name="paid_at" :value="old('paid_at')" />
+                <x-ui.input type="datetime-local" id="paid_at" name="paid_at" :value="old('paid_at', now()->format('Y-m-d\TH:i'))" />
 
             </x-ui.form-group>
 
