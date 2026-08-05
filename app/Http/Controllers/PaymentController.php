@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Exception;
 use App\Models\Bill;
 use App\Models\Payment;
+use Illuminate\Http\Request;
 use App\Services\PaymentService;
 use App\Http\Requests\Payment\StorePaymentRequest;
 use App\Http\Requests\Payment\UpdatePaymentRequest;
@@ -18,12 +19,11 @@ class PaymentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $payments = $this->service->getAll();
+        $payments = $this->service->getAll($request->search);
 
         return view('admin.payments.index', compact('payments'));
-
     }
 
     /**

@@ -16,12 +16,19 @@ class PaymentService
     ) {
     }
 
-    public function getAll()
+    public function getAll($search = null)
     {
         return Payment::with([
             'bill.roomTenant.room',
             'bill.roomTenant.tenant.user'
-        ])->latest()->get();
+        ])
+            ->when($search, function ($query) use ($search) {
+                $query->whereHas('bill.roomTenant.tenant.user', function ($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%");
+                });
+            })
+            ->latest()
+            ->paginate(10);
     }
 
     public function store(array $data): Payment
