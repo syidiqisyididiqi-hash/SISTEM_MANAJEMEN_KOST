@@ -47,9 +47,13 @@ class PaymentService
             ]);
 
             $this->activityLogService->store(
-                "Menambahkan pembayaran Bill #{$bill->id} sebesar Rp" .
-                number_format($payment->amount, 0, ',', '.') .
-                " menggunakan metode {$payment->method}."
+                "Menambahkan data pembayaran {$payment->id}. " .
+                "Nama Penyewa: {$bill->roomTenant->tenant->user->name}, " .
+                "Nomor Kamar: {$bill->roomTenant->room->room_number}, " .
+                "Bulan Tagihan: {$bill->bill_month->format('Y-m')}, " .
+                "Nominal: Rp" . number_format($payment->amount, 0, ',', '.') . ", " .
+                "Metode Pembayaran: {$payment->method}, " .
+                "Tanggal Pembayaran: {$payment->paid_at}."
             );
 
             return $payment;
@@ -90,13 +94,15 @@ class PaymentService
         }
 
         if ($oldData['paid_at'] != $payment->paid_at) {
-            $messages[] = "Tanggal pembayaran diperbarui";
+            $messages[] =
+                "Tanggal Pembayaran: {$oldData['paid_at']} → {$payment->paid_at}";
         }
 
         if (!empty($messages)) {
             $this->activityLogService->store(
-                "Mengubah pembayaran Bill #{$payment->bill_id}. " .
-                implode(", ", $messages)
+                "Mengubah data pembayaran {$payment->id}. " .
+                "Nama Penyewa: {$payment->bill->roomTenant->tenant->user->name}. " .
+                implode(", ", $messages) . "."
             );
         }
 
@@ -107,16 +113,21 @@ class PaymentService
     {
         DB::transaction(function () use ($payment) {
 
-            $billId = $payment->bill_id;
+            $tenantName = $payment->bill->roomTenant->tenant->user->name;
+            $roomNumber = $payment->bill->roomTenant->room->room_number;
+            $billMonth = $payment->bill->bill_month;
             $amount = $payment->amount;
             $method = $payment->method;
 
             $payment->delete();
 
             $this->activityLogService->store(
-                "Menghapus pembayaran Bill #{$billId} sebesar Rp" .
-                number_format($amount, 0, ',', '.') .
-                " menggunakan metode {$method}."
+                "Menghapus data pembayaran {$payment->id}. " .
+                "Nama Penyewa: {$tenantName}, " .
+                "Nomor Kamar: {$roomNumber}, " .
+                "Bulan Tagihan: {$billMonth}, " .
+                "Nominal: Rp" . number_format($amount, 0, ',', '.') . ", " .
+                "Metode Pembayaran: {$method}."
             );
         });
     }
