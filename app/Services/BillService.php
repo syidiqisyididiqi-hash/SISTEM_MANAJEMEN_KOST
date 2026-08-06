@@ -26,6 +26,44 @@ class BillService
             ->paginate(10);
     }
 
+    public function getTenantBills(int $userId, $search = null, $status = null)
+    {
+        return Bill::with('roomTenant.room', 'roomTenant.tenant.user')
+            ->whereHas('roomTenant.tenant', function ($query) use ($userId) {
+                $query->where('user_id', $userId);
+            })
+            ->when($search, function ($query) use ($search) {
+                $query->whereHas('roomTenant.tenant.user', function ($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%");
+                });
+            })
+            ->when($status, function ($query) use ($status) {
+                $query->where('status', $status);
+            })
+            ->latest()
+            ->paginate(10);
+    }
+
+    public function findTenantBillById(int $id, int $userId): Bill
+    {
+        $bill = Bill::with([
+            'roomTenant.room',
+            'roomTenant.tenant.user',
+            'payments'
+        ])
+            ->where('id', $id)
+            ->whereHas('roomTenant.tenant', function ($query) use ($userId) {
+                $query->where('user_id', $userId);
+            })
+            ->first();
+
+        if (!$bill) {
+            throw new ModelNotFoundException('Bill not found');
+        }
+
+        return $bill;
+    }
+
     public function store(array $data, bool $isAutomatic = false): Bill
     {
         $data['bill_month'] = Carbon::parse($data['bill_month'])
@@ -65,7 +103,7 @@ class BillService
             "Denda: Rp" . number_format($bill->fine_amount, 0, ',', '.') . ", " .
             "Status: {$bill->status}."
         );
-        
+
         return $bill;
     }
 

@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Bill\StoreBillRequest;
 use App\Http\Requests\Bill\UpdateBillRequest;
 use App\Models\Bill;
-    use Illuminate\Http\Request;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Models\RoomTenant;
 use App\Services\BillService;
 
@@ -23,6 +24,24 @@ class BillController extends Controller
         $bills = $this->service->getAll($request->search);
 
         return view('admin.bills.index', compact('bills'));
+    }
+
+    public function tenantIndex(Request $request)
+    {
+        $bills = $this->service->getTenantBills(
+            Auth::id(),
+            $request->search,
+            $request->status
+        );
+
+        return view('tenant.bills.index', compact('bills'));
+    }
+
+    public function tenantShow(int $id)
+    {
+        $bill = $this->service->findTenantBillById($id, Auth::id());
+
+        return view('tenant.bills.show', compact('bill'));
     }
 
     /**
