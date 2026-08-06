@@ -27,9 +27,12 @@ class RoomController extends Controller
     /**
      * untuk tenant
      */
-    public function tenantIndex()
+    public function tenantIndex(Request $request)
     {
-        $rooms = Room::all();
+        $rooms = $this->service->getTenantRooms(
+            $request->search,
+            $request->status
+        );
 
         return view('tenant.rooms.index', compact('rooms'));
     }

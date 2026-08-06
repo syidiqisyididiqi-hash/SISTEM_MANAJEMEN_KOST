@@ -42,6 +42,22 @@ class RoomService
             ->paginate(10);
     }
 
+    public function getTenantRooms($search = null, $status = null)
+    {
+        return Room::when($search, function ($query) use ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('room_number', 'like', "%{$search}%")
+                    ->orWhere('description', 'like', "%{$search}%");
+            });
+        })
+            ->when($status, function ($query) use ($status) {
+                $query->where('status', $status);
+            })
+            ->latest()
+            ->paginate(6)
+            ->withQueryString();
+    }
+
     public function store(array $data): Room
     {
         if (isset($data['image'])) {
