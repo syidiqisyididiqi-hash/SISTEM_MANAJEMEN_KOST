@@ -25,6 +25,7 @@ class RoomTenant extends Model
         'tenant_id',
         'tenant_date',
         'start_date',
+        'duration_month',
         'end_date',
         'status',
     ];
@@ -32,6 +33,7 @@ class RoomTenant extends Model
     protected $casts = [
         'start_date' => 'datetime:Y-m-d',
         'end_date' => 'datetime:Y-m-d',
+        'duration_month' => 'integer',
     ];
 
     public function room()

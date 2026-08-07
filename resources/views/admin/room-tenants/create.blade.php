@@ -46,16 +46,44 @@
                 </x-ui.select>
 
             </x-ui.form-group>
-            
+
             <x-ui.form-group label="Tanggal Masuk" name="start_date" required>
 
                 <x-ui.input type="date" id="start_date" name="start_date" :value="old('start_date', now()->format('Y-m-d'))" />
 
             </x-ui.form-group>
 
+            <x-ui.form-group label="Durasi Kontrak" name="duration_month" required>
+
+                <x-ui.select id="duration_month" name="duration_month">
+
+                    <option value="1">1 Bulan</option>
+                    <option value="3">3 Bulan</option>
+                    <option value="6">6 Bulan</option>
+                    <option value="12">12 Bulan</option>
+                    <option value="custom">Custom</option>
+
+                </x-ui.select>
+
+            </x-ui.form-group>
+
+            <div id="customDuration" class="hidden">
+
+                <x-ui.form-group label="Durasi Custom (Bulan)" name="custom_month">
+
+                    <x-ui.input type="number" id="custom_month" min="1" placeholder="Contoh: 18" />
+
+                </x-ui.form-group>
+
+            </div>
+
             <x-ui.form-group label="Tanggal Keluar" name="end_date">
 
-                <x-ui.input type="date" id="end_date" name="end_date" :value="old('end_date')" />
+                <x-ui.input type="date" id="end_date" name="end_date" readonly />
+
+                <small class="text-gray-500">
+                    Tanggal keluar dihitung otomatis berdasarkan tanggal masuk dan durasi kontrak.
+                </small>
 
             </x-ui.form-group>
 
@@ -93,6 +121,45 @@
     </x-ui.card>
 
     <script>
+        const startDate = document.getElementById('start_date');
+        const duration = document.getElementById('duration_month');
+        const customDiv = document.getElementById('customDuration');
+        const customMonth = document.getElementById('custom_month');
+        const endDate = document.getElementById('end_date');
+
+        function calculateEndDate() {
+
+            if (!startDate.value) return;
+
+            let month = duration.value;
+
+            if (month === 'custom') {
+
+                customDiv.classList.remove('hidden');
+
+                month = customMonth.value;
+
+            } else {
+
+                customDiv.classList.add('hidden');
+
+            }
+
+            if (!month || month <= 0) return;
+
+            const date = new Date(startDate.value);
+
+            date.setMonth(date.getMonth() + parseInt(month));
+
+            endDate.value = date.toISOString().split('T')[0];
+
+        }
+
+        startDate.addEventListener('change', calculateEndDate);
+        duration.addEventListener('change', calculateEndDate);
+        customMonth.addEventListener('input', calculateEndDate);
+
+        calculateEndDate();
 
         document.getElementById('formTambahRoomTenant').addEventListener('submit', function (e) {
 

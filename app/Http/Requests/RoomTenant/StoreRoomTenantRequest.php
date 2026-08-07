@@ -26,7 +26,7 @@ class StoreRoomTenantRequest extends FormRequest
             'room_id' => 'required|exists:rooms,id',
             'tenant_id' => 'required|exists:tenants,id',
             'start_date' => 'required|date',
-            'end_date' => 'nullable|date|after:start_date',
+            'duration_month' => 'required|integer|min:1',
             'status' => 'required|in:active,inactive',
         ];
     }

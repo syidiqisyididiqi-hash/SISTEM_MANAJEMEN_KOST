@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Carbon\Carbon;
 use App\Models\Room;
 use App\Models\RoomTenant;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -28,6 +29,14 @@ class RoomTenantService
 
     public function store(array $data): RoomTenant
     {
+        $durationMonths = (int) ($data['duration_month'] ?? 0);
+        $startDate = Carbon::parse($data['start_date']);
+
+        $data['duration_month'] = $durationMonths;
+        $data['end_date'] = $startDate
+            ->copy()
+            ->addMonthsNoOverflow($durationMonths);
+
         $roomTenant = RoomTenant::create($data);
         $roomTenant->load(['room', 'tenant.user']);
 
@@ -36,14 +45,21 @@ class RoomTenantService
             Room::where('id', $data['room_id'])
                 ->update(['status' => 'occupied']);
 
-            $this->billService->store([
-                'room_tenant_id' => $roomTenant->id,
-                'bill_month' => $roomTenant->start_date,
-                'amount' => $roomTenant->room->price_per_month,
-                'due_date' => $roomTenant->start_date->copy()->addDays(7),
-                'fine_amount' => 0,
-                'status' => 'unpaid',
-            ], true);
+            for ($i = 0; $i < $data['duration_month']; $i++) {
+
+                $billMonth = $startDate
+                    ->copy()
+                    ->addMonthsNoOverflow($i);
+
+                $this->billService->store([
+                    'room_tenant_id' => $roomTenant->id,
+                    'bill_month' => $billMonth,
+                    'amount' => $roomTenant->room->price_per_month,
+                    'due_date' => $billMonth->copy()->addDays(7),
+                    'fine_amount' => 0,
+                    'status' => 'unpaid',
+                ], true);
+            }
         }
 
         $this->activityLogService->store(
@@ -51,6 +67,7 @@ class RoomTenantService
             "Nomor Kamar: {$roomTenant->room->room_number}, " .
             "Nama Penyewa: {$roomTenant->tenant->user->name}, " .
             "Tanggal Mulai: {$roomTenant->start_date?->format('Y-m-d')}, " .
+            "Durasi Kontrak: {$roomTenant->duration_month} bulan, " .
             "Tanggal Selesai: {$roomTenant->end_date?->format('Y-m-d')}, " .
             "Status: {$roomTenant->status}."
         );
@@ -74,6 +91,17 @@ class RoomTenantService
 
     public function update(RoomTenant $roomTenant, array $data): RoomTenant
     {
+        if (isset($data['duration_month'])) {
+            $durationMonths = (int) $data['duration_month'];
+            $data['duration_month'] = $durationMonths;
+
+            $startDate = Carbon::parse($data['start_date'] ?? $roomTenant->start_date);
+
+            $data['end_date'] = $startDate
+                ->copy()
+                ->addMonthsNoOverflow($durationMonths);
+
+        }
         $roomTenant->load(['room', 'tenant.user']);
 
         $oldData = $roomTenant->toArray();
@@ -96,6 +124,11 @@ class RoomTenantService
         $messages = [];
         if ($roomTenant->wasChanged('start_date')) {
             $messages[] = "Tanggal Mulai: {$oldData['start_date']} → {$roomTenant->start_date?->format('Y-m-d')}";
+        }
+
+        if ($roomTenant->wasChanged('duration_month')) {
+            $messages[] =
+                "Durasi Kontrak: {$oldData['duration_month']} bulan → {$roomTenant->duration_month} bulan";
         }
 
         if ($roomTenant->wasChanged('end_date')) {
