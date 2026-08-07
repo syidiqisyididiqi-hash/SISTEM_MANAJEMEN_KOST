@@ -35,7 +35,8 @@ class RoomTenantService
         $data['duration_month'] = $durationMonths;
         $data['end_date'] = $startDate
             ->copy()
-            ->addMonthsNoOverflow($durationMonths);
+            ->addMonthsNoOverflow($durationMonths)
+            ->subDay();
 
         $roomTenant = RoomTenant::create($data);
         $roomTenant->load(['room', 'tenant.user']);
@@ -91,7 +92,7 @@ class RoomTenantService
 
     public function update(RoomTenant $roomTenant, array $data): RoomTenant
     {
-        if (isset($data['duration_month'])) {
+        if (array_key_exists('duration_month', $data)) {
             $durationMonths = (int) $data['duration_month'];
             $data['duration_month'] = $durationMonths;
 
@@ -99,7 +100,8 @@ class RoomTenantService
 
             $data['end_date'] = $startDate
                 ->copy()
-                ->addMonthsNoOverflow($durationMonths);
+                ->addMonthsNoOverflow($durationMonths)
+                ->subDay();
 
         }
         $roomTenant->load(['room', 'tenant.user']);

@@ -22,7 +22,7 @@ class BillService
                     $q->where('name', 'like', "%{$search}%");
                 });
             })
-            ->latest()
+            ->orderBy('bill_month', 'asc')
             ->paginate(10);
     }
 
@@ -40,7 +40,7 @@ class BillService
             ->when($status, function ($query) use ($status) {
                 $query->where('status', $status);
             })
-            ->latest()
+            ->orderBy('bill_month', 'asc')
             ->paginate(10);
     }
 
@@ -67,7 +67,6 @@ class BillService
     public function store(array $data, bool $isAutomatic = false): Bill
     {
         $data['bill_month'] = Carbon::parse($data['bill_month'])
-            ->startOfMonth()
             ->format('Y-m-d');
 
         $exists = Bill::where('room_tenant_id', $data['room_tenant_id'])
