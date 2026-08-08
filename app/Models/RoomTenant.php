@@ -10,9 +10,11 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $room_id
  * @property int $tenant_id
  * @property string|null $tenant_date
+ * @property int $duration_month
  * @property \Illuminate\Support\Carbon|null $start_date
  * @property \Illuminate\Support\Carbon|null $end_date
  * @property string $status
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Bill[] $bills
  * @property-read \App\Models\Room $room
  * @property-read \App\Models\Tenant $tenant
  */
