@@ -62,34 +62,80 @@ class UserService
 
     public function update(User $user, array $data): User
     {
-        $oldData = $user->toArray();
-        $oldName = $user->name;
-        $userId = $user->id;
+        return DB::transaction(function () use ($user, $data) {
 
-        $user->update($data);
+            $oldData = $user->toArray();
+            $oldName = $user->name;
+            $userId = $user->id;
+            $oldRole = $user->role;
+            $newRole = $data['role'];
 
-        $messages = [];
+            $user->update($data);
 
-        if ($oldData['name'] != $user->name) {
-            $messages[] = "Nama: {$oldData['name']} → {$user->name}";
-        }
+            $messages = [];
 
-        if ($oldData['email'] != $user->email) {
-            $messages[] = "Email: {$oldData['email']} → {$user->email}";
-        }
+            if ($oldData['name'] != $user->name) {
+                $messages[] = "Nama: {$oldData['name']} → {$user->name}";
+            }
 
-        if ($oldData['role'] != $user->role) {
-            $messages[] = "Peran: {$oldData['role']} → {$user->role}";
-        }
+            if ($oldData['email'] != $user->email) {
+                $messages[] = "Email: {$oldData['email']} → {$user->email}";
+            }
 
-        if (!empty($messages)) {
-            $this->activityLogService->store(
-                "Mengubah data pengguna {$userId} ({$oldName}). " .
-                implode(", ", $messages) . "."
-            );
-        }
+            if ($oldData['role'] != $user->role) {
+                $messages[] = "Peran: {$oldData['role']} → {$user->role}";
+            }
 
-        return $user;
+            if (!empty($messages)) {
+                $this->activityLogService->store(
+                    "Mengubah data pengguna {$userId} ({$oldName}). " .
+                    implode(", ", $messages) . "."
+                );
+            }
+
+            if ($oldRole === 'tenant' && $newRole === 'admin') {
+
+                $tenant = Tenant::where('user_id', $user->id)->first();
+
+                if ($tenant && !$tenant->roomTenants()->exists()) {
+
+                    $tenantId = $tenant->id;
+                    $tenantName = $user->name;
+                    $tenantPhone = $tenant->phone;
+
+                    $tenant->delete();
+
+                    $this->activityLogService->store(
+                        "Menghapus penyewa {$tenantId} (otomatis). " .
+                        "Nama: {$tenantName}, " .
+                        "Nomor Telepon: " . ($tenantPhone ?: '-') . "."
+                    );
+                }
+            }
+
+            if ($oldRole === 'admin' && $newRole === 'tenant') {
+
+                $tenantExists = Tenant::where('user_id', $user->id)->exists();
+
+                if (!$tenantExists) {
+
+                    $tenant = Tenant::create([
+                        'user_id' => $user->id,
+                        'phone' => $data['phone'] ?? null,
+                        'identity_number' => $data['identity_number'] ?? null,
+                        'address' => $data['address'] ?? null,
+                    ]);
+
+                    $this->activityLogService->store(
+                        "Menambahkan penyewa {$tenant->id} (otomatis). " .
+                        "Nama: {$user->name}, " .
+                        "Nomor Telepon: " . ($tenant->phone ?: '-') . "."
+                    );
+                }
+            }
+
+            return $user;
+        });
     }
 
     public function delete(User $user): void
