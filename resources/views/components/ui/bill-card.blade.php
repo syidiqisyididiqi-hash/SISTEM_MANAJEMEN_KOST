@@ -14,7 +14,7 @@
     </div>
 
     <div class="flex items-center gap-3 self-end md:self-center">
-        <a href="{{ route('tenant.billing.show', $bill->id ?? 1) }}"
+        <a href="{{ route('tenant.bills.show', $bill->id ?? 1) }}"
             class="px-4 py-2 text-sm font-medium text-slate-700 bg-slate-100 rounded-lg hover:bg-slate-200 transition">
             Detail
         </a>

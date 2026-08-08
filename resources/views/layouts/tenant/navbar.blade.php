@@ -64,7 +64,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('tenant.billing.index') }}"
+                        <a href="{{ route('tenant.bills.index') }}"
                             class="px-3 py-2 rounded-lg hover:text-blue-600 hover:bg-blue-50/50 transition-all">
                             Tagihan
                         </a>
@@ -165,7 +165,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('tenant.billing.index') }}"
+                        <a href="{{ route('tenant.bills.index') }}"
                             class="flex items-center px-4 py-3 rounded-xl hover:bg-gray-50 hover:text-blue-600 transition-all">
                             Tagihan
                         </a>

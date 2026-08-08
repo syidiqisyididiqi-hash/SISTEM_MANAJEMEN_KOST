@@ -22,7 +22,7 @@ class BillService
                     $q->where('name', 'like', "%{$search}%");
                 });
             })
-            ->orderBy('bill_month', 'asc')
+            ->latest()
             ->paginate(10);
     }
 
@@ -40,10 +40,10 @@ class BillService
             ->when($status, function ($query) use ($status) {
                 $query->where('status', $status);
             })
-            ->orderBy('bill_month', 'asc')
+            ->latest()
             ->paginate(10);
     }
-
+    
     public function findTenantBillById(int $id, int $userId): Bill
     {
         $bill = Bill::with([
