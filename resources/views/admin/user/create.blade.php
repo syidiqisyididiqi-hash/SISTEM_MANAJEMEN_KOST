@@ -15,15 +15,17 @@
             @csrf
 
             <x-ui.form-group label="Nama" name="name" required>
-                <x-ui.input id="name" type="text" name="name" placeholder="Masukkan nama" :value="old('name')" />
+                <x-ui.input id="name" type="text" name="name" placeholder="Contoh: Budi Santoso" :value="old('name')" />
             </x-ui.form-group>
 
             <x-ui.form-group label="Email" name="email" required>
-                <x-ui.input id="email" type="email" name="email" placeholder="Masukkan email" :value="old('email')" />
+                <x-ui.input id="email" type="email" name="email" placeholder="Contoh: budi@gmail.com" :value="old('email')"
+                    autocomplete="off" />
             </x-ui.form-group>
 
             <x-ui.form-group label="Password" name="password" required>
-                <x-ui.input id="password" type="password" name="password" placeholder="Masukkan password" />
+                <x-ui.input id="password" type="password" name="password" placeholder="Contoh: Budi@12345"
+                    autocomplete="new-password" />
             </x-ui.form-group>
 
             <x-ui.form-group label="Role" name="role" required>
@@ -31,10 +33,12 @@
                     <option value="">
                         Pilih Role
                     </option>
+
                     <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>
                         Admin
                     </option>
-                    <option value="tenant" {{ old('role') == 'tenant' ? 'selected' : '' }}>
+
+                    <option value="tenant" {{ old('role', 'tenant') == 'tenant' ? 'selected' : '' }}>
                         Tenant
                     </option>
                 </x-ui.select>
