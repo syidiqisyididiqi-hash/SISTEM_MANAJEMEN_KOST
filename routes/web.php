@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ActivityLogController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
@@ -7,6 +8,9 @@ use App\Http\Controllers\TenantController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\BillController;
+use App\Http\Controllers\RoomTenantController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -127,7 +131,6 @@ Route::post('/logout', [AuthController::class, 'logout'])
 
 
 
-
 /*
 |--------------------------------------------------------------------------
 | ADMIN
@@ -139,49 +142,62 @@ Route::prefix('admin')
     ->name('admin.')
     ->group(function () {
 
-
-        // Dashboard Admin
+        // Dashboard
         Route::get('/dashboard', [DashboardController::class, 'index'])
             ->name('dashboard');
 
+        // Laporan
+        Route::view('/report', 'admin.report.index')
+            ->name('report');
 
-
-        // Tenant Management
+        // Tenant
         Route::resource('tenants', TenantController::class)
             ->except(['show']);
 
-
-
-        // Room Management
+        // Room
         Route::resource('rooms', RoomController::class)
             ->except(['show']);
 
+        // Room Tenant
+        Route::resource('room-tenants', RoomTenantController::class)
+            ->except(['show']);
 
+        // Bill
+        Route::resource('bills', BillController::class)
+            ->except(['show']);
 
-        // Payment Management
+        // Payment
         Route::resource('payments', PaymentController::class)
             ->except(['show']);
 
+        // User Management
+        Route::resource('users', UserController::class)
+            ->except(['show']);
 
+        // Activity Log
+        // Route::resource('/activity-log', ActivityLogController::class)
+        //     ->except(['show']);
+    
+        Route::get('/activity-log', [ActivityLogController::class, 'index'])
+            ->name('activity-log.index');
 
-        // Profile Admin
+        Route::delete('/activity-log/clear', [ActivityLogController::class, 'clear'])
+            ->name('activity-log.clear');
+
+        // Settings
+        Route::view('/settings', 'admin.settings.index')
+            ->name('settings');
+
+        // Profile
         Route::get('/profile', [ProfileController::class, 'index'])
             ->name('profile.index');
-
 
         Route::get('/profile/edit', [ProfileController::class, 'edit'])
             ->name('profile.edit');
 
-
         Route::put('/profile', [ProfileController::class, 'update'])
             ->name('profile.update');
-
-
     });
-
-
-
-
 
 
 /*
@@ -218,12 +234,12 @@ Route::prefix('tenant')
 
 
         // Billing
-        Route::view('/billing', 'tenant.billing.index')
-            ->name('billing.index');
+        Route::get('/billing', [BillController::class, 'tenantIndex'])
+            ->name('bills.index');
 
 
-        Route::view('/billing/{id}', 'tenant.billing.show')
-            ->name('billing.show');
+        Route::get('/billing/{id}', [BillController::class, 'tenantShow'])
+            ->name('bills.show');
 
 
 
