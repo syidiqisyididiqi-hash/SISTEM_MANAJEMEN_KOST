@@ -38,7 +38,7 @@ class RoomService
                         ->orWhere('status', 'like', "%{$search}%");
                 });
             })
-            ->latest()
+            ->orderBy('id', 'desc')
             ->paginate(10);
     }
 
@@ -53,7 +53,7 @@ class RoomService
             ->when($status, function ($query) use ($status) {
                 $query->where('status', $status);
             })
-            ->latest()
+            ->orderBy('id', 'desc')
             ->paginate(6)
             ->withQueryString();
     }
