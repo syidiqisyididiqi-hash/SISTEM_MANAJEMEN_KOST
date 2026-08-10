@@ -22,7 +22,7 @@ class UserService
                 ->orWhere('email', 'like', "%{$search}%")
                 ->orWhere('role', 'like', "%{$search}%");
         })
-            ->latest()
+            ->orderBy('id', 'desc')
             ->paginate(10);
     }
 

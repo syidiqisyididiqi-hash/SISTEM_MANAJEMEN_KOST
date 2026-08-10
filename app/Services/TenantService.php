@@ -22,7 +22,7 @@ class TenantService
                     ->orWhere('identity_number', 'like', "%{$search}%")
                     ->orWhere('phone', 'like', "%{$search}%");
             })
-            ->latest()
+            ->orderBy('id', 'desc')
             ->paginate(10);
     }
 
