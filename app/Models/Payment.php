@@ -16,8 +16,8 @@ class Payment extends Model
         'method',
     ];
 
-    protected $dates = [
-        'paid_at',
+    protected $casts = [
+        'paid_at' => 'datetime',
     ];
 
     public function bill()
