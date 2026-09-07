@@ -34,7 +34,17 @@
             </label>
 
             <div class="bg-slate-50 p-3 rounded-xl">
-                {{ $user->phone ?? '-' }}
+                {{ $user->tenant?->phone ?? '-' }}
+            </div>
+        </div>
+
+        <div>
+            <label class="block text-sm text-slate-500 mb-2">
+                Nomor KTP
+            </label>
+
+            <div class="bg-slate-50 p-3 rounded-xl">
+                {{ $user->tenant?->identity_number ?? '-' }}
             </div>
         </div>
 

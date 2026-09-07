@@ -55,7 +55,18 @@
                         Nomor Telepon
                     </label>
 
-                    <input type="text" name="phone" value="{{ old('phone', $user->phone ?? '') }}"
+                    <input type="text" name="phone" value="{{ old('phone', $user->tenant?->phone ?? '') }}"
+                        class="w-full rounded-xl border border-slate-300 px-4 py-3">
+
+                </div>
+
+                <div>
+
+                    <label class="block mb-2 text-sm font-medium">
+                        Nomor KTP
+                    </label>
+
+                    <input type="text" name="identity_number" value="{{ old('identity_number', $user->tenant?->identity_number ?? '') }}"
                         class="w-full rounded-xl border border-slate-300 px-4 py-3">
 
                 </div>
