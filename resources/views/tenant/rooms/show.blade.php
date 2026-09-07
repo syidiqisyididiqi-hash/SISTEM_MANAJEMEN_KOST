@@ -199,10 +199,54 @@
 
                         @if($room->status == 'available')
 
-                            <button
-                                class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-2xl font-semibold transition duration-300">
-                                Ajukan Sewa
-                            </button>
+                            <form action="{{ route('tenant.rooms.rent', $room) }}" method="POST" class="space-y-4">
+                                @csrf
+
+                                @if($errors->any())
+                                    <div class="rounded-xl bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
+                                        {{ $errors->first() }}
+                                    </div>
+                                @endif
+
+                                <div>
+                                    <label for="duration_option" class="block text-sm font-medium text-gray-700 mb-2">
+                                        Durasi Sewa
+                                    </label>
+                                    <select id="duration_option" name="duration_option" required
+                                        class="w-full rounded-xl border-gray-300 focus:border-blue-500 focus:ring-blue-500">
+                                        <option value="1">1 bulan</option>
+                                        <option value="3">3 bulan</option>
+                                        <option value="6">6 bulan</option>
+                                        <option value="12">12 bulan</option>
+                                        <option value="custom">Custom</option>
+                                    </select>
+                                </div>
+
+                                <div id="custom-duration-field" class="hidden">
+                                    <label for="custom_duration" class="block text-sm font-medium text-gray-700 mb-2">
+                                        Durasi Custom (bulan)
+                                    </label>
+                                    <input id="custom_duration" name="custom_duration" type="number" min="1" max="24"
+                                        class="w-full rounded-xl border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                                        placeholder="Contoh: 9">
+                                </div>
+
+                                <button type="submit"
+                                    class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-2xl font-semibold transition duration-300">
+                                    Ajukan Sewa
+                                </button>
+                            </form>
+
+                            <script>
+                                document.getElementById('duration_option').addEventListener('change', function () {
+                                    const customField = document.getElementById('custom-duration-field');
+                                    const customInput = document.getElementById('custom_duration');
+                                    const isCustom = this.value === 'custom';
+
+                                    customField.classList.toggle('hidden', !isCustom);
+                                    customInput.required = isCustom;
+                                });
+                            </script>
 
                         @elseif($room->status == 'occupied')
 
@@ -229,3 +273,4 @@
     </div>
 
 @endsection
+

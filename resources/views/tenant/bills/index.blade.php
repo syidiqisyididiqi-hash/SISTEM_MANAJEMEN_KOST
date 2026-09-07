@@ -40,27 +40,34 @@
 
             <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 mb-5">
 
-                <div class="flex justify-between items-start">
+                <div class="flex justify-between items-start gap-4">
 
-                    <div>
+                    <div class="flex items-start gap-4 min-w-0">
 
-                        <h2 class="text-xl font-bold">
-                            {{ $bill->bill_month->translatedFormat('F Y') }}
-                        </h2>
+                        <img src="{{ $bill->roomTenant->room->image_url }}"
+                            alt="Kamar {{ $bill->roomTenant->room->room_number }}"
+                            class="h-20 w-24 shrink-0 rounded-xl object-cover border border-gray-100">
 
-                        <p class="text-gray-500 mt-2">
-                            Kamar {{ $bill->roomTenant->room->room_number }}
-                        </p>
+                        <div>
 
-                        <p class="mt-1">
-                            Jatuh Tempo :
-                            {{ $bill->due_date->format('d M Y') }}
-                        </p>
+                            <h2 class="text-xl font-bold">
+                                {{ $bill->bill_month->translatedFormat('F Y') }}
+                            </h2>
 
-                        <h3 class="text-2xl font-bold mt-4">
-                            Rp {{ number_format($bill->amount, 0, ',', '.') }}
-                        </h3>
+                            <p class="text-gray-500 mt-2">
+                                Kamar {{ $bill->roomTenant->room->room_number }}
+                            </p>
 
+                            <p class="mt-1">
+                                Jatuh Tempo :
+                                {{ $bill->due_date->format('d M Y') }}
+                            </p>
+
+                            <h3 class="text-2xl font-bold mt-4">
+                                Rp {{ number_format($bill->amount, 0, ',', '.') }}
+                            </h3>
+
+                        </div>
                     </div>
 
                     <div class="text-right">
