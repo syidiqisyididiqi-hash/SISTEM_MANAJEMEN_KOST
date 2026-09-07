@@ -6,6 +6,7 @@ use Exception;
 use App\Models\Bill;
 use App\Models\Payment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Services\PaymentService;
 use App\Http\Requests\Payment\StorePaymentRequest;
 use App\Http\Requests\Payment\UpdatePaymentRequest;
@@ -24,6 +25,13 @@ class PaymentController extends Controller
         $payments = $this->service->getAll($request->search);
 
         return view('admin.payments.index', compact('payments'));
+    }
+
+    public function tenantHistory()
+    {
+        $history = $this->service->getTenantHistory(Auth::id());
+
+        return view('tenant.payment.history', $history);
     }
 
     /**

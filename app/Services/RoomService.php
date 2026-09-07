@@ -4,7 +4,9 @@ namespace App\Services;
 
 use App\Models\Room;
 use App\Services\ActivityLogService;
+use App\Models\RoomTenant;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class RoomService
@@ -91,25 +93,36 @@ class RoomService
 
     public function update(Room $room, array $data): Room
     {
-        if (isset($data['image'])) {
-
-            if (
-                $room->image &&
-                Storage::disk('public')->exists($room->image)
-            ) {
-                Storage::disk('public')->delete($room->image);
-            }
-
-            $data['image'] = $data['image']->store(
-                'rooms',
-                'public'
-            );
-        }
-
         $oldData = $room->toArray();
         $oldRoomNumber = $room->room_number;
 
-        $room->update($data);
+        DB::transaction(function () use ($room, $data, $oldData) {
+            if (isset($data['image'])) {
+
+                if (
+                    $room->image &&
+                    Storage::disk('public')->exists($room->image)
+                ) {
+                    Storage::disk('public')->delete($room->image);
+                }
+
+                $data['image'] = $data['image']->store(
+                    'rooms',
+                    'public'
+                );
+            }
+
+            $room->update($data);
+
+            if (
+                in_array($data['status'] ?? $room->status, ['available', 'maintenance'], true)
+                && ($data['status'] ?? null) !== $oldData['status']
+            ) {
+                RoomTenant::where('room_id', $room->id)
+                    ->where('status', 'active')
+                    ->update(['status' => 'inactive']);
+            }
+        });
 
         $messages = [];
 

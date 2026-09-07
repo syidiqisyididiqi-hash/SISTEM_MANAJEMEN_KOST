@@ -31,6 +31,27 @@ class PaymentService
             ->paginate(10);
     }
 
+    public function getTenantHistory(int $userId): array
+    {
+        $paymentQuery = Payment::with([
+            'bill.roomTenant.room',
+            'bill.roomTenant.tenant.user',
+        ])->whereHas('bill.roomTenant.tenant', function ($query) use ($userId) {
+            $query->where('user_id', $userId);
+        });
+
+        return [
+            'payments' => (clone $paymentQuery)->latest()->paginate(10),
+            'totalAmount' => (clone $paymentQuery)->sum('amount'),
+            'successfulCount' => (clone $paymentQuery)->count(),
+            'pendingCount' => Bill::whereIn('status', ['unpaid', 'overdue'])
+                ->whereHas('roomTenant.tenant', function ($query) use ($userId) {
+                    $query->where('user_id', $userId);
+                })
+                ->count(),
+        ];
+    }
+
     public function store(array $data): Payment
     {
         return DB::transaction(function () use ($data) {

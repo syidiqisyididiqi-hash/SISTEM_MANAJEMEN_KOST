@@ -8,6 +8,7 @@ use App\Models\Room;
 use App\Models\Tenant;
 use App\Models\RoomTenant;
 use App\Models\ActivityLog;
+use Carbon\Carbon;
 
 class DashboardService
 {
@@ -67,5 +68,34 @@ class DashboardService
             'recentActivities',
             'billStats'
         );
+    }
+
+    public function getTenantDashboardSummary(int $userId): array
+    {
+        $roomTenant = RoomTenant::with('room')
+            ->whereHas('tenant', fn ($query) => $query->where('user_id', $userId))
+            ->where('status', 'active')
+            ->latest('start_date')
+            ->first();
+
+        $bill = $roomTenant?->bills()
+            ->whereDate('bill_month', '<=', Carbon::today())
+            ->orderByRaw("CASE WHEN status = 'paid' THEN 1 ELSE 0 END")
+            ->latest('bill_month')
+            ->first();
+
+        $recentPayments = $roomTenant?->bills()
+            ->with('payments')
+            ->get()
+            ->flatMap(fn ($item) => $item->payments)
+            ->sortByDesc('paid_at')
+            ->take(3)
+            ->values() ?? collect();
+
+        return [
+            'roomTenant' => $roomTenant,
+            'bill' => $bill,
+            'recentPayments' => $recentPayments,
+        ];
     }
 }
