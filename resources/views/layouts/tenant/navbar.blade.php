@@ -69,16 +69,11 @@
                             Tagihan
                         </a>
                     </li>
-                    <li>
-                        <a href="{{ route('tenant.payment.create') }}"
-                            class="px-3 py-2 rounded-lg hover:text-blue-600 hover:bg-blue-50/50 transition-all">
-                            Pembayaran
-                        </a>
-                    </li>
+
                     <li>
                         <a href="{{ route('tenant.payment.history') }}"
                             class="px-3 py-2 rounded-lg hover:text-blue-600 hover:bg-blue-50/50 transition-all">
-                            Riwayat
+                            Riwayat Sewa
                         </a>
                     </li>
                     <li>

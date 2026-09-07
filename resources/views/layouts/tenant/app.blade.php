@@ -6,7 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tenant Panel</title>
 
-    @vite(['resources/css/app.css'])
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        .tenant-alert-popup {
+            width: min(320px, calc(100vw - 32px)) !important;
+            min-height: 180px;
+        }
+    </style>
 </head>
 
 <body class="bg-gray-100">
@@ -26,6 +33,58 @@
         </div>
 
     </div>
+
+    @if(session('success'))
+        <input type="hidden" id="session-success" value="{{ session('success') }}">
+    @elseif(session('error'))
+        <input type="hidden" id="session-error" value="{{ session('error') }}">
+    @elseif($errors->any())
+        <ul id="validation-errors" class="hidden">
+            @foreach($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    @endif
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const successMessage = document.getElementById('session-success');
+            const errorMessage = document.getElementById('session-error');
+            const validationErrors = document.getElementById('validation-errors');
+
+            if (successMessage) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil!',
+                    text: successMessage.value,
+                    width: '320px',
+                    padding: '1.25em',
+                    customClass: { popup: 'tenant-alert-popup' },
+                    confirmButtonColor: '#4f46e5'
+                });
+            } else if (errorMessage) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal!',
+                    text: errorMessage.value,
+                    width: '320px',
+                    padding: '1.25em',
+                    customClass: { popup: 'tenant-alert-popup' },
+                    confirmButtonColor: '#dc2626'
+                });
+            } else if (validationErrors) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Data Gagal Disimpan',
+                    html: validationErrors.innerHTML,
+                    width: '320px',
+                    padding: '1.25em',
+                    customClass: { popup: 'tenant-alert-popup' },
+                    confirmButtonColor: '#dc2626'
+                });
+            }
+        });
+    </script>
 
     <script>
         const menuToggle = document.getElementById('mobile-menu-toggle');
