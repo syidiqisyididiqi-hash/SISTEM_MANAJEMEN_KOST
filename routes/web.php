@@ -11,6 +11,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\BillController;
 use App\Http\Controllers\RoomTenantController;
+use App\Http\Controllers\TenantRentalController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -61,6 +62,10 @@ Route::prefix('tenant')
         Route::get('/rooms/{room}', [RoomController::class, 'show'])
             ->name('rooms.show');
 
+        Route::post('/rooms/{room}/rent', [TenantRentalController::class, 'store'])
+            ->middleware(['auth', 'role:tenant'])
+            ->name('rooms.rent');
+
 
         // Pengumuman
         Route::view('/announcement', 'tenant.announcement.index')
@@ -69,6 +74,8 @@ Route::prefix('tenant')
 
         Route::view('/announcement/{id}', 'tenant.announcement.show')
             ->name('announcement.show');
+
+        
 
     });
 
@@ -177,7 +184,7 @@ Route::prefix('admin')
         // Activity Log
         // Route::resource('/activity-log', ActivityLogController::class)
         //     ->except(['show']);
-    
+
         Route::get('/activity-log', [ActivityLogController::class, 'index'])
             ->name('activity-log.index');
 
@@ -194,6 +201,9 @@ Route::prefix('admin')
 
         Route::get('/profile/edit', [ProfileController::class, 'edit'])
             ->name('profile.edit');
+
+        Route::get('/profile/change-password', [ProfileController::class, 'changePassword'])
+            ->name('profile.change-password');
 
         Route::put('/profile', [ProfileController::class, 'update'])
             ->name('profile.update');
@@ -214,7 +224,7 @@ Route::prefix('tenant')
 
 
         // Dashboard Tenant
-        Route::view('/dashboard', 'tenant.dashboard.index')
+        Route::get('/dashboard', [DashboardController::class, 'tenantIndex'])
             ->name('dashboard');
 
 
@@ -224,7 +234,7 @@ Route::prefix('tenant')
             ->name('payment.create');
 
 
-        Route::view('/payment/history', 'tenant.payment.history')
+        Route::get('/payment/history', [PaymentController::class, 'tenantHistory'])
             ->name('payment.history');
 
 
@@ -241,11 +251,21 @@ Route::prefix('tenant')
         Route::get('/billing/{id}', [BillController::class, 'tenantShow'])
             ->name('bills.show');
 
+        Route::post('/billing/{id}/pay', [TenantRentalController::class, 'pay'])
+            ->name('bills.pay');
+
 
 
         // Profile
         Route::view('/profile', 'tenant.profile.index')
             ->name('profile.index');
 
+        Route::get('/profile/edit', [ProfileController::class, 'tenantEdit'])
+            ->name('profile.edit');
+
+        Route::put('/profile', [ProfileController::class, 'tenantUpdate'])
+            ->name('profile.update');
+
 
     });
+
