@@ -62,7 +62,7 @@
             <p class="px-2 text-[11px] font-bold tracking-wider text-gray-600 uppercase mb-2.5">Main Menu</p>
             <div class="space-y-1.5">
                 <a href="{{ route('admin.dashboard') }}"
-                    class="group flex items-center justify-between px-3 py-2.5 rounded-xl relative transition-all duration-150 
+                    class="group flex items-center justify-between px-3 py-2.5 rounded-xl relative transition-all duration-150
                     {{ request()->routeIs('admin.dashboard') ? 'bg-white/10 text-white font-medium border-l-2 border-blue-500 rounded-l-none' : 'text-gray-400 hover:text-white hover:bg-white/[0.03]' }}">
                     <div class="flex items-center gap-3">
                         <span
@@ -71,7 +71,7 @@
                     </div>
                 </a>
 
-                <a href="{{ route('admin.report') }}"
+                {{-- <a href="{{ route('admin.report') }}"
                     class="group flex items-center justify-between px-3 py-2.5 rounded-xl relative transition-all duration-150
                     {{ request()->routeIs('admin.report') ? 'bg-white/10 text-white font-medium border-l-2 border-blue-500 rounded-l-none' : 'text-gray-400 hover:text-white hover:bg-white/[0.03]' }}">
                     <div class="flex items-center gap-3">
@@ -79,7 +79,7 @@
                             class="text-lg {{ request()->routeIs('admin.report') ? 'scale-110' : 'opacity-70 group-hover:opacity-100' }}">📊</span>
                         <span class="text-[13px] tracking-wide">Laporan</span>
                     </div>
-                </a>
+                </a> --}}
             </div>
         </div>
 
@@ -176,7 +176,7 @@
                     </div>
                 </a>
 
-                <a href="{{ route('admin.settings') }}"
+                {{-- <a href="{{ route('admin.settings') }}"
                     class="group flex items-center justify-between px-3 py-2.5 rounded-xl relative transition-all duration-150
                     {{ request()->routeIs('admin.settings') ? 'bg-white/10 text-white font-medium border-l-2 border-blue-500 rounded-l-none' : 'text-gray-400 hover:text-white hover:bg-white/[0.03]' }}">
                     <div class="flex items-center gap-3">
@@ -184,7 +184,7 @@
                             class="text-lg {{ request()->routeIs('admin.settings') ? 'scale-110' : 'opacity-70 group-hover:opacity-100' }}">⚙️</span>
                         <span class="text-[13px] tracking-wide">Settings</span>
                     </div>
-                </a>
+                </a> --}}
             </div>
         </div>
     </nav>

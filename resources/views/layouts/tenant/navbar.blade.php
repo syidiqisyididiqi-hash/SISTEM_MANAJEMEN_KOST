@@ -36,12 +36,12 @@
                             Kamar
                         </a>
                     </li>
-                    <li>
+                    {{-- <li>
                         <a href="{{ route('tenant.announcement.index') }}"
                             class="px-3 py-2 rounded-lg hover:text-blue-600 hover:bg-blue-50/50 transition-all">
                             Pengumuman
                         </a>
-                    </li>
+                    </li> --}}
                     <li class="ml-2">
                         <a href="{{ route('login') }}"
                             class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-sm shadow-blue-100 transition-all">
