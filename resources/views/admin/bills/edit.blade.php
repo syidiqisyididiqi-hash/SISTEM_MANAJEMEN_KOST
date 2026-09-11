@@ -1,0 +1,120 @@
+@extends('layouts.admin.app')
+
+@section('title', 'Edit Bill')
+
+@section('content')
+
+    <x-ui.page-header title="Edit Bill" description="Perbarui data tagihan tenant" />
+
+    <x-ui.card>
+
+        <form action="{{ route('admin.bills.update', $bill->id) }}" method="POST" id="form-edit">
+            @csrf
+            @method('PUT')
+
+            <x-ui.form-group label="Penyewa Kamar" name="room_tenant_id" required>
+
+                <x-ui.select id="room_tenant_id" name="room_tenant_id">
+
+                    @foreach($roomTenants as $roomTenant)
+                        <option value="{{ $roomTenant->id }}" {{ old('room_tenant_id', $bill->room_tenant_id) == $roomTenant->id ? 'selected' : '' }}>
+                            {{ $roomTenant->tenant->user->name }}
+                        </option>
+                    @endforeach
+
+                </x-ui.select>
+
+            </x-ui.form-group>
+
+            <x-ui.form-group label="Bulan Tagihan" name="bill_month" required>
+
+                <x-ui.input type="month" id="bill_month" name="bill_month" :value="old(
+            'bill_month',
+            \Carbon\Carbon::parse($bill->bill_month)->format('Y-m')
+        )" />
+
+            </x-ui.form-group>
+
+            <x-ui.form-group label="Jumlah Tagihan" name="amount" required>
+
+                <x-ui.input type="number" id="amount" name="amount" :value="old('amount', $bill->amount)" />
+
+            </x-ui.form-group>
+
+            <x-ui.form-group label="Tanggal Jatuh Tempo" name="due_date" required>
+
+                <x-ui.input type="date" id="due_date" name="due_date" :value="old(
+            'due_date',
+            $bill->due_date
+            ? \Carbon\Carbon::parse($bill->due_date)->format('Y-m-d')
+            : ''
+        )" />
+
+            </x-ui.form-group>
+
+            <x-ui.form-group label="Denda" name="fine_amount">
+
+                <x-ui.input type="number" id="fine_amount" name="fine_amount" :value="old('fine_amount', $bill->fine_amount)" />
+
+            </x-ui.form-group>
+
+            <x-ui.form-group label="Status" name="status" required>
+
+                <x-ui.select id="status" name="status">
+
+                    <option value="unpaid" {{ old('status', $bill->status) == 'unpaid' ? 'selected' : '' }}>
+                        Belum Dibayar
+                    </option>
+
+                    <option value="paid" {{ old('status', $bill->status) == 'paid' ? 'selected' : '' }}>
+                        Lunas
+                    </option>
+
+                    <option value="overdue" {{ old('status', $bill->status) == 'overdue' ? 'selected' : '' }}>
+                        Tunggakan
+                    </option>
+
+                </x-ui.select>
+
+            </x-ui.form-group>
+
+            <div class="flex gap-3">
+
+                <x-ui.button type="submit">
+                    Update
+                </x-ui.button>
+
+                <a href="{{ route('admin.bills.index') }}"
+                    class="px-5 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg font-medium inline-block text-center">
+                    Kembali
+                </a>
+
+            </div>
+
+        </form>
+
+    </x-ui.card>
+
+    <script>
+        document.getElementById('form-edit').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            Swal.fire({
+                icon: 'question',
+                title: 'Simpan Perubahan?',
+                text: 'Apakah Anda yakin ingin memperbarui data tagihan ini?',
+                width: '400px',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, Simpan',
+                cancelButtonText: 'Batal',
+                confirmButtonColor: '#2563eb', cancelButtonColor: '#6b7280',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    this.submit();
+                }
+            });
+        });
+    </script>
+
+@endsection
